@@ -4,7 +4,7 @@ namespace Latidos.Services;
 
 public class CartService : ICartService
 {
-    private readonly List<CartItem> _cartItems = new();
+    private static readonly List<CartItem> _cartItems = new();
 
     public Task<List<CartItem>> GetCartItemsAsync()
     {
@@ -15,16 +15,9 @@ public class CartService : ICartService
     {
         try
         {
-            var existingItem = _cartItems.FirstOrDefault(ci => ci.EventId == item.EventId);
-            if (existingItem != null)
-            {
-                existingItem.Quantity += item.Quantity;
-            }
-            else
-            {
-                item.Id = _cartItems.Count > 0 ? _cartItems.Max(ci => ci.Id) + 1 : 1;
-                _cartItems.Add(item);
-            }
+            item.Id = _cartItems.Count > 0 ? _cartItems.Max(ci => ci.Id) + 1 : 1;
+            item.Quantity = Math.Max(item.Quantity, 1);
+            _cartItems.Add(item);
             return Task.FromResult(true);
         }
         catch

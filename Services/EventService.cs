@@ -22,6 +22,7 @@ public class EventService : IEventService
                 Description = "Una carrera divertida de 5K por el centro de la ciudad",
                 EventDate = DateTime.Now.AddDays(30),
                 Price = 25.00m,
+                City = "Santo Domingo",
                 Location = "Parque del Centro",
                 MaxParticipants = 500,
                 CurrentParticipants = 245,
@@ -34,6 +35,7 @@ public class EventService : IEventService
                 Description = "Media maraton de 21K con cronometraje profesional",
                 EventDate = DateTime.Now.AddDays(60),
                 Price = 45.00m,
+                City = "Santo Domingo",
                 Location = "Distrito Centro",
                 MaxParticipants = 300,
                 CurrentParticipants = 156,
@@ -46,6 +48,7 @@ public class EventService : IEventService
                 Description = "Carrera trail de 10K por senderos de montana",
                 EventDate = DateTime.Now.AddDays(45),
                 Price = 35.00m,
+                City = "Jarabacoa",
                 Location = "Sendero Montana",
                 MaxParticipants = 200,
                 CurrentParticipants = 87,
@@ -69,7 +72,7 @@ public class EventService : IEventService
     {
         try
         {
-            runningEvent.Id = _events.Max(e => e.Id) + 1;
+            runningEvent.Id = _events.Count == 0 ? 1 : _events.Max(e => e.Id) + 1;
             _events.Add(runningEvent);
             return Task.FromResult(true);
         }
@@ -88,9 +91,29 @@ public class EventService : IEventService
             {
                 _events.Remove(existingEvent);
                 _events.Add(runningEvent);
+                _events.Sort((left, right) => left.EventDate.CompareTo(right.EventDate));
                 return Task.FromResult(true);
             }
             return Task.FromResult(false);
+        }
+        catch
+        {
+            return Task.FromResult(false);
+        }
+    }
+
+    public Task<bool> DeleteEventAsync(int eventId)
+    {
+        try
+        {
+            var existingEvent = _events.FirstOrDefault(e => e.Id == eventId);
+            if (existingEvent == null)
+            {
+                return Task.FromResult(false);
+            }
+
+            _events.Remove(existingEvent);
+            return Task.FromResult(true);
         }
         catch
         {

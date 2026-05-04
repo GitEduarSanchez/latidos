@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Latidos.Views.RegistrationPage"
+             Title="Inscripcion"
+             BackgroundColor="#F7F7F5">
+
+    <ScrollView Padding="16,12">
+        <VerticalStackLayout Spacing="14">
+            <VerticalStackLayout Spacing="2">
+                <Label Text="Ficha del competidor"
+                       FontSize="26"
+                       FontAttributes="Bold"
+                       TextColor="#C9A227" />
+                <Label Text="Completa los datos antes de agregar la inscripcion al carrito."
+                       FontSize="13"
+                       TextColor="#767676" />
+            </VerticalStackLayout>
+
+            <Border Padding="14"
+                    Stroke="#E8E3D5"
+                    StrokeThickness="1"
+                    StrokeShape="RoundRectangle 14"
+                    BackgroundColor="White">
+                <Grid ColumnDefinitions="*,Auto"
+                      ColumnSpacing="12">
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="{Binding EventName}"
+                               FontSize="18"
+                               FontAttributes="Bold"
+                               TextColor="#252525"
+                               MaxLines="2"
+                               LineBreakMode="TailTruncation" />
+                        <Label Text="{Binding EventInfoText}"
+                               FontSize="12"
+                               TextColor="#767676"
+                               MaxLines="2"
+                               LineBreakMode="TailTruncation" />
+                    </VerticalStackLayout>
+
+                    <Border Grid.Column="1"
+                            Padding="10,6"
+                            StrokeThickness="0"
+                            StrokeShape="RoundRectangle 12"
+                            BackgroundColor="#FFF7DB"
+                            VerticalOptions="Start">
+                        <Label Text="{Binding EventPriceText}"
+                               FontSize="13"
+                               FontAttributes="Bold"
+                               TextColor="#C9A227" />
+                    </Border>
+                </Grid>
+            </Border>
+
+            <Border Padding="14"
+                    Stroke="#E8E3D5"
+                    StrokeThickness="1"
+                    StrokeShape="RoundRectangle 14"
+                    BackgroundColor="White">
+                <VerticalStackLayout Spacing="12">
+                    <Grid ColumnDefinitions="*,Auto"
+                          ColumnSpacing="12">
+                        <VerticalStackLayout Spacing="3">
+                            <Label Text="Numero asignado"
+                                   FontSize="12"
+                                   FontAttributes="Bold"
+                                   TextColor="#4F4F4F" />
+                            <Label Text="{Binding CompetitorNumberText}"
+                                   FontSize="26"
+                                   FontAttributes="Bold"
+                                   TextColor="#C9A227" />
+                        </VerticalStackLayout>
+
+                        <Border Grid.Column="1"
+                                WidthRequest="72"
+                                HeightRequest="72"
+                                Stroke="#E8E3D5"
+                                StrokeThickness="1"
+                                StrokeShape="RoundRectangle 36"
+                                BackgroundColor="#FAFAFA">
+                            <Grid>
+                                <Image Source="{Binding PhotoPath}"
+                                       IsVisible="{Binding HasPhoto}"
+                                       Aspect="AspectFill"
+                                       WidthRequest="72"
+                                       HeightRequest="72" />
+                                <Label Text="Foto"
+                                       FontSize="12"
+                                       TextColor="#999999"
+                                       HorizontalTextAlignment="Center"
+                                       VerticalTextAlignment="Center" />
+                            </Grid>
+                        </Border>
+                    </Grid>
+
+                    <Label Text="Nombre completo"
+                           FontSize="12"
+                           FontAttributes="Bold"
+                           TextColor="#4F4F4F" />
+                    <Border Padding="10,0"
+                            Stroke="#E8E3D5"
+                            StrokeThickness="1"
+                            StrokeShape="RoundRectangle 10"
+                            BackgroundColor="#FAFAFA">
+                        <Entry Text="{Binding FullName}"
+                               Placeholder="Nombre del competidor"
+                               HeightRequest="44"
+                               ClearButtonVisibility="WhileEditing" />
+                    </Border>
+
+                    <Grid ColumnDefinitions="*,*"
+                          ColumnSpacing="10">
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="Tipo de documento"
+                                   FontSize="12"
+                                   FontAttributes="Bold"
+                                   TextColor="#4F4F4F" />
+                            <Border Padding="10,0"
+                                    Stroke="#E8E3D5"
+                                    StrokeThickness="1"
+                                    StrokeShape="RoundRectangle 10"
+                                    BackgroundColor="#FAFAFA">
+                                <Picker ItemsSource="{Binding DocumentTypes}"
+                                        SelectedItem="{Binding SelectedDocumentType}"
+                                        HeightRequest="44" />
+                            </Border>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout Grid.Column="1" Spacing="6">
+                            <Label Text="Documento"
+                                   FontSize="12"
+                                   FontAttributes="Bold"
+                                   TextColor="#4F4F4F" />
+                            <Border Padding="10,0"
+                                    Stroke="#E8E3D5"
+                                    StrokeThickness="1"
+                                    StrokeShape="RoundRectangle 10"
+                                    BackgroundColor="#FAFAFA">
+                                <Entry Text="{Binding DocumentNumber}"
+                                       Placeholder="Numero"
+                                       HeightRequest="44"
+                                       ClearButtonVisibility="WhileEditing" />
+                            </Border>
+                        </VerticalStackLayout>
+                    </Grid>
+
+                    <Grid ColumnDefinitions="*,*"
+                          ColumnSpacing="10">
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="Fecha de nacimiento"
+                                   FontSize="12"
+                                   FontAttributes="Bold"
+                                   TextColor="#4F4F4F" />
+                            <Border Padding="10,0"
+                                    Stroke="#E8E3D5"
+                                    StrokeThickness="1"
+                                    StrokeShape="RoundRectangle 10"
+                                    BackgroundColor="#FAFAFA">
+                                <DatePicker Date="{Binding BirthDate}"
+                                            Format="dd MMM yyyy"
+                                            HeightRequest="44" />
+                            </Border>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout Grid.Column="1" Spacing="6">
+                            <Label Text="Categoria"
+                                   FontSize="12"
+                                   FontAttributes="Bold"
+                                   TextColor="#4F4F4F" />
+                            <Border Padding="10,0"
+                                    Stroke="#E8E3D5"
+                                    StrokeThickness="1"
+                                    StrokeShape="RoundRectangle 10"
+                                    BackgroundColor="#FAFAFA">
+                                <Label Text="{Binding AgeText}"
+                                       FontSize="13"
+                                       TextColor="#252525"
+                                       VerticalTextAlignment="Center"
+                                       HeightRequest="44" />
+                            </Border>
+                        </VerticalStackLayout>
+                    </Grid>
+
+                    <Grid ColumnDefinitions="*,*"
+                          ColumnSpacing="10">
+                        <Button Text="Tomar foto"
+                                Command="{Binding CapturePhotoCommand}"
+                                BackgroundColor="White"
+                                TextColor="#C9A227"
+                                BorderColor="#C9A227"
+                                BorderWidth="1"
+                                FontAttributes="Bold"
+                                CornerRadius="10"
+                                HeightRequest="46" />
+                        <Button Grid.Column="1"
+                                Text="Seleccionar foto"
+                                Command="{Binding PickPhotoCommand}"
+                                BackgroundColor="White"
+                                TextColor="#C9A227"
+                                BorderColor="#C9A227"
+                                BorderWidth="1"
+                                FontAttributes="Bold"
+                                CornerRadius="10"
+                                HeightRequest="46" />
+                    </Grid>
+
+                    <Label Text="{Binding StatusMessage}"
+                           IsVisible="{Binding HasStatusMessage}"
+                           FontSize="12"
+                           TextColor="#B94A48"
+                           LineBreakMode="WordWrap" />
+                </VerticalStackLayout>
+            </Border>
+
+            <Button Text="Agregar al carrito"
+                    Command="{Binding AddToCartCommand}"
+                    BackgroundColor="#C9A227"
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    CornerRadius="10"
+                    HeightRequest="48" />
+
+            <Button Text="Agregar otro competidor"
+                    Command="{Binding AddAnotherCommand}"
+                    BackgroundColor="White"
+                    TextColor="#C9A227"
+                    BorderColor="#C9A227"
+                    BorderWidth="1"
+                    FontAttributes="Bold"
+                    CornerRadius="10"
+                    HeightRequest="48" />
+
+            <Button Text="Volver a eventos"
+                    Command="{Binding CancelCommand}"
+                    BackgroundColor="Transparent"
+                    TextColor="#777777"
+                    FontAttributes="Bold"
+                    HeightRequest="44" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

@@ -19,6 +19,10 @@ public class OrderItem
     public int OrderId { get; set; }
     public int EventId { get; set; }
     public string EventName { get; set; } = string.Empty;
+    public string CompetitorNumber { get; set; } = string.Empty;
+    public string CompetitorName { get; set; } = string.Empty;
+    public string CompetitorDocument { get; set; } = string.Empty;
+    public string CompetitorAgeCategory { get; set; } = string.Empty;
     public int Quantity { get; set; }
     public decimal UnitPrice { get; set; }
     public decimal TotalPrice { get; set; }

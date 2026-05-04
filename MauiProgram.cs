@@ -44,6 +44,8 @@ namespace Latidos
             builder.Services.AddSingleton<EventsPage>();
             builder.Services.AddSingleton<CartPage>();
             builder.Services.AddSingleton<CheckoutPage>();
+            builder.Services.AddSingleton<AdminEventsPage>();
+            builder.Services.AddTransient<RegistrationPage>();
 
 #if DEBUG
             builder.Logging.AddDebug();

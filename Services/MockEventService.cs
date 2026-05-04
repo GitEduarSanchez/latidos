@@ -26,6 +26,7 @@ public class MockEventService : IEventService
                 Description = "Una carrera casual de 5K por el centro. Ideal para principiantes.",
                 EventDate = DateTime.Now.AddDays(7),
                 Price = 25.00m,
+                City = "Santo Domingo",
                 Location = "Parque Central",
                 MaxParticipants = 500,
                 CurrentParticipants = 245,
@@ -38,6 +39,7 @@ public class MockEventService : IEventService
                 Description = "Carrera competitiva de 21K con cronometraje profesional y apoyo en ruta.",
                 EventDate = DateTime.Now.AddDays(14),
                 Price = 45.00m,
+                City = "Santo Domingo",
                 Location = "Distrito Centro",
                 MaxParticipants = 300,
                 CurrentParticipants = 156,
@@ -50,6 +52,7 @@ public class MockEventService : IEventService
                 Description = "Recorrido escenico de 10K por senderos de montana. Nivel intermedio.",
                 EventDate = DateTime.Now.AddDays(21),
                 Price = 35.00m,
+                City = "Jarabacoa",
                 Location = "Parque Sendero Montana",
                 MaxParticipants = 200,
                 CurrentParticipants = 87,
@@ -62,6 +65,7 @@ public class MockEventService : IEventService
                 Description = "Carrera recreativa de 10K en apoyo a iniciativas locales de salud.",
                 EventDate = DateTime.Now.AddDays(30),
                 Price = 30.00m,
+                City = "Santiago",
                 Location = "Pista Ribera",
                 MaxParticipants = 400,
                 CurrentParticipants = 320,
@@ -72,8 +76,9 @@ public class MockEventService : IEventService
                 Id = 5,
                 Name = "Serie sprint - Semana 1",
                 Description = "Sprint rapido de 3K para corredores que buscan velocidad. Nivel avanzado.",
-                EventDate = DateTime.Now.AddDays(3),
+                EventDate = DateTime.Now.AddDays(-5),
                 Price = 20.00m,
+                City = "Santo Domingo",
                 Location = "Complejo Atletico",
                 MaxParticipants = 150,
                 CurrentParticipants = 145,
@@ -86,10 +91,12 @@ public class MockEventService : IEventService
                 Description = "Carrera nocturna de 5K con luces LED y estaciones de musica.",
                 EventDate = DateTime.Now.AddDays(10),
                 Price = 35.00m,
+                City = "Punta Cana",
                 Location = "Circuito Centro",
                 MaxParticipants = 600,
                 CurrentParticipants = 412,
-                ImageUrl = "event_night_glow.svg"
+                ImageUrl = "event_night_glow.svg",
+                Status = EventStatus.Cancelled
             }
         };
     }
@@ -110,7 +117,7 @@ public class MockEventService : IEventService
     {
         try
         {
-            runningEvent.Id = _events.Max(e => e.Id) + 1;
+            runningEvent.Id = _events.Count == 0 ? 1 : _events.Max(e => e.Id) + 1;
             _events.Add(runningEvent);
             return Task.FromResult(true);
         }
@@ -129,9 +136,29 @@ public class MockEventService : IEventService
             {
                 _events.Remove(existingEvent);
                 _events.Add(runningEvent);
+                _events.Sort((left, right) => left.EventDate.CompareTo(right.EventDate));
                 return Task.FromResult(true);
             }
             return Task.FromResult(false);
+        }
+        catch
+        {
+            return Task.FromResult(false);
+        }
+    }
+
+    public Task<bool> DeleteEventAsync(int eventId)
+    {
+        try
+        {
+            var existingEvent = _events.FirstOrDefault(e => e.Id == eventId);
+            if (existingEvent == null)
+            {
+                return Task.FromResult(false);
+            }
+
+            _events.Remove(existingEvent);
+            return Task.FromResult(true);
         }
         catch
         {

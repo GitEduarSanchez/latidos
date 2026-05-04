@@ -25,6 +25,12 @@
             Icon="cart.png"
             ContentTemplate="{DataTemplate views:CartPage}"
             Route="cart" />
+
+        <ShellContent
+            Title="Admin"
+            Icon="icon_calendar.svg"
+            ContentTemplate="{DataTemplate views:AdminEventsPage}"
+            Route="admin" />
     </TabBar>
 
     <Shell.TitleView>

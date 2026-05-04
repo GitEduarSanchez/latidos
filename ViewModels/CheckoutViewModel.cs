@@ -239,7 +239,7 @@ public class CheckoutViewModel : BindableObject
                 TokenId = CardNumber,
                 Amount = Total,
                 Currency = "USD",
-                Description = $"Inscripciones a eventos - {ItemCount} productos",
+                Description = $"Inscripciones a eventos - {ItemCount} competidores",
                 CustomerEmail = CustomerEmail,
                 CustomerName = CustomerName
             };
@@ -259,6 +259,10 @@ public class CheckoutViewModel : BindableObject
                     {
                         EventId = ci.EventId,
                         EventName = ci.Event?.Name ?? "Evento sin nombre",
+                        CompetitorNumber = ci.Competitor?.CompetitorNumber ?? string.Empty,
+                        CompetitorName = ci.Competitor?.FullName ?? string.Empty,
+                        CompetitorDocument = ci.Competitor == null ? string.Empty : $"{ci.Competitor.DocumentType}: {ci.Competitor.DocumentNumber}",
+                        CompetitorAgeCategory = ci.Competitor?.AgeCategory ?? string.Empty,
                         Quantity = ci.Quantity,
                         UnitPrice = ci.Price,
                         TotalPrice = ci.TotalPrice

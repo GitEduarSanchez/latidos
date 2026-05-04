@@ -102,7 +102,7 @@
                                BorderColor="#E8E3D5"
                                BackgroundColor="White"
                                Margin="0">
-                            <Grid RowDefinitions="96,Auto,Auto"
+                            <Grid RowDefinitions="96,Auto,Auto,Auto"
                                   RowSpacing="0">
                                 <Image Grid.Row="0"
                                        Source="{Binding Event.ImageUrl}"
@@ -151,6 +151,65 @@
                                 </Grid>
 
                                 <Grid Grid.Row="2"
+                                      ColumnDefinitions="Auto,*,Auto"
+                                      Padding="16,8,16,8"
+                                      ColumnSpacing="10">
+                                    <Border WidthRequest="54"
+                                            HeightRequest="54"
+                                            Stroke="#E8E3D5"
+                                            StrokeThickness="1"
+                                            StrokeShape="RoundRectangle 27"
+                                            BackgroundColor="#FAFAFA"
+                                            VerticalOptions="Center">
+                                        <Grid>
+                                            <Label Text="Foto"
+                                                   FontSize="10"
+                                                   TextColor="#999999"
+                                                   HorizontalTextAlignment="Center"
+                                                   VerticalTextAlignment="Center" />
+                                            <Image Source="{Binding CompetitorPhotoPath}"
+                                                   IsVisible="{Binding HasCompetitorPhoto}"
+                                                   Aspect="AspectFill"
+                                                   WidthRequest="54"
+                                                   HeightRequest="54" />
+                                        </Grid>
+                                    </Border>
+
+                                    <VerticalStackLayout Grid.Column="1"
+                                                         Spacing="2"
+                                                         VerticalOptions="Center">
+                                        <Label Text="{Binding CompetitorNameText}"
+                                               FontSize="14"
+                                               FontAttributes="Bold"
+                                               TextColor="#252525"
+                                               MaxLines="1"
+                                               LineBreakMode="TailTruncation" />
+                                        <Label Text="{Binding CompetitorDocumentText}"
+                                               FontSize="11"
+                                               TextColor="#777777"
+                                               MaxLines="1"
+                                               LineBreakMode="TailTruncation" />
+                                        <Label Text="{Binding CompetitorAgeText}"
+                                               FontSize="11"
+                                               TextColor="#777777"
+                                               MaxLines="1"
+                                               LineBreakMode="TailTruncation" />
+                                    </VerticalStackLayout>
+
+                                    <Border Grid.Column="2"
+                                            Padding="8,5"
+                                            StrokeThickness="0"
+                                            StrokeShape="RoundRectangle 10"
+                                            BackgroundColor="#FFF7DB"
+                                            VerticalOptions="Center">
+                                        <Label Text="{Binding CompetitorNumberText}"
+                                               FontSize="11"
+                                               FontAttributes="Bold"
+                                               TextColor="#C9A227" />
+                                    </Border>
+                                </Grid>
+
+                                <Grid Grid.Row="3"
                                       ColumnDefinitions="*,Auto"
                                       Padding="16,4,16,16"
                                       ColumnSpacing="12">

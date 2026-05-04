@@ -69,7 +69,7 @@ public class CartViewModel : BindableObject
 
     public bool HasItems => ItemCount > 0;
     public bool IsEmpty => ItemCount == 0;
-    public string ItemCountText => ItemCount == 1 ? "1 producto" : $"{ItemCount} productos";
+    public string ItemCountText => ItemCount == 1 ? "1 inscripcion" : $"{ItemCount} inscripciones";
 
     public ICommand LoadCartCommand { get; }
     public ICommand RemoveFromCartCommand { get; }
