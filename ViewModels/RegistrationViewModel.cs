@@ -61,6 +61,26 @@ public class RegistrationViewModel : BindableObject
 
     public bool ShowEmptySavedCompetitorsHelp => SavedCompetitors.Count == 0;
 
+    private bool _isBrowseCompetitorsVisible;
+
+    public bool IsBrowseCompetitorsVisible
+    {
+        get => _isBrowseCompetitorsVisible;
+        set
+        {
+            if (_isBrowseCompetitorsVisible == value)
+            {
+                return;
+            }
+
+            _isBrowseCompetitorsVisible = value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(BrowseToggleButtonText));
+        }
+    }
+
+    public string BrowseToggleButtonText => IsBrowseCompetitorsVisible ? "Ocultar" : "Ver";
+
     private string _competitorSearchText = string.Empty;
     public string CompetitorSearchText
     {
@@ -215,6 +235,7 @@ public class RegistrationViewModel : BindableObject
     public ICommand SearchCompetitorsCommand { get; }
     public ICommand SelectCompetitorCommand { get; }
     public ICommand ClearSearchCommand { get; }
+    public ICommand ToggleBrowseCompetitorsCommand { get; }
     public ICommand AddToCartCommand { get; }
     public ICommand AddAnotherCommand { get; }
     public ICommand AddSelectedToCartCommand { get; }
@@ -232,6 +253,7 @@ public class RegistrationViewModel : BindableObject
         SearchCompetitorsCommand = new Command(async () => await SearchCompetitorsAsync());
         SelectCompetitorCommand = new Command<CompetitorProfile>(SelectCompetitor);
         ClearSearchCommand = new Command(ClearSearch);
+        ToggleBrowseCompetitorsCommand = new Command(ToggleBrowseCompetitors);
         AddToCartCommand = new Command(async () => await AddRegistrationAsync(goToCart: true));
         AddAnotherCommand = new Command(async () => await AddRegistrationAsync(goToCart: false));
         AddSelectedToCartCommand = new Command(async () => await AddSelectedCompetitorsToCartAsync(goToCart: true));
@@ -486,6 +508,12 @@ public class RegistrationViewModel : BindableObject
     {
         CompetitorSearchText = string.Empty;
         SearchResults = new List<CompetitorProfile>();
+        IsBrowseCompetitorsVisible = false;
+    }
+
+    private void ToggleBrowseCompetitors()
+    {
+        IsBrowseCompetitorsVisible = !IsBrowseCompetitorsVisible;
     }
 
     private async Task CapturePhotoAsync()

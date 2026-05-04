@@ -139,9 +139,11 @@
                     StrokeShape="RoundRectangle 14"
                     BackgroundColor="White">
                 <VerticalStackLayout Spacing="10">
-                    <Grid ColumnDefinitions="*,Auto"
-                          ColumnSpacing="10">
-                        <VerticalStackLayout Spacing="2">
+                    <Grid RowDefinitions="Auto,Auto"
+                          RowSpacing="10"
+                          ColumnDefinitions="*">
+                        <VerticalStackLayout Grid.Row="0"
+                                             Spacing="2">
                             <Label Text="Buscar competidor"
                                    FontSize="18"
                                    FontAttributes="Bold"
@@ -151,18 +153,37 @@
                                    TextColor="#767676" />
                         </VerticalStackLayout>
 
-                        <Button Grid.Column="1"
-                                Text="Limpiar"
-                                Command="{Binding ClearSearchCommand}"
-                                BackgroundColor="White"
-                                TextColor="#C9A227"
-                                BorderColor="#C9A227"
-                                BorderWidth="1"
-                                FontSize="12"
-                                FontAttributes="Bold"
-                                CornerRadius="10"
-                                HeightRequest="40"
-                                Padding="12,0" />
+                        <HorizontalStackLayout Grid.Row="1"
+                                               Spacing="8"
+                                               HorizontalOptions="Fill"
+                                               FlowDirection="LeftToRight">
+                            <Button Text="{Binding BrowseToggleButtonText, FallbackValue=Ver, TargetNullValue=Ver}"
+                                    Command="{Binding ToggleBrowseCompetitorsCommand}"
+                                    BackgroundColor="White"
+                                    TextColor="#252525"
+                                    BorderColor="#252525"
+                                    BorderWidth="1"
+                                    FontSize="12"
+                                    FontAttributes="Bold"
+                                    CornerRadius="10"
+                                    HeightRequest="40"
+                                    MinimumWidthRequest="72"
+                                    Padding="14,0"
+                                    HorizontalOptions="Start" />
+                            <Button Text="Limpiar"
+                                    Command="{Binding ClearSearchCommand}"
+                                    BackgroundColor="White"
+                                    TextColor="#C9A227"
+                                    BorderColor="#C9A227"
+                                    BorderWidth="1"
+                                    FontSize="12"
+                                    FontAttributes="Bold"
+                                    CornerRadius="10"
+                                    HeightRequest="40"
+                                    MinimumWidthRequest="88"
+                                    Padding="14,0"
+                                    HorizontalOptions="Start" />
+                        </HorizontalStackLayout>
                     </Grid>
 
                     <SearchBar Text="{Binding CompetitorSearchText}"
@@ -170,6 +191,55 @@
                                Placeholder="Cedula o nombre"
                                HeightRequest="44"
                                Margin="0" />
+
+                    <VerticalStackLayout Spacing="8"
+                                         IsVisible="{Binding IsBrowseCompetitorsVisible}">
+                        <Label Text="Lista de competidores"
+                               FontSize="13"
+                               FontAttributes="Bold"
+                               TextColor="#4F4F4F" />
+                        <Label Text="Marca los que quieras inscribir; los mismos marcadores se usan en la seccion de arriba."
+                               FontSize="11"
+                               TextColor="#999999"
+                               LineBreakMode="WordWrap" />
+                        <Label Text="{Binding SelectedSavedSummaryText}"
+                               FontSize="12"
+                               FontAttributes="Bold"
+                               TextColor="#4F4F4F"
+                               IsVisible="{Binding HasSavedCompetitors}" />
+                        <Label Text="No hay competidores guardados aun. Completa el formulario primero."
+                               FontSize="12"
+                               TextColor="#999999"
+                               IsVisible="{Binding ShowEmptySavedCompetitorsHelp}" />
+                        <CollectionView ItemsSource="{Binding SavedCompetitors}"
+                                        HeightRequest="200"
+                                        IsVisible="{Binding HasSavedCompetitors}">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="vm:SelectableCompetitorItem">
+                                    <Grid Padding="4,6"
+                                          ColumnDefinitions="Auto,*">
+                                        <CheckBox VerticalOptions="Center"
+                                                  IsChecked="{Binding IsSelected, Mode=TwoWay}" />
+                                        <VerticalStackLayout Grid.Column="1"
+                                                             Spacing="2"
+                                                             VerticalOptions="Center">
+                                            <Label Text="{Binding Competitor.FullName}"
+                                                   FontSize="14"
+                                                   FontAttributes="Bold"
+                                                   TextColor="#252525"
+                                                   MaxLines="1"
+                                                   LineBreakMode="TailTruncation" />
+                                            <Label Text="{Binding Competitor.ProfileSummaryText}"
+                                                   FontSize="11"
+                                                   TextColor="#767676"
+                                                   MaxLines="2"
+                                                   LineBreakMode="TailTruncation" />
+                                        </VerticalStackLayout>
+                                    </Grid>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
 
                     <Label Text="No se encontraron competidores con esa busqueda."
                            IsVisible="{Binding HasSearchTextWithoutResults}"
