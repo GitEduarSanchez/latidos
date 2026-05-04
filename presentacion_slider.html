@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Latidos - Presentación</title>
+  <style>
+    :root{
+      --gold:#c9a227;
+      --bg:#111;
+      --panel:#1b1b1b;
+      --text:#f5f5f5;
+      --muted:#cfcfcf;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Segoe UI,Arial,sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      display:grid;
+      min-height:100vh;
+      place-items:center;
+      padding:20px;
+    }
+    .deck{
+      width:min(1100px,100%);
+      background:var(--panel);
+      border:1px solid #2a2a2a;
+      border-radius:14px;
+      overflow:hidden;
+      box-shadow:0 10px 35px rgba(0,0,0,.35);
+    }
+    .top{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:14px 18px;
+      border-bottom:1px solid #2a2a2a;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      color:var(--gold);
+      font-weight:700;
+      letter-spacing:.4px;
+    }
+    .brand img{
+      width:30px;height:30px;border-radius:8px;object-fit:cover;
+    }
+    .counter{color:#bdbdbd;font-size:14px}
+    .slide-wrap{
+      position:relative;
+      aspect-ratio:16/9;
+      background:#0f0f0f;
+    }
+    .slide{
+      position:absolute; inset:0;
+      opacity:0;
+      transition:opacity .35s ease;
+      display:grid;
+      grid-template-columns:58% 42%;
+    }
+    .slide.active{opacity:1}
+    .media{
+      background:#0d0d0d;
+      display:grid;
+      place-items:center;
+      border-right:1px solid #262626;
+    }
+    .media img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      padding:18px;
+    }
+    .content{
+      padding:30px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      gap:12px;
+    }
+    h2{
+      margin:0;
+      color:var(--gold);
+      font-size:34px;
+      line-height:1.1;
+    }
+    p{
+      margin:0;
+      color:var(--muted);
+      font-size:19px;
+      line-height:1.45;
+    }
+    .controls{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:14px 18px;
+      border-top:1px solid #2a2a2a;
+    }
+    .btn{
+      border:1px solid var(--gold);
+      color:var(--gold);
+      background:#fff;
+      padding:8px 14px;
+      border-radius:10px;
+      font-weight:600;
+      cursor:pointer;
+    }
+    .dots{display:flex;gap:8px}
+    .dot{
+      width:10px;height:10px;border-radius:50%;
+      background:#555;cursor:pointer;
+    }
+    .dot.active{background:var(--gold)}
+    @media (max-width:860px){
+      .slide{grid-template-columns:1fr}
+      .media{border-right:none;border-bottom:1px solid #262626; min-height:220px}
+      .content{padding:20px}
+      h2{font-size:27px}
+      p{font-size:16px}
+    }
+  </style>
+</head>
+<body>
+  <section class="deck">
+    <div class="top">
+      <div class="brand">
+        <img src="Resources/Images/latidos_logo.jpg" alt="Latidos"/>
+        <span>LATIDOS - AVANCES DEL PROYECTO</span>
+      </div>
+      <div class="counter" id="counter">1 / 6</div>
+    </div>
+
+    <div class="slide-wrap" id="slides">
+      <article class="slide active">
+        <div class="media"><img src="Resources/Images/event_5k_city.svg" alt="Eventos"/></div>
+        <div class="content">
+          <h2>Exploración de Eventos</h2>
+          <p>Interfaz móvil optimizada para visualizar eventos, estado, fecha, ciudad y precio en COP.</p>
+        </div>
+      </article>
+      <article class="slide">
+        <div class="media"><img src="Resources/Images/event_half_marathon.svg" alt="Buscador"/></div>
+        <div class="content">
+          <h2>Buscador Inteligente</h2>
+          <p>Filtro por nombre, fecha y ciudad con panel plegable para aprovechar mejor el espacio de la lista.</p>
+        </div>
+      </article>
+      <article class="slide">
+        <div class="media"><img src="Resources/Images/icon_cart.svg" alt="Carrito"/></div>
+        <div class="content">
+          <h2>Carrito de Inscripciones</h2>
+          <p>Gestión de inscripciones por evento con múltiples competidores y contador visual en el botón de carrito.</p>
+        </div>
+      </article>
+      <article class="slide">
+        <div class="media"><img src="Resources/Images/icon_users.svg" alt="Competidores"/></div>
+        <div class="content">
+          <h2>Registro de Competidores</h2>
+          <p>Búsqueda por nombre o cédula, ficha del competidor y captura de datos para clasificación por edad.</p>
+        </div>
+      </article>
+      <article class="slide">
+        <div class="media"><img src="Resources/Images/icon_tag.svg" alt="Perfiles"/></div>
+        <div class="content">
+          <h2>Login y Perfiles</h2>
+          <p>Acceso por rol: Administrador y Competidor. El admin puede gestionar eventos y registrar tiempos.</p>
+        </div>
+      </article>
+      <article class="slide">
+        <div class="media"><img src="Resources/Images/icon_calendar.svg" alt="Factura"/></div>
+        <div class="content">
+          <h2>Facturación PDF</h2>
+          <p>Comprobante tipo ticket por compra, incluyendo el detalle de todos los competidores inscritos.</p>
+        </div>
+      </article>
+    </div>
+
+    <div class="controls">
+      <button class="btn" id="prev">Anterior</button>
+      <div class="dots" id="dots"></div>
+      <button class="btn" id="next">Siguiente</button>
+    </div>
+  </section>
+
+  <script>
+    const slides = [...document.querySelectorAll('.slide')];
+    const dotsWrap = document.getElementById('dots');
+    const counter = document.getElementById('counter');
+    let idx = 0;
+    let timer;
+
+    slides.forEach((_, i) => {
+      const d = document.createElement('button');
+      d.className = 'dot' + (i === 0 ? ' active' : '');
+      d.addEventListener('click', () => go(i));
+      dotsWrap.appendChild(d);
+    });
+    const dots = [...document.querySelectorAll('.dot')];
+
+    function go(i){
+      slides[idx].classList.remove('active');
+      dots[idx].classList.remove('active');
+      idx = (i + slides.length) % slides.length;
+      slides[idx].classList.add('active');
+      dots[idx].classList.add('active');
+      counter.textContent = `${idx + 1} / ${slides.length}`;
+      restart();
+    }
+    function restart(){
+      clearInterval(timer);
+      timer = setInterval(() => go(idx + 1), 4500);
+    }
+    document.getElementById('prev').addEventListener('click', () => go(idx - 1));
+    document.getElementById('next').addEventListener('click', () => go(idx + 1));
+    restart();
+  </script>
+</body>
+</html>

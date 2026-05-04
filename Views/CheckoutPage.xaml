@@ -127,6 +127,17 @@
                 </Grid>
             </Frame>
 
+            <Button Text="Ver factura"
+                    Command="{Binding OpenLastInvoiceCommand}"
+                    BackgroundColor="White"
+                    TextColor="#2d2d2d"
+                    Padding="15,12"
+                    BorderWidth="1"
+                    BorderColor="#C9A227"
+                    FontSize="14"
+                    FontAttributes="Bold"
+                    CornerRadius="10" />
+
             <Button Text="Procesar pago"
                     Command="{Binding ProcessPaymentCommand}"
                     BackgroundColor="#C9A227"

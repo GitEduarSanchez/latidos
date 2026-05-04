@@ -130,6 +130,23 @@ public class CheckoutViewModel : BindableObject
             }
         }
     }
+    
+    private string _lastInvoicePath = string.Empty;
+    public string LastInvoicePath
+    {
+        get => _lastInvoicePath;
+        set
+        {
+            if (_lastInvoicePath != value)
+            {
+                _lastInvoicePath = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(HasLastInvoice));
+            }
+        }
+    }
+
+    public bool HasLastInvoice => !string.IsNullOrWhiteSpace(LastInvoicePath);
 
     private int _itemCount;
     public int ItemCount
@@ -196,6 +213,8 @@ public class CheckoutViewModel : BindableObject
 
     public ICommand ProcessPaymentCommand { get; }
     public ICommand CancelCommand { get; }
+    public ICommand PreviewTicketCommand { get; }
+    public ICommand OpenLastInvoiceCommand { get; }
 
     public CheckoutViewModel()
     {
@@ -207,6 +226,8 @@ public class CheckoutViewModel : BindableObject
 
         ProcessPaymentCommand = new Command(async () => await ProcessPaymentAsync());
         CancelCommand = new Command(async () => await CancelAsync());
+        PreviewTicketCommand = new Command(async () => await PreviewTicketAsync());
+        OpenLastInvoiceCommand = new Command(async () => await OpenLastInvoiceAsync());
 
         var user = _authService.CurrentUser;
         if (user != null)
@@ -289,11 +310,11 @@ public class CheckoutViewModel : BindableObject
 
                 await _orderService.CreateOrderAsync(order);
                 var invoicePath = await _invoiceService.GenerateOrderTicketPdfAsync(order);
+                LastInvoicePath = invoicePath;
                 await _cartService.ClearCartAsync();
 
                 StatusMessage = $"Pago exitoso. Orden: {paymentResponse.TransactionId}. Factura: {invoicePath}";
                 await Application.Current!.MainPage!.DisplayAlert("Pago exitoso", "El pago fue procesado correctamente.", "Aceptar");
-                await Shell.Current.GoToAsync("///events");
             }
             else
             {
@@ -311,5 +332,71 @@ public class CheckoutViewModel : BindableObject
     public async Task CancelAsync()
     {
         await Shell.Current.GoToAsync("///cart");
+    }
+
+    public async Task PreviewTicketAsync()
+    {
+        try
+        {
+            var order = new Order
+            {
+                OrderNumber = $"PREVIEW-{DateTime.Now.Ticks}",
+                CustomerName = string.IsNullOrWhiteSpace(CustomerName) ? "Borrador" : CustomerName,
+                CustomerEmail = string.IsNullOrWhiteSpace(CustomerEmail) ? "borrador@latidos.com" : CustomerEmail,
+                TotalAmount = Total,
+                OrderDate = DateTime.Now,
+                Status = "Borrador",
+                TransactionId = "N/A",
+                Items = _cartItems.Select(ci => new OrderItem
+                {
+                    EventId = ci.EventId,
+                    EventName = ci.Event?.Name ?? "Evento sin nombre",
+                    CompetitorNumber = ci.Competitor?.CompetitorNumber ?? string.Empty,
+                    CompetitorName = ci.Competitor?.FullName ?? string.Empty,
+                    CompetitorDocument = ci.Competitor == null ? string.Empty : $"{ci.Competitor.DocumentType}: {ci.Competitor.DocumentNumber}",
+                    CompetitorAgeCategory = ci.Competitor?.AgeCategory ?? string.Empty,
+                    Quantity = ci.Quantity,
+                    UnitPrice = ci.Price,
+                    TotalPrice = ci.TotalPrice
+                }).ToList()
+            };
+
+            var invoicePath = await _invoiceService.GenerateOrderTicketPdfAsync(order);
+            LastInvoicePath = invoicePath;
+            await Microsoft.Maui.ApplicationModel.Launcher.OpenAsync(new Microsoft.Maui.ApplicationModel.OpenFileRequest
+            {
+                Title = "Vista Previa de Ticket",
+                File = new Microsoft.Maui.Storage.ReadOnlyFile(invoicePath)
+            });
+        }
+        catch (Exception ex)
+        {
+            StatusMessage = $"Error al generar vista previa: {ex.Message}";
+            await Application.Current!.MainPage!.DisplayAlert("Error", $"Error: {ex.Message}", "Aceptar");
+        }
+    }
+
+    public async Task OpenLastInvoiceAsync()
+    {
+        try
+        {
+            if (string.IsNullOrWhiteSpace(LastInvoicePath) || !File.Exists(LastInvoicePath))
+            {
+                // Si no hay factura final aun, abrir una preliminar.
+                await PreviewTicketAsync();
+                return;
+            }
+
+            await Microsoft.Maui.ApplicationModel.Launcher.OpenAsync(new Microsoft.Maui.ApplicationModel.OpenFileRequest
+            {
+                Title = "Factura",
+                File = new Microsoft.Maui.Storage.ReadOnlyFile(LastInvoicePath)
+            });
+        }
+        catch (Exception ex)
+        {
+            StatusMessage = $"No se pudo abrir la factura: {ex.Message}";
+            await Application.Current!.MainPage!.DisplayAlert("Error", $"Error: {ex.Message}", "Aceptar");
+        }
     }
 }

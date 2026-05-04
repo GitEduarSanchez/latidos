@@ -88,7 +88,7 @@
                 </VerticalStackLayout>
             </Border>
 
-            <CollectionView ItemsSource="{Binding CartItems}"
+            <CollectionView ItemsSource="{Binding GroupedCartItems}"
                             IsVisible="{Binding HasItems}">
                 <CollectionView.ItemsLayout>
                     <LinearItemsLayout Orientation="Vertical" ItemSpacing="14" />
@@ -105,7 +105,7 @@
                             <Grid RowDefinitions="96,Auto,Auto,Auto"
                                   RowSpacing="0">
                                 <Image Grid.Row="0"
-                                       Source="{Binding Event.ImageUrl}"
+                                       Source="{Binding EventImageUrl}"
                                        Aspect="AspectFill"
                                        HeightRequest="96"
                                        HorizontalOptions="Fill"
@@ -116,7 +116,7 @@
                                       Padding="16,14,16,6"
                                       ColumnSpacing="12">
                                     <VerticalStackLayout Spacing="5">
-                                        <Label Text="{Binding Event.Name}"
+                                        <Label Text="{Binding EventName}"
                                                FontSize="17"
                                                FontAttributes="Bold"
                                                TextColor="#252525"
@@ -127,87 +127,111 @@
                                                    WidthRequest="14"
                                                    HeightRequest="14"
                                                    Aspect="AspectFit" />
-                                            <Label Text="{Binding Event.EventDate, StringFormat='{0:dd MMM}'}"
+                                            <Label Text="{Binding EventDate, StringFormat='{0:dd MMM}'}"
                                                    FontSize="12"
                                                    TextColor="#777777"
                                                    VerticalOptions="Center" />
-                                        </HorizontalStackLayout>
-                                    </VerticalStackLayout>
-
-                                    <Button Grid.Column="1"
-                                            Text="Quitar"
-                                            Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.RemoveFromCartCommand}"
-                                            CommandParameter="{Binding}"
-                                            BackgroundColor="White"
-                                            TextColor="#B94A48"
-                                            BorderColor="#F0C5C4"
-                                            BorderWidth="1"
-                                            CornerRadius="9"
-                                            Padding="10,7"
-                                            FontSize="12"
-                                            FontAttributes="Bold"
-                                            HeightRequest="36"
-                                            MinimumWidthRequest="72" />
+                                    </HorizontalStackLayout>
+                                </VerticalStackLayout>
                                 </Grid>
 
-                                <Grid Grid.Row="2"
-                                      ColumnDefinitions="Auto,*,Auto"
-                                      Padding="16,8,16,8"
-                                      ColumnSpacing="10">
-                                    <Border WidthRequest="54"
-                                            HeightRequest="54"
-                                            Stroke="#E8E3D5"
-                                            StrokeThickness="1"
-                                            StrokeShape="RoundRectangle 27"
-                                            BackgroundColor="#FAFAFA"
-                                            VerticalOptions="Center">
-                                        <Grid>
-                                            <Label Text="Foto"
-                                                   FontSize="10"
-                                                   TextColor="#999999"
-                                                   HorizontalTextAlignment="Center"
-                                                   VerticalTextAlignment="Center" />
-                                            <Image Source="{Binding CompetitorPhotoPath}"
-                                                   IsVisible="{Binding HasCompetitorPhoto}"
-                                                   Aspect="AspectFill"
-                                                   WidthRequest="54"
-                                                   HeightRequest="54" />
-                                        </Grid>
-                                    </Border>
+                                <VerticalStackLayout Grid.Row="2"
+                                                     Padding="12,4,12,8"
+                                                     Spacing="8"
+                                                     BindableLayout.ItemsSource="{Binding Items}">
+                                    <BindableLayout.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid ColumnDefinitions="Auto,*,Auto"
+                                                  ColumnSpacing="10">
+                                                <Border WidthRequest="44"
+                                                        HeightRequest="44"
+                                                        Stroke="#E8E3D5"
+                                                        StrokeThickness="1"
+                                                        StrokeShape="RoundRectangle 22"
+                                                        BackgroundColor="#FAFAFA"
+                                                        VerticalOptions="Center">
+                                                    <Grid>
+                                                        <Label Text="Foto"
+                                                               FontSize="9"
+                                                               TextColor="#999999"
+                                                               HorizontalTextAlignment="Center"
+                                                               VerticalTextAlignment="Center" />
+                                                        <Image Source="{Binding CompetitorPhotoPath}"
+                                                               IsVisible="{Binding HasCompetitorPhoto}"
+                                                               Aspect="AspectFill"
+                                                               WidthRequest="44"
+                                                               HeightRequest="44" />
+                                                    </Grid>
+                                                </Border>
 
-                                    <VerticalStackLayout Grid.Column="1"
-                                                         Spacing="2"
-                                                         VerticalOptions="Center">
-                                        <Label Text="{Binding CompetitorNameText}"
-                                               FontSize="14"
-                                               FontAttributes="Bold"
-                                               TextColor="#252525"
-                                               MaxLines="1"
-                                               LineBreakMode="TailTruncation" />
-                                        <Label Text="{Binding CompetitorDocumentText}"
-                                               FontSize="11"
-                                               TextColor="#777777"
-                                               MaxLines="1"
-                                               LineBreakMode="TailTruncation" />
-                                        <Label Text="{Binding CompetitorAgeText}"
-                                               FontSize="11"
-                                               TextColor="#777777"
-                                               MaxLines="1"
-                                               LineBreakMode="TailTruncation" />
-                                    </VerticalStackLayout>
+                                                <VerticalStackLayout Grid.Column="1"
+                                                                     Spacing="1"
+                                                                     VerticalOptions="Center">
+                                                    <Label Text="{Binding CompetitorNameText}"
+                                                           FontSize="13"
+                                                           FontAttributes="Bold"
+                                                           TextColor="#252525"
+                                                           MaxLines="1"
+                                                           LineBreakMode="TailTruncation" />
+                                                    <Label Text="{Binding CompetitorDocumentText}"
+                                                           FontSize="10"
+                                                           TextColor="#777777"
+                                                           MaxLines="1"
+                                                           LineBreakMode="TailTruncation" />
+                                                    <Label Text="{Binding CompetitorAgeText}"
+                                                           FontSize="10"
+                                                           TextColor="#777777"
+                                                           MaxLines="1"
+                                                           LineBreakMode="TailTruncation" />
+                                                </VerticalStackLayout>
 
-                                    <Border Grid.Column="2"
-                                            Padding="8,5"
-                                            StrokeThickness="0"
-                                            StrokeShape="RoundRectangle 10"
-                                            BackgroundColor="#FFF7DB"
-                                            VerticalOptions="Center">
-                                        <Label Text="{Binding CompetitorNumberText}"
-                                               FontSize="11"
-                                               FontAttributes="Bold"
-                                               TextColor="#C9A227" />
-                                    </Border>
-                                </Grid>
+                                                <Border Grid.Column="2"
+                                                        Padding="7,4"
+                                                        StrokeThickness="0"
+                                                        StrokeShape="RoundRectangle 10"
+                                                        BackgroundColor="#FFF7DB"
+                                                        VerticalOptions="Center">
+                                                    <Label Text="{Binding CompetitorNumberText}"
+                                                           FontSize="10"
+                                                           FontAttributes="Bold"
+                                                           TextColor="#C9A227" />
+                                                </Border>
+
+                                                <VerticalStackLayout Grid.Column="2"
+                                                                     Spacing="6"
+                                                                     VerticalOptions="Center">
+                                                    <Button Text="Cambiar"
+                                                            Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.ChangeCompetitorCommand}"
+                                                            CommandParameter="{Binding}"
+                                                            BackgroundColor="White"
+                                                            TextColor="#2d2d2d"
+                                                            BorderColor="#E8E3D5"
+                                                            BorderWidth="1"
+                                                            CornerRadius="8"
+                                                            Padding="8,5"
+                                                            FontSize="10"
+                                                            FontAttributes="Bold"
+                                                            HeightRequest="30"
+                                                            MinimumWidthRequest="72" />
+
+                                                    <Button Text="Quitar"
+                                                            Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.RemoveFromCartCommand}"
+                                                            CommandParameter="{Binding}"
+                                                            BackgroundColor="White"
+                                                            TextColor="#B94A48"
+                                                            BorderColor="#F0C5C4"
+                                                            BorderWidth="1"
+                                                            CornerRadius="8"
+                                                            Padding="8,5"
+                                                            FontSize="10"
+                                                            FontAttributes="Bold"
+                                                            HeightRequest="30"
+                                                            MinimumWidthRequest="72" />
+                                                </VerticalStackLayout>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </BindableLayout.ItemTemplate>
+                                </VerticalStackLayout>
 
                                 <Grid Grid.Row="3"
                                       ColumnDefinitions="*,Auto"
@@ -219,7 +243,7 @@
                                                WidthRequest="14"
                                                HeightRequest="14"
                                                Aspect="AspectFit" />
-                                        <Label Text="{Binding QuantityText}"
+                                        <Label Text="{Binding CompetitorCountText}"
                                                FontSize="12"
                                                TextColor="#777777"
                                                VerticalOptions="Center" />
@@ -233,7 +257,7 @@
                                                WidthRequest="15"
                                                HeightRequest="15"
                                                Aspect="AspectFit" />
-                                        <Label Text="{Binding TotalPriceText}"
+                                        <Label Text="{Binding GroupTotalText}"
                                                FontSize="16"
                                                FontAttributes="Bold"
                                                TextColor="#C9A227"

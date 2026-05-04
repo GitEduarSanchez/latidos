@@ -62,6 +62,24 @@ public class CartService : ICartService
         }
     }
 
+    public Task<bool> UpdateCompetitorAsync(int cartItemId, CompetitorProfile competitor)
+    {
+        try
+        {
+            var item = _cartItems.FirstOrDefault(ci => ci.Id == cartItemId);
+            if (item != null)
+            {
+                item.Competitor = competitor;
+                return Task.FromResult(true);
+            }
+            return Task.FromResult(false);
+        }
+        catch
+        {
+            return Task.FromResult(false);
+        }
+    }
+
     public Task ClearCartAsync()
     {
         _cartItems.Clear();
