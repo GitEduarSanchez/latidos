@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Latidos.ViewModels"
              x:Class="Latidos.Views.RegistrationPage"
              Title="Inscripcion"
              BackgroundColor="#F7F7F5">
@@ -50,6 +51,86 @@
                                TextColor="#C9A227" />
                     </Border>
                 </Grid>
+            </Border>
+
+            <Border Padding="14"
+                    Stroke="#E8E3D5"
+                    StrokeThickness="1"
+                    StrokeShape="RoundRectangle 14"
+                    BackgroundColor="White">
+                <VerticalStackLayout Spacing="10">
+                    <VerticalStackLayout Spacing="2">
+                        <Label Text="Competidores guardados"
+                               FontSize="18"
+                               FontAttributes="Bold"
+                               TextColor="#252525" />
+                        <Label Text="Marca uno o varios y agregalos al carrito para este evento."
+                               FontSize="12"
+                               TextColor="#767676" />
+                    </VerticalStackLayout>
+
+                    <Label Text="Aqui apareceran las fichas que ya guardaste desde esta app."
+                           FontSize="12"
+                           TextColor="#999999"
+                           IsVisible="{Binding ShowEmptySavedCompetitorsHelp}" />
+
+                    <Label Text="{Binding SelectedSavedSummaryText}"
+                           FontSize="12"
+                           FontAttributes="Bold"
+                           TextColor="#4F4F4F"
+                           IsVisible="{Binding HasSavedCompetitors}" />
+
+                    <CollectionView ItemsSource="{Binding SavedCompetitors}"
+                                    HeightRequest="220"
+                                    IsVisible="{Binding HasSavedCompetitors}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="vm:SelectableCompetitorItem">
+                                <Grid Padding="4,6"
+                                      ColumnDefinitions="Auto,*">
+                                    <CheckBox VerticalOptions="Center"
+                                              IsChecked="{Binding IsSelected, Mode=TwoWay}" />
+                                    <VerticalStackLayout Grid.Column="1"
+                                                         Spacing="2"
+                                                         VerticalOptions="Center">
+                                        <Label Text="{Binding Competitor.FullName}"
+                                               FontSize="14"
+                                               FontAttributes="Bold"
+                                               TextColor="#252525"
+                                               MaxLines="1"
+                                               LineBreakMode="TailTruncation" />
+                                        <Label Text="{Binding Competitor.ProfileSummaryText}"
+                                               FontSize="11"
+                                               TextColor="#767676"
+                                               MaxLines="2"
+                                               LineBreakMode="TailTruncation" />
+                                    </VerticalStackLayout>
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+
+                    <Button Text="Agregar seleccionados al carrito"
+                            Command="{Binding AddSelectedToCartCommand}"
+                            IsVisible="{Binding HasSavedCompetitors}"
+                            BackgroundColor="#252525"
+                            TextColor="White"
+                            FontSize="13"
+                            FontAttributes="Bold"
+                            CornerRadius="10"
+                            HeightRequest="46" />
+
+                    <Button Text="Agregar seleccionados y seguir aqui"
+                            Command="{Binding AddSelectedAndContinueCommand}"
+                            IsVisible="{Binding HasSavedCompetitors}"
+                            BackgroundColor="White"
+                            TextColor="#252525"
+                            BorderColor="#252525"
+                            BorderWidth="1"
+                            FontSize="13"
+                            FontAttributes="Bold"
+                            CornerRadius="10"
+                            HeightRequest="44" />
+                </VerticalStackLayout>
             </Border>
 
             <Border Padding="14"

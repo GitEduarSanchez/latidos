@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using System.Windows.Input;
 using Latidos.Models;
 using Latidos.Services;
@@ -31,6 +32,34 @@ public class RegistrationViewModel : BindableObject
     public string EventName => Event?.Name ?? "Evento";
     public string EventInfoText => Event == null ? string.Empty : $"{Event.EventDate:dd MMM yyyy} - {Event.CityLocationText}";
     public string EventPriceText => Event == null ? string.Empty : $"${Event.Price:F2}";
+
+    public ObservableCollection<SelectableCompetitorItem> SavedCompetitors { get; } = new();
+
+    private int _selectedSavedCount;
+
+    public int SelectedSavedCount
+    {
+        get => _selectedSavedCount;
+        private set
+        {
+            if (_selectedSavedCount == value)
+            {
+                return;
+            }
+
+            _selectedSavedCount = value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(SelectedSavedSummaryText));
+        }
+    }
+
+    public bool HasSavedCompetitors => SavedCompetitors.Count > 0;
+
+    public string SelectedSavedSummaryText => SelectedSavedCount == 0
+        ? "Ninguno seleccionado"
+        : $"{SelectedSavedCount} seleccionado(s)";
+
+    public bool ShowEmptySavedCompetitorsHelp => SavedCompetitors.Count == 0;
 
     private string _competitorSearchText = string.Empty;
     public string CompetitorSearchText
@@ -188,6 +217,8 @@ public class RegistrationViewModel : BindableObject
     public ICommand ClearSearchCommand { get; }
     public ICommand AddToCartCommand { get; }
     public ICommand AddAnotherCommand { get; }
+    public ICommand AddSelectedToCartCommand { get; }
+    public ICommand AddSelectedAndContinueCommand { get; }
     public ICommand CancelCommand { get; }
 
     public RegistrationViewModel()
@@ -203,6 +234,8 @@ public class RegistrationViewModel : BindableObject
         ClearSearchCommand = new Command(ClearSearch);
         AddToCartCommand = new Command(async () => await AddRegistrationAsync(goToCart: true));
         AddAnotherCommand = new Command(async () => await AddRegistrationAsync(goToCart: false));
+        AddSelectedToCartCommand = new Command(async () => await AddSelectedCompetitorsToCartAsync(goToCart: true));
+        AddSelectedAndContinueCommand = new Command(async () => await AddSelectedCompetitorsToCartAsync(goToCart: false));
         CancelCommand = new Command(async () => await Shell.Current.GoToAsync("///events"));
 
         RegenerateCompetitorNumber();
@@ -222,6 +255,115 @@ public class RegistrationViewModel : BindableObject
         {
             StatusMessage = "Este evento no acepta nuevas inscripciones.";
         }
+
+        await LoadSavedCompetitorsAsync();
+    }
+
+    private void UpdateSavedCompetitorsListChanged()
+    {
+        OnPropertyChanged(nameof(HasSavedCompetitors));
+        OnPropertyChanged(nameof(ShowEmptySavedCompetitorsHelp));
+        UpdateSelectionSummary();
+    }
+
+    private void UpdateSelectionSummary()
+    {
+        SelectedSavedCount = SavedCompetitors.Count(static i => i.IsSelected);
+    }
+
+    private async Task LoadSavedCompetitorsAsync()
+    {
+        var all = await _competitorService.GetAllCompetitorsAsync();
+        SavedCompetitors.Clear();
+        foreach (var c in all)
+        {
+            SavedCompetitors.Add(new SelectableCompetitorItem(c, UpdateSelectionSummary));
+        }
+
+        UpdateSavedCompetitorsListChanged();
+    }
+
+    private async Task AddSelectedCompetitorsToCartAsync(bool goToCart)
+    {
+        StatusMessage = string.Empty;
+
+        if (Event == null)
+        {
+            StatusMessage = "Selecciona un evento valido.";
+            return;
+        }
+
+        if (!Event.CanRegister)
+        {
+            StatusMessage = "Este evento no acepta nuevas inscripciones.";
+            return;
+        }
+
+        var selected = SavedCompetitors.Where(static i => i.IsSelected).ToList();
+        if (selected.Count == 0)
+        {
+            StatusMessage = "Selecciona al menos un competidor en la lista.";
+            return;
+        }
+
+        foreach (var row in selected)
+        {
+            var competitor = CloneProfileForCart(row.Competitor);
+            AssignNewCompetitorNumber(competitor);
+
+            var added = await _cartService.AddToCartAsync(new CartItem
+            {
+                EventId = Event.Id,
+                Event = Event,
+                Competitor = competitor,
+                Quantity = 1,
+                Price = Event.Price
+            });
+
+            if (!added)
+            {
+                StatusMessage = "No se pudo agregar una o mas inscripciones al carrito.";
+                return;
+            }
+
+            await _competitorService.SaveCompetitorAsync(competitor);
+        }
+
+        var count = selected.Count;
+        foreach (var row in selected)
+        {
+            row.IsSelected = false;
+        }
+
+        UpdateSelectionSummary();
+        await LoadSavedCompetitorsAsync();
+
+        if (goToCart)
+        {
+            await Shell.Current.GoToAsync("///cart");
+            return;
+        }
+
+        StatusMessage = $"{count} inscripcion(es) agregada(s). Puedes seguir seleccionando o usar el formulario.";
+    }
+
+    private static CompetitorProfile CloneProfileForCart(CompetitorProfile source)
+    {
+        return new CompetitorProfile
+        {
+            FullName = source.FullName.Trim(),
+            DocumentType = source.DocumentType,
+            DocumentNumber = source.DocumentNumber.Trim(),
+            BirthDate = source.BirthDate.Date,
+            PhotoPath = source.PhotoPath
+        };
+    }
+
+    private void AssignNewCompetitorNumber(CompetitorProfile competitor)
+    {
+        var eventPrefix = Event?.Id ?? 0;
+        var random = Random.Shared.Next(1000, 9999);
+        competitor.CompetitorNumber = $"{eventPrefix:D2}{random}";
     }
 
     private async Task AddRegistrationAsync(bool goToCart)
@@ -262,6 +404,8 @@ public class RegistrationViewModel : BindableObject
         }
 
         await _competitorService.SaveCompetitorAsync(competitor);
+
+        await LoadSavedCompetitorsAsync();
 
         if (goToCart)
         {
@@ -414,9 +558,9 @@ public class RegistrationViewModel : BindableObject
 
     private void RegenerateCompetitorNumber()
     {
-        var eventPrefix = Event?.Id ?? 0;
-        var random = Random.Shared.Next(1000, 9999);
-        CompetitorNumber = $"{eventPrefix:D2}{random}";
+        var temp = new CompetitorProfile();
+        AssignNewCompetitorNumber(temp);
+        CompetitorNumber = temp.CompetitorNumber;
     }
 
     private static int CalculateAge(DateTime birthDate)

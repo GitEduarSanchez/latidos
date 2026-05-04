@@ -44,6 +44,24 @@ public class CompetitorService : ICompetitorService
         }
     }
 
+    public async Task<List<CompetitorProfile>> GetAllCompetitorsAsync()
+    {
+        await EnsureLoadedAsync();
+
+        await _gate.WaitAsync();
+        try
+        {
+            return _competitors
+                .OrderBy(competitor => competitor.FullName)
+                .Select(Clone)
+                .ToList();
+        }
+        finally
+        {
+            _gate.Release();
+        }
+    }
+
     public async Task SaveCompetitorAsync(CompetitorProfile competitor)
     {
         await EnsureLoadedAsync();
