@@ -7,6 +7,12 @@
 
     <ScrollView Padding="20">
         <VerticalStackLayout Spacing="14" VerticalOptions="Center">
+            <Image Source="latidos_logo.jpg"
+                   HeightRequest="72"
+                   WidthRequest="72"
+                   Aspect="AspectFit"
+                   HorizontalOptions="Center" />
+
             <Label Text="LATIDOS"
                    FontSize="32"
                    FontAttributes="Bold"
