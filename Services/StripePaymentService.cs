@@ -49,7 +49,7 @@ public class StripePaymentService : IPaymentService
                 {
                     Success = true,
                     TransactionId = charge.GetProperty("id").GetString() ?? string.Empty,
-                    Message = "Payment processed successfully",
+                    Message = "Pago procesado correctamente",
                     Amount = request.Amount,
                     ProcessedAt = DateTime.UtcNow
                 };
@@ -60,7 +60,7 @@ public class StripePaymentService : IPaymentService
                 return new PaymentResponse
                 {
                     Success = false,
-                    Message = $"Payment failed: {errorResponse}",
+                    Message = $"Pago rechazado: {errorResponse}",
                     Amount = request.Amount,
                     ProcessedAt = DateTime.UtcNow
                 };
@@ -71,7 +71,7 @@ public class StripePaymentService : IPaymentService
             return new PaymentResponse
             {
                 Success = false,
-                Message = $"Error processing payment: {ex.Message}",
+                Message = $"Error al procesar el pago: {ex.Message}",
                 Amount = request.Amount,
                 ProcessedAt = DateTime.UtcNow
             };

@@ -50,6 +50,27 @@ public class CartViewModel : BindableObject
         }
     }
 
+    private int _itemCount;
+    public int ItemCount
+    {
+        get => _itemCount;
+        set
+        {
+            if (_itemCount != value)
+            {
+                _itemCount = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(HasItems));
+                OnPropertyChanged(nameof(IsEmpty));
+                OnPropertyChanged(nameof(ItemCountText));
+            }
+        }
+    }
+
+    public bool HasItems => ItemCount > 0;
+    public bool IsEmpty => ItemCount == 0;
+    public string ItemCountText => ItemCount == 1 ? "1 producto" : $"{ItemCount} productos";
+
     public ICommand LoadCartCommand { get; }
     public ICommand RemoveFromCartCommand { get; }
     public ICommand ProceedToCheckoutCommand { get; }
@@ -71,11 +92,12 @@ public class CartViewModel : BindableObject
         {
             CartItems = await _cartService.GetCartItemsAsync();
             CartTotal = await _cartService.GetCartTotalAsync();
-            CanCheckout = CartItems.Count > 0;
+            ItemCount = CartItems.Sum(item => item.Quantity);
+            CanCheckout = HasItems;
         }
         catch (Exception ex)
         {
-            await Application.Current!.MainPage!.DisplayAlert("Error", $"Failed to load cart: {ex.Message}", "OK");
+            await Application.Current!.MainPage!.DisplayAlert("Error", $"No se pudo cargar el carrito: {ex.Message}", "Aceptar");
         }
     }
 
@@ -88,7 +110,7 @@ public class CartViewModel : BindableObject
         }
         catch (Exception ex)
         {
-            await Application.Current!.MainPage!.DisplayAlert("Error", $"Failed to remove item: {ex.Message}", "OK");
+            await Application.Current!.MainPage!.DisplayAlert("Error", $"No se pudo eliminar el producto: {ex.Message}", "Aceptar");
         }
     }
 
@@ -96,15 +118,15 @@ public class CartViewModel : BindableObject
     {
         if (CartItems.Count == 0)
         {
-            await Application.Current!.MainPage!.DisplayAlert("Warning", "Your cart is empty", "OK");
+            await Application.Current!.MainPage!.DisplayAlert("Carrito vacio", "Agrega un evento antes de continuar.", "Aceptar");
             return;
         }
 
-        await Shell.Current.GoToAsync("checkout");
+        await Shell.Current.GoToAsync("///checkout");
     }
 
     public async Task ContinueShoppingAsync()
     {
-        await Shell.Current.GoToAsync("events");
+        await Shell.Current.GoToAsync("///events");
     }
 }

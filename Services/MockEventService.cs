@@ -22,11 +22,11 @@ public class MockEventService : IEventService
             new RunningEvent
             {
                 Id = 1,
-                Name = "5K City Morning Run",
-                Description = "A fun and casual 5K run through downtown. Perfect for beginners.",
+                Name = "Carrera urbana 5K",
+                Description = "Una carrera casual de 5K por el centro. Ideal para principiantes.",
                 EventDate = DateTime.Now.AddDays(7),
                 Price = 25.00m,
-                Location = "Central Park",
+                Location = "Parque Central",
                 MaxParticipants = 500,
                 CurrentParticipants = 245,
                 ImageUrl = "event_5k_city.svg"
@@ -34,11 +34,11 @@ public class MockEventService : IEventService
             new RunningEvent
             {
                 Id = 2,
-                Name = "Half Marathon Championship",
-                Description = "Competitive 21K race with professional timing and support.",
+                Name = "Campeonato de media maraton",
+                Description = "Carrera competitiva de 21K con cronometraje profesional y apoyo en ruta.",
                 EventDate = DateTime.Now.AddDays(14),
                 Price = 45.00m,
-                Location = "Downtown District",
+                Location = "Distrito Centro",
                 MaxParticipants = 300,
                 CurrentParticipants = 156,
                 ImageUrl = "event_half_marathon.svg"
@@ -46,11 +46,11 @@ public class MockEventService : IEventService
             new RunningEvent
             {
                 Id = 3,
-                Name = "Trail Running Adventure",
-                Description = "10K scenic trail run through mountain paths. Intermediate level.",
+                Name = "Aventura trail running",
+                Description = "Recorrido escenico de 10K por senderos de montana. Nivel intermedio.",
                 EventDate = DateTime.Now.AddDays(21),
                 Price = 35.00m,
-                Location = "Mountain Trail Park",
+                Location = "Parque Sendero Montana",
                 MaxParticipants = 200,
                 CurrentParticipants = 87,
                 ImageUrl = "event_trail_running.svg"
@@ -58,11 +58,11 @@ public class MockEventService : IEventService
             new RunningEvent
             {
                 Id = 4,
-                Name = "Women's 10K Charity Run",
-                Description = "10K fun run supporting local women's healthcare initiatives.",
+                Name = "Carrera solidaria 10K",
+                Description = "Carrera recreativa de 10K en apoyo a iniciativas locales de salud.",
                 EventDate = DateTime.Now.AddDays(30),
                 Price = 30.00m,
-                Location = "Riverside Track",
+                Location = "Pista Ribera",
                 MaxParticipants = 400,
                 CurrentParticipants = 320,
                 ImageUrl = "event_charity_run.svg"
@@ -70,11 +70,11 @@ public class MockEventService : IEventService
             new RunningEvent
             {
                 Id = 5,
-                Name = "Sprint Series - Week 1",
-                Description = "Fast-paced 3K sprint for speed enthusiasts. Advanced runners.",
+                Name = "Serie sprint - Semana 1",
+                Description = "Sprint rapido de 3K para corredores que buscan velocidad. Nivel avanzado.",
                 EventDate = DateTime.Now.AddDays(3),
                 Price = 20.00m,
-                Location = "Athletic Complex",
+                Location = "Complejo Atletico",
                 MaxParticipants = 150,
                 CurrentParticipants = 145,
                 ImageUrl = "event_sprint_series.svg"
@@ -82,11 +82,11 @@ public class MockEventService : IEventService
             new RunningEvent
             {
                 Id = 6,
-                Name = "Night Glow Run",
-                Description = "Evening 5K run with LED lights and DJ stations.",
+                Name = "Carrera nocturna glow",
+                Description = "Carrera nocturna de 5K con luces LED y estaciones de musica.",
                 EventDate = DateTime.Now.AddDays(10),
                 Price = 35.00m,
-                Location = "Downtown Loop",
+                Location = "Circuito Centro",
                 MaxParticipants = 600,
                 CurrentParticipants = 412,
                 ImageUrl = "event_night_glow.svg"

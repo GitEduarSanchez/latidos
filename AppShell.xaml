@@ -46,7 +46,7 @@
     </Shell.TitleView>
 
     <ShellContent
-        Title="Checkout"
+        Title="Pago"
         ContentTemplate="{DataTemplate views:CheckoutPage}"
         Route="checkout" />
 

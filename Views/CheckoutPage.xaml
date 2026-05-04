@@ -3,76 +3,155 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Latidos.Views.CheckoutPage"
              Title="Pago"
-             BackgroundColor="#F8F8F8">
+             BackgroundColor="#F7F7F5">
 
-    <ScrollView Padding="12">
-        <VerticalStackLayout Spacing="12">
-            <!-- Order Summary -->
-            <Frame Padding="16" CornerRadius="12" HasShadow="True" BorderColor="#E8E8E8" BackgroundColor="White">
+    <ScrollView Padding="16,12">
+        <VerticalStackLayout Spacing="14">
+            <Frame Padding="16"
+                   CornerRadius="14"
+                   HasShadow="True"
+                   BorderColor="#E8E3D5"
+                   BackgroundColor="White">
                 <VerticalStackLayout Spacing="10">
-                    <Label Text="Resumen del Pedido" FontSize="18" FontAttributes="Bold" TextColor="#D4AF37" />
-                    <BoxView Color="#E0E0E0" HeightRequest="1" />
+                    <Label Text="Resumen del pedido"
+                           FontSize="18"
+                           FontAttributes="Bold"
+                           TextColor="#C9A227" />
+                    <BoxView Color="#E8E3D5" HeightRequest="1" />
                     <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
-                        <Label Text="Artículos:" FontSize="14" TextColor="#2d2d2d" />
-                        <Label Grid.Column="1" Text="{Binding ItemCount}" FontSize="14" FontAttributes="Bold" TextColor="#2d2d2d" />
+                        <Label Text="Articulos"
+                               FontSize="14"
+                               TextColor="#2d2d2d" />
+                        <Label Grid.Column="1"
+                               Text="{Binding ItemCount}"
+                               FontSize="14"
+                               FontAttributes="Bold"
+                               TextColor="#2d2d2d" />
                     </Grid>
                     <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
-                        <Label Text="Subtotal:" FontSize="14" TextColor="#2d2d2d" />
-                        <Label Grid.Column="1" Text="{Binding Subtotal, StringFormat='${0:F2}'}" FontSize="14" FontAttributes="Bold" TextColor="#2d2d2d" />
+                        <Label Text="Subtotal"
+                               FontSize="14"
+                               TextColor="#2d2d2d" />
+                        <Label Grid.Column="1"
+                               Text="{Binding Subtotal, StringFormat='${0:F2}'}"
+                               FontSize="14"
+                               FontAttributes="Bold"
+                               TextColor="#2d2d2d" />
                     </Grid>
                     <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
-                        <Label Text="IVA:" FontSize="14" TextColor="#2d2d2d" />
-                        <Label Grid.Column="1" Text="{Binding Tax, StringFormat='${0:F2}'}" FontSize="14" FontAttributes="Bold" TextColor="#2d2d2d" />
+                        <Label Text="IVA"
+                               FontSize="14"
+                               TextColor="#2d2d2d" />
+                        <Label Grid.Column="1"
+                               Text="{Binding Tax, StringFormat='${0:F2}'}"
+                               FontSize="14"
+                               FontAttributes="Bold"
+                               TextColor="#2d2d2d" />
                     </Grid>
-                    <BoxView Color="#D4AF37" HeightRequest="2" Margin="0,8,0,8" />
+                    <BoxView Color="#C9A227" HeightRequest="2" Margin="0,8,0,8" />
                     <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
-                        <Label Text="Total:" FontSize="16" FontAttributes="Bold" TextColor="#D4AF37" />
-                        <Label Grid.Column="1" Text="{Binding Total, StringFormat='${0:F2}'}" FontSize="16" FontAttributes="Bold" TextColor="#D4AF37" />
+                        <Label Text="Total"
+                               FontSize="16"
+                               FontAttributes="Bold"
+                               TextColor="#C9A227" />
+                        <Label Grid.Column="1"
+                               Text="{Binding Total, StringFormat='${0:F2}'}"
+                               FontSize="16"
+                               FontAttributes="Bold"
+                               TextColor="#C9A227" />
                     </Grid>
                 </VerticalStackLayout>
             </Frame>
 
-            <!-- Customer Information -->
-            <Frame Padding="16" CornerRadius="12" HasShadow="True" BorderColor="#E8E8E8" BackgroundColor="White">
+            <Frame Padding="16"
+                   CornerRadius="14"
+                   HasShadow="True"
+                   BorderColor="#E8E3D5"
+                   BackgroundColor="White">
                 <VerticalStackLayout Spacing="10">
-                    <Label Text="Información Personal" FontSize="18" FontAttributes="Bold" TextColor="#D4AF37" />
-                    <Entry Placeholder="Nombre Completo" Text="{Binding CustomerName}" PlaceholderColor="#999999" />
-                    <Entry Placeholder="Correo Electrónico" Text="{Binding CustomerEmail}" Keyboard="Email" PlaceholderColor="#999999" />
+                    <Label Text="Informacion personal"
+                           FontSize="18"
+                           FontAttributes="Bold"
+                           TextColor="#C9A227" />
+                    <Entry Placeholder="Nombre completo"
+                           Text="{Binding CustomerName}"
+                           PlaceholderColor="#999999" />
+                    <Entry Placeholder="Correo electronico"
+                           Text="{Binding CustomerEmail}"
+                           Keyboard="Email"
+                           PlaceholderColor="#999999" />
                 </VerticalStackLayout>
             </Frame>
 
-            <!-- Payment Information -->
-            <Frame Padding="16" CornerRadius="12" HasShadow="True" BorderColor="#E8E8E8" BackgroundColor="White">
+            <Frame Padding="16"
+                   CornerRadius="14"
+                   HasShadow="True"
+                   BorderColor="#E8E3D5"
+                   BackgroundColor="White">
                 <VerticalStackLayout Spacing="10">
-                    <Label Text="Información de Pago" FontSize="18" FontAttributes="Bold" TextColor="#D4AF37" />
-                    <Entry Placeholder="Número de Tarjeta" Text="{Binding CardNumber}" Keyboard="Numeric" MaxLength="16" PlaceholderColor="#999999" />
+                    <Label Text="Informacion de pago"
+                           FontSize="18"
+                           FontAttributes="Bold"
+                           TextColor="#C9A227" />
+                    <Entry Placeholder="Numero de tarjeta"
+                           Text="{Binding CardNumber}"
+                           Keyboard="Numeric"
+                           MaxLength="16"
+                           PlaceholderColor="#999999" />
                     <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
-                        <Entry Placeholder="MM/YY" Text="{Binding CardExpiry}" PlaceholderColor="#999999" />
-                        <Entry Grid.Column="1" Placeholder="CVV" Text="{Binding CardCvv}" Keyboard="Numeric" MaxLength="3" PlaceholderColor="#999999" />
+                        <Entry Placeholder="MM/AA"
+                               Text="{Binding CardExpiry}"
+                               PlaceholderColor="#999999" />
+                        <Entry Grid.Column="1"
+                               Placeholder="CVV"
+                               Text="{Binding CardCvv}"
+                               Keyboard="Numeric"
+                               MaxLength="3"
+                               PlaceholderColor="#999999" />
                     </Grid>
                 </VerticalStackLayout>
             </Frame>
 
-            <!-- Terms and Conditions -->
-            <Frame Padding="16" CornerRadius="12" HasShadow="False" BorderColor="Transparent" BackgroundColor="White">
-                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10" RowSpacing="8">
+            <Frame Padding="16"
+                   CornerRadius="14"
+                   HasShadow="False"
+                   BorderColor="#E8E3D5"
+                   BackgroundColor="White">
+                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
                     <CheckBox IsChecked="{Binding AcceptedTerms}" />
-                    <Label Grid.Column="1" Text="Acepto los términos y condiciones" VerticalTextAlignment="Center" FontSize="13" TextColor="#2d2d2d" />
+                    <Label Grid.Column="1"
+                           Text="Acepto los terminos y condiciones"
+                           VerticalTextAlignment="Center"
+                           FontSize="13"
+                           TextColor="#2d2d2d" />
                 </Grid>
             </Frame>
 
-            <!-- Process Payment Button -->
-            <Button Text="Procesar Pago" Command="{Binding ProcessPaymentCommand}" 
-                    BackgroundColor="#D4AF37" TextColor="White" Padding="15,12" FontSize="14" 
-                    IsEnabled="{Binding CanProcessPayment}" CornerRadius="8" />
+            <Button Text="Procesar pago"
+                    Command="{Binding ProcessPaymentCommand}"
+                    BackgroundColor="#C9A227"
+                    TextColor="White"
+                    Padding="15,12"
+                    FontSize="14"
+                    FontAttributes="Bold"
+                    IsEnabled="{Binding CanProcessPayment}"
+                    CornerRadius="10" />
 
-            <!-- Cancel Button -->
-            <Button Text="Cancelar" Command="{Binding CancelCommand}" 
-                    BackgroundColor="Transparent" TextColor="#D4AF37" Padding="15,12" 
-                    BorderWidth="2" BorderColor="#D4AF37" FontSize="14" CornerRadius="8" />
+            <Button Text="Volver al carrito"
+                    Command="{Binding CancelCommand}"
+                    BackgroundColor="White"
+                    TextColor="#C9A227"
+                    Padding="15,12"
+                    BorderWidth="1"
+                    BorderColor="#C9A227"
+                    FontSize="14"
+                    FontAttributes="Bold"
+                    CornerRadius="10" />
 
-            <!-- Status Message -->
-            <Label Text="{Binding StatusMessage}" FontSize="12" TextColor="#FF6B6B" LineBreakMode="WordWrap" />
+            <Label Text="{Binding StatusMessage}"
+                   FontSize="12"
+                   TextColor="#B94A48"
+                   LineBreakMode="WordWrap" />
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

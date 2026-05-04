@@ -129,8 +129,8 @@ public class CheckoutViewModel : BindableObject
         }
     }
 
-    private decimal _itemCount;
-    public decimal ItemCount
+    private int _itemCount;
+    public int ItemCount
     {
         get => _itemCount;
         set
@@ -205,7 +205,7 @@ public class CheckoutViewModel : BindableObject
         try
         {
             _cartItems = await _cartService.GetCartItemsAsync();
-            ItemCount = _cartItems.Count;
+            ItemCount = _cartItems.Sum(ci => ci.Quantity);
             Subtotal = _cartItems.Sum(ci => ci.TotalPrice);
             Tax = Subtotal * 0.08m;
             Total = Subtotal + Tax;
@@ -213,7 +213,7 @@ public class CheckoutViewModel : BindableObject
         }
         catch (Exception ex)
         {
-            StatusMessage = $"Error loading cart: {ex.Message}";
+            StatusMessage = $"No se pudo cargar el carrito: {ex.Message}";
         }
     }
 
@@ -232,14 +232,14 @@ public class CheckoutViewModel : BindableObject
     {
         try
         {
-            StatusMessage = "Processing payment...";
+            StatusMessage = "Procesando pago...";
 
             var paymentRequest = new PaymentRequest
             {
                 TokenId = CardNumber,
                 Amount = Total,
                 Currency = "USD",
-                Description = $"Running Event Inscriptions - {ItemCount} events",
+                Description = $"Inscripciones a eventos - {ItemCount} productos",
                 CustomerEmail = CustomerEmail,
                 CustomerName = CustomerName
             };
@@ -253,12 +253,12 @@ public class CheckoutViewModel : BindableObject
                     CustomerName = CustomerName,
                     CustomerEmail = CustomerEmail,
                     TotalAmount = Total,
-                    Status = "Completed",
+                    Status = "Completado",
                     TransactionId = paymentResponse.TransactionId,
                     Items = _cartItems.Select(ci => new OrderItem
                     {
                         EventId = ci.EventId,
-                        EventName = ci.Event?.Name ?? "Unknown Event",
+                        EventName = ci.Event?.Name ?? "Evento sin nombre",
                         Quantity = ci.Quantity,
                         UnitPrice = ci.Price,
                         TotalPrice = ci.TotalPrice
@@ -268,25 +268,25 @@ public class CheckoutViewModel : BindableObject
                 await _orderService.CreateOrderAsync(order);
                 await _cartService.ClearCartAsync();
 
-                StatusMessage = $"Payment successful! Order #: {paymentResponse.TransactionId}";
-                await Application.Current!.MainPage!.DisplayAlert("Success", "Payment processed successfully!", "OK");
-                await Shell.Current.GoToAsync("events");
+                StatusMessage = $"Pago exitoso. Orden: {paymentResponse.TransactionId}";
+                await Application.Current!.MainPage!.DisplayAlert("Pago exitoso", "El pago fue procesado correctamente.", "Aceptar");
+                await Shell.Current.GoToAsync("///events");
             }
             else
             {
-                StatusMessage = $"Payment failed: {paymentResponse.Message}";
-                await Application.Current!.MainPage!.DisplayAlert("Error", $"Payment failed: {paymentResponse.Message}", "OK");
+                StatusMessage = $"Pago rechazado: {paymentResponse.Message}";
+                await Application.Current!.MainPage!.DisplayAlert("Error", $"Pago rechazado: {paymentResponse.Message}", "Aceptar");
             }
         }
         catch (Exception ex)
         {
-            StatusMessage = $"Error processing payment: {ex.Message}";
-            await Application.Current!.MainPage!.DisplayAlert("Error", $"Error: {ex.Message}", "OK");
+            StatusMessage = $"Error al procesar el pago: {ex.Message}";
+            await Application.Current!.MainPage!.DisplayAlert("Error", $"Error: {ex.Message}", "Aceptar");
         }
     }
 
     public async Task CancelAsync()
     {
-        await Shell.Current.GoToAsync("cart");
+        await Shell.Current.GoToAsync("///cart");
     }
 }

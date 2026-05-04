@@ -9,4 +9,5 @@ public class CartItem
     public decimal Price { get; set; }
 
     public decimal TotalPrice => Price * Quantity;
+    public string QuantityText => Quantity == 1 ? "1 inscripcion" : $"{Quantity} inscripciones";
 }

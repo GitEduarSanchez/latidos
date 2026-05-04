@@ -6,7 +6,7 @@ public class Order
     public string OrderNumber { get; set; } = string.Empty;
     public DateTime OrderDate { get; set; }
     public decimal TotalAmount { get; set; }
-    public string Status { get; set; } = "Pending"; // Pending, Processing, Completed, Failed
+    public string Status { get; set; } = "Pendiente";
     public string CustomerName { get; set; } = string.Empty;
     public string CustomerEmail { get; set; } = string.Empty;
     public string TransactionId { get; set; } = string.Empty;

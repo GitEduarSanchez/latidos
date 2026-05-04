@@ -78,7 +78,7 @@ public class EventsViewModel : BindableObject
         }
         catch (Exception ex)
         {
-            await Application.Current!.MainPage!.DisplayAlert("Error", $"Failed to load events: {ex.Message}", "OK");
+            await Application.Current!.MainPage!.DisplayAlert("Error", $"No se pudieron cargar los eventos: {ex.Message}", "Aceptar");
         }
         finally
         {
@@ -101,7 +101,7 @@ public class EventsViewModel : BindableObject
             var added = await _cartService.AddToCartAsync(cartItem);
             if (!added)
             {
-                await Application.Current!.MainPage!.DisplayAlert("Error", "Failed to add item to cart", "OK");
+                await Application.Current!.MainPage!.DisplayAlert("Error", "No se pudo agregar el producto al carrito", "Aceptar");
                 return;
             }
 
@@ -109,13 +109,13 @@ public class EventsViewModel : BindableObject
         }
         catch (Exception ex)
         {
-            await Application.Current!.MainPage!.DisplayAlert("Error", $"Failed to add to cart: {ex.Message}", "OK");
+            await Application.Current!.MainPage!.DisplayAlert("Error", $"No se pudo agregar al carrito: {ex.Message}", "Aceptar");
         }
     }
 
     public async Task GoToCartAsync()
     {
-        await Shell.Current.GoToAsync("cart");
+        await Shell.Current.GoToAsync("///cart");
     }
 
     private async Task RefreshCartBadgeAsync()

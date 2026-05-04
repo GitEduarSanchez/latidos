@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using System.Globalization;
 
 namespace Latidos
 {
@@ -6,9 +6,13 @@ namespace Latidos
     {
         public App()
         {
+            var spanishCulture = new CultureInfo("es-ES");
+            CultureInfo.DefaultThreadCurrentCulture = spanishCulture;
+            CultureInfo.DefaultThreadCurrentUICulture = spanishCulture;
+
             InitializeComponent();
 
-            // Force light theme for Latidos brand
+            // Force light theme for Latidos brand.
             UserAppTheme = AppTheme.Light;
         }
 

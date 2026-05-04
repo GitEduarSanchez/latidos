@@ -18,11 +18,11 @@ public class EventService : IEventService
             new RunningEvent
             {
                 Id = 1,
-                Name = "5K City Run",
-                Description = "A fun 5K run through the city center",
+                Name = "Carrera urbana 5K",
+                Description = "Una carrera divertida de 5K por el centro de la ciudad",
                 EventDate = DateTime.Now.AddDays(30),
                 Price = 25.00m,
-                Location = "City Center Park",
+                Location = "Parque del Centro",
                 MaxParticipants = 500,
                 CurrentParticipants = 245,
                 ImageUrl = "event_5k_city.svg"
@@ -30,11 +30,11 @@ public class EventService : IEventService
             new RunningEvent
             {
                 Id = 2,
-                Name = "Half Marathon Challenge",
-                Description = "21K half marathon with professional timing",
+                Name = "Reto media maraton",
+                Description = "Media maraton de 21K con cronometraje profesional",
                 EventDate = DateTime.Now.AddDays(60),
                 Price = 45.00m,
-                Location = "Downtown District",
+                Location = "Distrito Centro",
                 MaxParticipants = 300,
                 CurrentParticipants = 156,
                 ImageUrl = "event_half_marathon.svg"
@@ -42,11 +42,11 @@ public class EventService : IEventService
             new RunningEvent
             {
                 Id = 3,
-                Name = "Trail Running Adventure",
-                Description = "10K trail run through mountain paths",
+                Name = "Aventura trail running",
+                Description = "Carrera trail de 10K por senderos de montana",
                 EventDate = DateTime.Now.AddDays(45),
                 Price = 35.00m,
-                Location = "Mountain Trail",
+                Location = "Sendero Montana",
                 MaxParticipants = 200,
                 CurrentParticipants = 87,
                 ImageUrl = "event_trail_running.svg"
