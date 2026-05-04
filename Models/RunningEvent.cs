@@ -7,6 +7,7 @@ public class RunningEvent
     public string Description { get; set; } = string.Empty;
     public DateTime EventDate { get; set; }
     public decimal Price { get; set; }
+    public string PriceText => CurrencyFormatter.FormatCop(Price);
     public string City { get; set; } = string.Empty;
     public string Location { get; set; } = string.Empty;
     public int MaxParticipants { get; set; }

@@ -31,7 +31,7 @@ public class RegistrationViewModel : BindableObject
 
     public string EventName => Event?.Name ?? "Evento";
     public string EventInfoText => Event == null ? string.Empty : $"{Event.EventDate:dd MMM yyyy} - {Event.CityLocationText}";
-    public string EventPriceText => Event == null ? string.Empty : $"${Event.Price:F2}";
+    public string EventPriceText => Event == null ? string.Empty : CurrencyFormatter.FormatCop(Event.Price);
 
     public ObservableCollection<SelectableCompetitorItem> SavedCompetitors { get; } = new();
 
@@ -50,6 +50,7 @@ public class RegistrationViewModel : BindableObject
             _selectedSavedCount = value;
             OnPropertyChanged();
             OnPropertyChanged(nameof(SelectedSavedSummaryText));
+            OnPropertyChanged(nameof(HasSelectedSavedCompetitors));
         }
     }
 
@@ -58,6 +59,8 @@ public class RegistrationViewModel : BindableObject
     public string SelectedSavedSummaryText => SelectedSavedCount == 0
         ? "Ninguno seleccionado"
         : $"{SelectedSavedCount} seleccionado(s)";
+
+    public bool HasSelectedSavedCompetitors => SelectedSavedCount > 0;
 
     public bool ShowEmptySavedCompetitorsHelp => SavedCompetitors.Count == 0;
 

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Latidos.Views.LoginPage"
+             Title="Ingreso"
+             BackgroundColor="#F7F7F5">
+
+    <ScrollView Padding="20">
+        <VerticalStackLayout Spacing="14" VerticalOptions="Center">
+            <Label Text="LATIDOS"
+                   FontSize="32"
+                   FontAttributes="Bold"
+                   TextColor="#C9A227"
+                   HorizontalTextAlignment="Center" />
+
+            <Label Text="Ingresa como admin o competidor"
+                   FontSize="13"
+                   TextColor="#777777"
+                   HorizontalTextAlignment="Center" />
+
+            <Border Padding="12" Stroke="#E8E3D5" StrokeThickness="1" StrokeShape="RoundRectangle 12" BackgroundColor="White">
+                <Entry Text="{Binding FullName}" Placeholder="Nombre completo" />
+            </Border>
+
+            <Border Padding="12" Stroke="#E8E3D5" StrokeThickness="1" StrokeShape="RoundRectangle 12" BackgroundColor="White">
+                <Entry Text="{Binding Email}" Placeholder="Correo" Keyboard="Email" />
+            </Border>
+
+            <Border Padding="12" Stroke="#E8E3D5" StrokeThickness="1" StrokeShape="RoundRectangle 12" BackgroundColor="White">
+                <Entry Text="{Binding Password}" Placeholder="Contrasena" IsPassword="True" />
+            </Border>
+
+            <Border Padding="12,0" Stroke="#E8E3D5" StrokeThickness="1" StrokeShape="RoundRectangle 12" BackgroundColor="White">
+                <Picker ItemsSource="{Binding Roles}" SelectedItem="{Binding SelectedRole}" HeightRequest="44" />
+            </Border>
+
+            <Button Text="Ingresar"
+                    Command="{Binding LoginCommand}"
+                    BackgroundColor="#C9A227"
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    HeightRequest="48"
+                    CornerRadius="10" />
+
+            <Label Text="{Binding StatusMessage}"
+                   IsVisible="{Binding HasStatusMessage}"
+                   TextColor="#B94A48"
+                   FontSize="12" />
+
+            <Label Text="Clave admin demo: admin123"
+                   FontSize="11"
+                   TextColor="#999999"
+                   HorizontalTextAlignment="Center" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

@@ -10,6 +10,7 @@ public class CartItem
     public decimal Price { get; set; }
 
     public decimal TotalPrice => Price * Quantity;
+    public string TotalPriceText => CurrencyFormatter.FormatCop(TotalPrice);
     public string QuantityText => Quantity == 1 ? "1 inscripcion" : $"{Quantity} inscripciones";
     public string CompetitorNameText => Competitor?.FullName ?? "Competidor sin nombre";
     public string CompetitorDocumentText => Competitor == null ? "Documento pendiente" : $"{Competitor.DocumentType}: {Competitor.DocumentNumber}";

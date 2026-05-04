@@ -129,7 +129,7 @@
                         </VerticalStackLayout>
 
                         <VerticalStackLayout Grid.Column="1" Spacing="6">
-                            <Label Text="Precio"
+                            <Label Text="Precio (COP)"
                                    FontSize="12"
                                    FontAttributes="Bold"
                                    TextColor="#4F4F4F" />
@@ -139,7 +139,7 @@
                                     StrokeShape="RoundRectangle 10"
                                     BackgroundColor="#FAFAFA">
                                 <Entry Text="{Binding PriceText}"
-                                       Placeholder="0.00"
+                                       Placeholder="25000"
                                        Keyboard="Numeric"
                                        HeightRequest="44"
                                        ClearButtonVisibility="WhileEditing" />
@@ -296,7 +296,7 @@
                                     </HorizontalStackLayout>
 
                                     <Label Grid.Column="1"
-                                           Text="{Binding Price, StringFormat='${0:F2}'}"
+                                           Text="{Binding PriceText}"
                                            FontSize="13"
                                            FontAttributes="Bold"
                                            TextColor="#C9A227" />

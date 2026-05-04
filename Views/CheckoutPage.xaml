@@ -33,7 +33,7 @@
                                FontSize="14"
                                TextColor="#2d2d2d" />
                         <Label Grid.Column="1"
-                               Text="{Binding Subtotal, StringFormat='${0:F2}'}"
+                               Text="{Binding SubtotalText}"
                                FontSize="14"
                                FontAttributes="Bold"
                                TextColor="#2d2d2d" />
@@ -43,7 +43,7 @@
                                FontSize="14"
                                TextColor="#2d2d2d" />
                         <Label Grid.Column="1"
-                               Text="{Binding Tax, StringFormat='${0:F2}'}"
+                               Text="{Binding TaxText}"
                                FontSize="14"
                                FontAttributes="Bold"
                                TextColor="#2d2d2d" />
@@ -55,7 +55,7 @@
                                FontAttributes="Bold"
                                TextColor="#C9A227" />
                         <Label Grid.Column="1"
-                               Text="{Binding Total, StringFormat='${0:F2}'}"
+                               Text="{Binding TotalText}"
                                FontSize="16"
                                FontAttributes="Bold"
                                TextColor="#C9A227" />

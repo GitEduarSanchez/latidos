@@ -9,6 +9,8 @@ public class CheckoutViewModel : BindableObject
     private readonly IPaymentService _paymentService;
     private readonly ICartService _cartService;
     private readonly IOrderService _orderService;
+    private readonly IInvoiceService _invoiceService;
+    private readonly IAuthService _authService;
     private List<CartItem> _cartItems = new();
 
     private string _customerName = string.Empty;
@@ -153,6 +155,7 @@ public class CheckoutViewModel : BindableObject
             {
                 _subtotal = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(SubtotalText));
             }
         }
     }
@@ -167,6 +170,7 @@ public class CheckoutViewModel : BindableObject
             {
                 _tax = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(TaxText));
             }
         }
     }
@@ -181,9 +185,14 @@ public class CheckoutViewModel : BindableObject
             {
                 _total = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(TotalText));
             }
         }
     }
+
+    public string SubtotalText => CurrencyFormatter.FormatCop(Subtotal);
+    public string TaxText => CurrencyFormatter.FormatCop(Tax);
+    public string TotalText => CurrencyFormatter.FormatCop(Total);
 
     public ICommand ProcessPaymentCommand { get; }
     public ICommand CancelCommand { get; }
@@ -193,9 +202,18 @@ public class CheckoutViewModel : BindableObject
         _paymentService = IPlatformApplication.Current?.Services.GetService<IPaymentService>() ?? throw new InvalidOperationException("Payment service not registered");
         _cartService = IPlatformApplication.Current?.Services.GetService<ICartService>() ?? new CartService();
         _orderService = IPlatformApplication.Current?.Services.GetService<IOrderService>() ?? new OrderService();
+        _invoiceService = IPlatformApplication.Current?.Services.GetService<IInvoiceService>() ?? throw new InvalidOperationException("Invoice service not registered");
+        _authService = IPlatformApplication.Current?.Services.GetService<IAuthService>() ?? new AuthService();
 
         ProcessPaymentCommand = new Command(async () => await ProcessPaymentAsync());
         CancelCommand = new Command(async () => await CancelAsync());
+
+        var user = _authService.CurrentUser;
+        if (user != null)
+        {
+            CustomerName = user.FullName;
+            CustomerEmail = user.Email;
+        }
 
         LoadCheckoutDataAsync();
     }
@@ -207,7 +225,7 @@ public class CheckoutViewModel : BindableObject
             _cartItems = await _cartService.GetCartItemsAsync();
             ItemCount = _cartItems.Sum(ci => ci.Quantity);
             Subtotal = _cartItems.Sum(ci => ci.TotalPrice);
-            Tax = Subtotal * 0.08m;
+            Tax = Subtotal * 0.19m;
             Total = Subtotal + Tax;
             UpdateCanProcessPayment();
         }
@@ -238,7 +256,7 @@ public class CheckoutViewModel : BindableObject
             {
                 TokenId = CardNumber,
                 Amount = Total,
-                Currency = "USD",
+                Currency = "COP",
                 Description = $"Inscripciones a eventos - {ItemCount} competidores",
                 CustomerEmail = CustomerEmail,
                 CustomerName = CustomerName
@@ -270,9 +288,10 @@ public class CheckoutViewModel : BindableObject
                 };
 
                 await _orderService.CreateOrderAsync(order);
+                var invoicePath = await _invoiceService.GenerateOrderTicketPdfAsync(order);
                 await _cartService.ClearCartAsync();
 
-                StatusMessage = $"Pago exitoso. Orden: {paymentResponse.TransactionId}";
+                StatusMessage = $"Pago exitoso. Orden: {paymentResponse.TransactionId}. Factura: {invoicePath}";
                 await Application.Current!.MainPage!.DisplayAlert("Pago exitoso", "El pago fue procesado correctamente.", "Aceptar");
                 await Shell.Current.GoToAsync("///events");
             }

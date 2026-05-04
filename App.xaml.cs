@@ -1,4 +1,5 @@
 using System.Globalization;
+using Latidos.Views;
 
 namespace Latidos
 {
@@ -18,7 +19,7 @@ namespace Latidos
 
         protected override Window CreateWindow(IActivationState? activationState)
         {
-            return new Window(new AppShell());
+            return new Window(new NavigationPage(new LoginPage()));
         }
     }
 }

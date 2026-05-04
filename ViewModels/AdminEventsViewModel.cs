@@ -358,7 +358,7 @@ public class AdminEventsViewModel : BindableObject
         City = runningEvent.City;
         Location = runningEvent.Location;
         EventDate = runningEvent.EventDate;
-        PriceText = runningEvent.Price.ToString("0.00", CultureInfo.InvariantCulture);
+        PriceText = runningEvent.Price.ToString("0", CultureInfo.InvariantCulture);
         MaxParticipantsText = runningEvent.MaxParticipants.ToString(CultureInfo.InvariantCulture);
         CurrentParticipantsText = runningEvent.CurrentParticipants.ToString(CultureInfo.InvariantCulture);
         SelectedStatusText = runningEvent.IsCancelled ? "Cancelado" : "Activo";
@@ -402,7 +402,7 @@ public class AdminEventsViewModel : BindableObject
         City = string.Empty;
         Location = string.Empty;
         EventDate = DateTime.Today.AddDays(7);
-        PriceText = "0.00";
+        PriceText = "0";
         MaxParticipantsText = "100";
         CurrentParticipantsText = "0";
         SelectedStatusText = "Activo";

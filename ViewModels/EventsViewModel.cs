@@ -58,6 +58,23 @@ public class EventsViewModel : BindableObject
 
     public bool IsCartBadgeVisible => CartItemCount > 0;
 
+    private bool _isFiltersExpanded;
+    public bool IsFiltersExpanded
+    {
+        get => _isFiltersExpanded;
+        set
+        {
+            if (_isFiltersExpanded != value)
+            {
+                _isFiltersExpanded = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(FiltersToggleText));
+            }
+        }
+    }
+
+    public string FiltersToggleText => IsFiltersExpanded ? "Ocultar filtros" : "Mostrar filtros";
+
     private string _searchText = string.Empty;
     public string SearchText
     {
@@ -128,6 +145,7 @@ public class EventsViewModel : BindableObject
     public ICommand AddToCartCommand { get; }
     public ICommand GoToCartCommand { get; }
     public ICommand ClearFiltersCommand { get; }
+    public ICommand ToggleFiltersCommand { get; }
 
     public EventsViewModel()
     {
@@ -138,6 +156,9 @@ public class EventsViewModel : BindableObject
         AddToCartCommand = new Command<RunningEvent>(async (evt) => await AddToCartAsync(evt));
         GoToCartCommand = new Command(async () => await GoToCartAsync());
         ClearFiltersCommand = new Command(ClearFilters);
+        ToggleFiltersCommand = new Command(ToggleFilters);
+
+        IsFiltersExpanded = false;
     }
 
     public async Task LoadEventsAsync()
@@ -224,5 +245,10 @@ public class EventsViewModel : BindableObject
         IsDateFilterEnabled = false;
         FilterDate = DateTime.Today;
         ApplyFilters();
+    }
+
+    private void ToggleFilters()
+    {
+        IsFiltersExpanded = !IsFiltersExpanded;
     }
 }

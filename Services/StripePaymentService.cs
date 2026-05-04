@@ -30,7 +30,7 @@ public class StripePaymentService : IPaymentService
         {
             var content = new FormUrlEncodedContent(new[]
             {
-                new KeyValuePair<string, string>("amount", ((int)(request.Amount * 100)).ToString()),
+                new KeyValuePair<string, string>("amount", GetStripeAmount(request.Amount, request.Currency).ToString()),
                 new KeyValuePair<string, string>("currency", request.Currency.ToLower()),
                 new KeyValuePair<string, string>("source", request.TokenId),
                 new KeyValuePair<string, string>("description", request.Description),
@@ -85,7 +85,7 @@ public class StripePaymentService : IPaymentService
             var content = new FormUrlEncodedContent(new[]
             {
                 new KeyValuePair<string, string>("charge", transactionId),
-                new KeyValuePair<string, string>("amount", ((int)(amount * 100)).ToString()),
+                new KeyValuePair<string, string>("amount", GetStripeAmount(amount, "COP").ToString()),
             });
 
             var response = await _httpClient.PostAsync($"{_stripeApiUrl}/refunds", content);
@@ -95,5 +95,12 @@ public class StripePaymentService : IPaymentService
         {
             return false;
         }
+    }
+
+    private static int GetStripeAmount(decimal amount, string currency)
+    {
+        return currency.Equals("COP", StringComparison.OrdinalIgnoreCase)
+            ? (int)Math.Round(amount, MidpointRounding.AwayFromZero)
+            : (int)Math.Round(amount * 100, MidpointRounding.AwayFromZero);
     }
 }

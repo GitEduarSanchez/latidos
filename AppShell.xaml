@@ -15,22 +15,32 @@
 
     <TabBar>
         <ShellContent
+            x:Name="EventsTab"
             Title="Eventos"
             Icon="shopping.png"
             ContentTemplate="{DataTemplate views:EventsPage}"
             Route="events" />
 
         <ShellContent
+            x:Name="CartTab"
             Title="Carrito"
             Icon="cart.png"
             ContentTemplate="{DataTemplate views:CartPage}"
             Route="cart" />
 
         <ShellContent
+            x:Name="AdminTab"
             Title="Admin"
             Icon="icon_calendar.svg"
             ContentTemplate="{DataTemplate views:AdminEventsPage}"
             Route="admin" />
+
+        <ShellContent
+            x:Name="TimesTab"
+            Title="Tiempos"
+            Icon="icon_calendar.svg"
+            ContentTemplate="{DataTemplate views:AdminTimesPage}"
+            Route="admin-times" />
     </TabBar>
 
     <Shell.TitleView>

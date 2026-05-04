@@ -28,6 +28,11 @@ public class OrderService : IOrderService
         return Task.FromResult(order);
     }
 
+    public Task<List<Order>> GetAllOrdersAsync()
+    {
+        return Task.FromResult(_orders.ToList());
+    }
+
     public Task<List<Order>> GetUserOrdersAsync(string customerEmail)
     {
         var userOrders = _orders.Where(o => o.CustomerEmail == customerEmail).ToList();

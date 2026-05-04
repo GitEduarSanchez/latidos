@@ -32,6 +32,7 @@ public class CartViewModel : BindableObject
             {
                 _cartTotal = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(CartTotalText));
             }
         }
     }
@@ -70,6 +71,7 @@ public class CartViewModel : BindableObject
     public bool HasItems => ItemCount > 0;
     public bool IsEmpty => ItemCount == 0;
     public string ItemCountText => ItemCount == 1 ? "1 inscripcion" : $"{ItemCount} inscripciones";
+    public string CartTotalText => CurrencyFormatter.FormatCop(CartTotal);
 
     public ICommand LoadCartCommand { get; }
     public ICommand RemoveFromCartCommand { get; }

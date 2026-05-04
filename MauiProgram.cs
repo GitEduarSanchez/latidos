@@ -40,12 +40,17 @@ namespace Latidos
             builder.Services.AddSingleton<ICartService, CartService>();
             builder.Services.AddSingleton<IOrderService, OrderService>();
             builder.Services.AddSingleton<ICompetitorService, CompetitorService>();
+            builder.Services.AddSingleton<IAuthService, AuthService>();
+            builder.Services.AddSingleton<IResultService, ResultService>();
+            builder.Services.AddSingleton<IInvoiceService, InvoiceService>();
 
             // Register Views
             builder.Services.AddSingleton<EventsPage>();
             builder.Services.AddSingleton<CartPage>();
             builder.Services.AddSingleton<CheckoutPage>();
             builder.Services.AddSingleton<AdminEventsPage>();
+            builder.Services.AddSingleton<AdminTimesPage>();
+            builder.Services.AddSingleton<LoginPage>();
             builder.Services.AddTransient<RegistrationPage>();
 
 #if DEBUG
