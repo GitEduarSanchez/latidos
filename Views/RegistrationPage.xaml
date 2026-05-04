@@ -57,6 +57,94 @@
                     StrokeThickness="1"
                     StrokeShape="RoundRectangle 14"
                     BackgroundColor="White">
+                <VerticalStackLayout Spacing="10">
+                    <Grid ColumnDefinitions="*,Auto"
+                          ColumnSpacing="10">
+                        <VerticalStackLayout Spacing="2">
+                            <Label Text="Buscar competidor"
+                                   FontSize="18"
+                                   FontAttributes="Bold"
+                                   TextColor="#252525" />
+                            <Label Text="Busca por cedula o nombre si ya esta registrado."
+                                   FontSize="12"
+                                   TextColor="#767676" />
+                        </VerticalStackLayout>
+
+                        <Button Grid.Column="1"
+                                Text="Limpiar"
+                                Command="{Binding ClearSearchCommand}"
+                                BackgroundColor="White"
+                                TextColor="#C9A227"
+                                BorderColor="#C9A227"
+                                BorderWidth="1"
+                                FontSize="12"
+                                FontAttributes="Bold"
+                                CornerRadius="10"
+                                HeightRequest="40"
+                                Padding="12,0" />
+                    </Grid>
+
+                    <SearchBar Text="{Binding CompetitorSearchText}"
+                               SearchCommand="{Binding SearchCompetitorsCommand}"
+                               Placeholder="Cedula o nombre"
+                               HeightRequest="44"
+                               Margin="0" />
+
+                    <Label Text="No se encontraron competidores con esa busqueda."
+                           IsVisible="{Binding HasSearchTextWithoutResults}"
+                           FontSize="12"
+                           TextColor="#767676" />
+
+                    <VerticalStackLayout Spacing="8"
+                                         IsVisible="{Binding HasSearchResults}"
+                                         BindableLayout.ItemsSource="{Binding SearchResults}">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate>
+                                <Border Padding="10"
+                                        Stroke="#E8E3D5"
+                                        StrokeThickness="1"
+                                        StrokeShape="RoundRectangle 12"
+                                        BackgroundColor="#FAFAFA">
+                                    <Grid ColumnDefinitions="*,Auto"
+                                          ColumnSpacing="10">
+                                        <VerticalStackLayout Spacing="2">
+                                            <Label Text="{Binding FullName}"
+                                                   FontSize="14"
+                                                   FontAttributes="Bold"
+                                                   TextColor="#252525"
+                                                   MaxLines="1"
+                                                   LineBreakMode="TailTruncation" />
+                                            <Label Text="{Binding ProfileSummaryText}"
+                                                   FontSize="11"
+                                                   TextColor="#767676"
+                                                   MaxLines="1"
+                                                   LineBreakMode="TailTruncation" />
+                                        </VerticalStackLayout>
+
+                                        <Button Grid.Column="1"
+                                                Text="Usar"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.SelectCompetitorCommand}"
+                                                CommandParameter="{Binding}"
+                                                BackgroundColor="#C9A227"
+                                                TextColor="White"
+                                                FontSize="12"
+                                                FontAttributes="Bold"
+                                                CornerRadius="10"
+                                                HeightRequest="38"
+                                                Padding="12,0" />
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Border>
+
+            <Border Padding="14"
+                    Stroke="#E8E3D5"
+                    StrokeThickness="1"
+                    StrokeShape="RoundRectangle 14"
+                    BackgroundColor="White">
                 <VerticalStackLayout Spacing="12">
                     <Grid ColumnDefinitions="*,Auto"
                           ColumnSpacing="12">

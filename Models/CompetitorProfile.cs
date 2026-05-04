@@ -9,6 +9,10 @@ public class CompetitorProfile
     public DateTime BirthDate { get; set; }
     public string PhotoPath { get; set; } = string.Empty;
 
+    public string DocumentText => $"{DocumentType}: {DocumentNumber}";
+
+    public string ProfileSummaryText => $"{DocumentText} - {Age} anos - {AgeCategory}";
+
     public int Age
     {
         get

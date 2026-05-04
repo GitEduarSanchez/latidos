@@ -8,6 +8,7 @@ public class RegistrationViewModel : BindableObject
 {
     private readonly IEventService _eventService;
     private readonly ICartService _cartService;
+    private readonly ICompetitorService _competitorService;
     private RunningEvent? _event;
 
     public RunningEvent? Event
@@ -30,6 +31,41 @@ public class RegistrationViewModel : BindableObject
     public string EventName => Event?.Name ?? "Evento";
     public string EventInfoText => Event == null ? string.Empty : $"{Event.EventDate:dd MMM yyyy} - {Event.CityLocationText}";
     public string EventPriceText => Event == null ? string.Empty : $"${Event.Price:F2}";
+
+    private string _competitorSearchText = string.Empty;
+    public string CompetitorSearchText
+    {
+        get => _competitorSearchText;
+        set
+        {
+            if (_competitorSearchText != value)
+            {
+                _competitorSearchText = value;
+                OnPropertyChanged();
+                _ = SearchCompetitorsAsync();
+            }
+        }
+    }
+
+    private List<CompetitorProfile> _searchResults = new();
+    public List<CompetitorProfile> SearchResults
+    {
+        get => _searchResults;
+        set
+        {
+            if (_searchResults != value)
+            {
+                _searchResults = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(HasSearchResults));
+                OnPropertyChanged(nameof(HasSearchTextWithoutResults));
+            }
+        }
+    }
+
+    public bool HasSearchResults => SearchResults.Count > 0;
+
+    public bool HasSearchTextWithoutResults => !string.IsNullOrWhiteSpace(CompetitorSearchText) && SearchResults.Count == 0;
 
     private string _fullName = string.Empty;
     public string FullName
@@ -147,6 +183,9 @@ public class RegistrationViewModel : BindableObject
 
     public ICommand CapturePhotoCommand { get; }
     public ICommand PickPhotoCommand { get; }
+    public ICommand SearchCompetitorsCommand { get; }
+    public ICommand SelectCompetitorCommand { get; }
+    public ICommand ClearSearchCommand { get; }
     public ICommand AddToCartCommand { get; }
     public ICommand AddAnotherCommand { get; }
     public ICommand CancelCommand { get; }
@@ -155,9 +194,13 @@ public class RegistrationViewModel : BindableObject
     {
         _eventService = IPlatformApplication.Current?.Services.GetService<IEventService>() ?? new EventService();
         _cartService = IPlatformApplication.Current?.Services.GetService<ICartService>() ?? new CartService();
+        _competitorService = IPlatformApplication.Current?.Services.GetService<ICompetitorService>() ?? new CompetitorService();
 
         CapturePhotoCommand = new Command(async () => await CapturePhotoAsync());
         PickPhotoCommand = new Command(async () => await PickPhotoAsync());
+        SearchCompetitorsCommand = new Command(async () => await SearchCompetitorsAsync());
+        SelectCompetitorCommand = new Command<CompetitorProfile>(SelectCompetitor);
+        ClearSearchCommand = new Command(ClearSearch);
         AddToCartCommand = new Command(async () => await AddRegistrationAsync(goToCart: true));
         AddAnotherCommand = new Command(async () => await AddRegistrationAsync(goToCart: false));
         CancelCommand = new Command(async () => await Shell.Current.GoToAsync("///events"));
@@ -218,6 +261,8 @@ public class RegistrationViewModel : BindableObject
             return;
         }
 
+        await _competitorService.SaveCompetitorAsync(competitor);
+
         if (goToCart)
         {
             await Shell.Current.GoToAsync("///cart");
@@ -268,6 +313,35 @@ public class RegistrationViewModel : BindableObject
         };
 
         return true;
+    }
+
+    private async Task SearchCompetitorsAsync()
+    {
+        SearchResults = await _competitorService.SearchCompetitorsAsync(CompetitorSearchText);
+    }
+
+    private void SelectCompetitor(CompetitorProfile? competitor)
+    {
+        if (competitor == null)
+        {
+            return;
+        }
+
+        FullName = competitor.FullName;
+        SelectedDocumentType = competitor.DocumentType;
+        DocumentNumber = competitor.DocumentNumber;
+        BirthDate = competitor.BirthDate;
+        PhotoPath = competitor.PhotoPath;
+        CompetitorSearchText = string.Empty;
+        SearchResults = new List<CompetitorProfile>();
+        RegenerateCompetitorNumber();
+        StatusMessage = "Ficha encontrada. Revisa los datos y confirma la inscripcion.";
+    }
+
+    private void ClearSearch()
+    {
+        CompetitorSearchText = string.Empty;
+        SearchResults = new List<CompetitorProfile>();
     }
 
     private async Task CapturePhotoAsync()
@@ -333,6 +407,8 @@ public class RegistrationViewModel : BindableObject
         DocumentNumber = string.Empty;
         BirthDate = DateTime.Today.AddYears(-18);
         PhotoPath = string.Empty;
+        SearchResults = new List<CompetitorProfile>();
+        CompetitorSearchText = string.Empty;
         RegenerateCompetitorNumber();
     }
 

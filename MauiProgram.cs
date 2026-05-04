@@ -39,6 +39,7 @@ namespace Latidos
             // Shared Services
             builder.Services.AddSingleton<ICartService, CartService>();
             builder.Services.AddSingleton<IOrderService, OrderService>();
+            builder.Services.AddSingleton<ICompetitorService, CompetitorService>();
 
             // Register Views
             builder.Services.AddSingleton<EventsPage>();
