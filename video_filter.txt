@@ -1,0 +1,18 @@
+[0:v]drawtext=fontfile=C\\\\:/Windows/Fonts/arial.ttf:text='LATIDOS - Avances del Prototipo':fontcolor=0xE0B84A:fontsize=56:x=(w-text_w)/2:y=170:enable='between(t,0,9)',
+drawtext=fontfile=C\\\\:/Windows/Fonts/arial.ttf:text='Resumen para cliente':fontcolor=white:fontsize=34:x=(w-text_w)/2:y=260:enable='between(t,0,9)',
+drawtext=fontfile=C\\\\:/Windows/Fonts/arial.ttf:text='1) Interfaz movil mejorada':fontcolor=white:fontsize=42:x=100:y=185:enable='between(t,9,18)',
+drawtext=fontfile=C\\\\:/Windows/Fonts/arial.ttf:text='Buscador plegable y tarjetas mas limpias':fontcolor=0xD9D9D9:fontsize=30:x=100:y=255:enable='between(t,9,18)',
+drawtext=fontfile=C\\\\:/Windows/Fonts/arial.ttf:text='2) Carrito e inscripcion por competidor':fontcolor=white:fontsize=42:x=100:y=185:enable='between(t,18,27)',
+drawtext=fontfile=C\\\\:/Windows/Fonts/arial.ttf:text='Multiples personas por evento con datos completos':fontcolor=0xD9D9D9:fontsize=30:x=100:y=255:enable='between(t,18,27)',
+drawtext=fontfile=C\\\\:/Windows/Fonts/arial.ttf:text='3) Login por perfiles':fontcolor=white:fontsize=42:x=100:y=185:enable='between(t,27,36)',
+drawtext=fontfile=C\\\\:/Windows/Fonts/arial.ttf:text='Admin y Competidor con acceso diferenciado':fontcolor=0xD9D9D9:fontsize=30:x=100:y=255:enable='between(t,27,36)',
+drawtext=fontfile=C\\\\:/Windows/Fonts/arial.ttf:text='4) Gestion de tiempos':fontcolor=white:fontsize=42:x=100:y=185:enable='between(t,36,45)',
+drawtext=fontfile=C\\\\:/Windows/Fonts/arial.ttf:text='Carga de HH MM SS por evento y competidor':fontcolor=0xD9D9D9:fontsize=30:x=100:y=255:enable='between(t,36,45)',
+drawtext=fontfile=C\\\\:/Windows/Fonts/arial.ttf:text='5) Factura PDF tipo ticket':fontcolor=white:fontsize=42:x=100:y=185:enable='between(t,45,54)',
+drawtext=fontfile=C\\\\:/Windows/Fonts/arial.ttf:text='Incluye todos los competidores de la compra':fontcolor=0xD9D9D9:fontsize=30:x=100:y=255:enable='between(t,45,54)',
+drawtext=fontfile=C\\\\:/Windows/Fonts/arial.ttf:text='6) Regionalizacion y branding':fontcolor=white:fontsize=42:x=100:y=185:enable='between(t,54,63)',
+drawtext=fontfile=C\\\\:/Windows/Fonts/arial.ttf:text='COP, eventos de Ocana y Cucuta, nuevo logo':fontcolor=0xD9D9D9:fontsize=30:x=100:y=255:enable='between(t,54,63)',
+drawtext=fontfile=C\\\\:/Windows/Fonts/arial.ttf:text='Siguiente fase sugerida':fontcolor=0xE0B84A:fontsize=46:x=(w-text_w)/2:y=185:enable='between(t,63,72)',
+drawtext=fontfile=C\\\\:/Windows/Fonts/arial.ttf:text='Ranking automatico, certificados y check-in QR':fontcolor=white:fontsize=32:x=(w-text_w)/2:y=255:enable='between(t,63,72)'[base];
+[1:v]scale=140:140[logo];
+[base][logo]overlay=W-w-40:40[v]
