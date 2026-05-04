@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="Latidos.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:Latidos"
+    xmlns:views="clr-namespace:Latidos.Views"
+    Title="Latidos"
+    BackgroundColor="{StaticResource LightBackground}"
+    ForegroundColor="{StaticResource Gold}"
+    TitleColor="{StaticResource Gold}"
+    DisabledColor="{StaticResource LightGray}"
+    UnselectedColor="{StaticResource LightGray}"
+    TabBarBackgroundColor="{StaticResource CardBackground}">
+
+    <TabBar>
+        <ShellContent
+            Title="Eventos"
+            Icon="shopping.png"
+            ContentTemplate="{DataTemplate views:EventsPage}"
+            Route="events" />
+
+        <ShellContent
+            Title="Carrito"
+            Icon="cart.png"
+            ContentTemplate="{DataTemplate views:CartPage}"
+            Route="cart" />
+    </TabBar>
+
+    <Shell.TitleView>
+        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10" Padding="10" BackgroundColor="{StaticResource CardBackground}">
+            <Image 
+                Grid.Column="0"
+                Source="latidos_logo.png"
+                WidthRequest="40"
+                HeightRequest="40"
+                Aspect="AspectFit" />
+            <Label 
+                Grid.Column="1"
+                Text="LATIDOS"
+                TextColor="{StaticResource Gold}"
+                FontSize="24"
+                FontAttributes="Bold"
+                VerticalOptions="Center" />
+        </Grid>
+    </Shell.TitleView>
+
+    <ShellContent
+        Title="Checkout"
+        ContentTemplate="{DataTemplate views:CheckoutPage}"
+        Route="checkout" />
+
+</Shell>

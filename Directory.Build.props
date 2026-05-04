@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <!-- Disable the broken macOS SDK import -->
+  <PropertyGroup>
+    <EnableWorkloadAutoImportPropsLocator>false</EnableWorkloadAutoImportPropsLocator>
+  </PropertyGroup>
+</Project>

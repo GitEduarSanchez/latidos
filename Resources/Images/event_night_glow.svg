@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="280" viewBox="0 0 640 280">
+  <defs>
+    <linearGradient id="night" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#141824"/>
+      <stop offset="1" stop-color="#39516B"/>
+    </linearGradient>
+  </defs>
+  <rect width="640" height="280" fill="url(#night)"/>
+  <circle cx="512" cy="68" r="31" fill="#F4DE88"/>
+  <g fill="#222A34">
+    <rect x="42" y="104" width="58" height="104"/>
+    <rect x="126" y="70" width="76" height="138"/>
+    <rect x="478" y="96" width="86" height="112"/>
+  </g>
+  <path d="M0 210h640v70H0Z" fill="#10131A"/>
+  <path d="M58 230h524" stroke="#C9A227" stroke-width="5" stroke-linecap="round"/>
+  <g stroke="#FFFFFF" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M306 151l-34 31"/>
+    <path d="M331 153l37 27"/>
+    <path d="M321 118l-20 36 34 17"/>
+    <path d="M274 188l-29 34"/>
+    <path d="M368 187l34 33"/>
+  </g>
+  <circle cx="325" cy="101" r="17" fill="#FFFFFF"/>
+  <path d="M284 125c28-22 63-24 103-6" stroke="#58E3FF" stroke-width="10" stroke-linecap="round"/>
+  <path d="M246 168c68-21 122-20 164 2" stroke="#F05DFF" stroke-width="6" stroke-linecap="round" opacity=".82"/>
+</svg>

@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Latidos.Views.EventsPage"
+             Title="Eventos">
+
+    <Grid RowDefinitions="Auto,*"
+          Padding="16,12"
+          RowSpacing="14"
+          BackgroundColor="#F7F7F5">
+
+        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+            <Label Text="Explora Eventos"
+                   FontSize="26"
+                   FontAttributes="Bold"
+                   TextColor="#C9A227"
+                   VerticalOptions="Center"
+                   LineBreakMode="TailTruncation" />
+
+            <Border Grid.Column="1"
+                    Padding="12,0"
+                    HeightRequest="44"
+                    Stroke="#C9A227"
+                    StrokeThickness="1.2"
+                    StrokeShape="RoundRectangle 12"
+                    BackgroundColor="White"
+                    VerticalOptions="Center">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding GoToCartCommand}" />
+                </Border.GestureRecognizers>
+                <Grid>
+                    <HorizontalStackLayout Spacing="7"
+                                           VerticalOptions="Center"
+                                           HorizontalOptions="Center">
+                        <Image Source="icon_cart.svg"
+                               WidthRequest="18"
+                               HeightRequest="18"
+                               Aspect="AspectFit" />
+                        <Label Text="Carrito"
+                               FontSize="12"
+                               FontAttributes="Bold"
+                               TextColor="#C9A227"
+                               VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+
+                    <Border IsVisible="{Binding IsCartBadgeVisible}"
+                            InputTransparent="True"
+                            WidthRequest="20"
+                            HeightRequest="20"
+                            StrokeThickness="0"
+                            StrokeShape="RoundRectangle 10"
+                            BackgroundColor="#2D2D2D"
+                            HorizontalOptions="End"
+                            VerticalOptions="Start"
+                            TranslationX="10"
+                            TranslationY="-9">
+                        <Label Text="{Binding CartItemCount}"
+                               FontSize="10"
+                               FontAttributes="Bold"
+                               TextColor="White"
+                               HorizontalTextAlignment="Center"
+                               VerticalTextAlignment="Center" />
+                    </Border>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <CollectionView Grid.Row="1"
+                        ItemsSource="{Binding Events}"
+                        SelectionChangedCommand="{Binding EventSelectedCommand}"
+                        SelectionChangedCommandParameter="{Binding SelectedItem, Source={RelativeSource Self}}"
+                        SelectionMode="Single">
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Vertical" ItemSpacing="14" />
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame Padding="0"
+                           CornerRadius="14"
+                           IsClippedToBounds="True"
+                           HasShadow="True"
+                           BorderColor="#E8E3D5"
+                           BackgroundColor="White"
+                           Margin="0">
+                        <Grid RowDefinitions="148,Auto,Auto,Auto,Auto,Auto"
+                              RowSpacing="0">
+
+                            <Image Grid.Row="0"
+                                   Source="{Binding ImageUrl}"
+                                   Aspect="AspectFill"
+                                   HorizontalOptions="Fill"
+                                   VerticalOptions="Fill"
+                                   HeightRequest="148" />
+
+                            <Label Grid.Row="1"
+                                   Text="{Binding Name}"
+                                   FontSize="18"
+                                   FontAttributes="Bold"
+                                   TextColor="#252525"
+                                   Padding="16,14,16,4"
+                                   MaxLines="2"
+                                   LineBreakMode="TailTruncation" />
+
+                            <Label Grid.Row="2"
+                                   Text="{Binding Description}"
+                                   FontSize="13"
+                                   TextColor="#666666"
+                                   Padding="16,0,16,12"
+                                   LineBreakMode="TailTruncation"
+                                   MaxLines="2" />
+
+                            <Grid Grid.Row="3"
+                                  ColumnDefinitions="Auto,*"
+                                  ColumnSpacing="16"
+                                  Padding="16,0,16,10">
+                                <HorizontalStackLayout Spacing="6" VerticalOptions="Center">
+                                    <Image Source="icon_calendar.svg"
+                                           WidthRequest="14"
+                                           HeightRequest="14"
+                                           Aspect="AspectFit" />
+                                    <Label Text="{Binding EventDate, StringFormat='{0:dd MMM}'}"
+                                           FontSize="12"
+                                           TextColor="#4F4F4F"
+                                           FontAttributes="Bold"
+                                           VerticalOptions="Center" />
+                                </HorizontalStackLayout>
+
+                                <HorizontalStackLayout Grid.Column="1"
+                                                       Spacing="6"
+                                                       VerticalOptions="Center"
+                                                       HorizontalOptions="Fill">
+                                    <Image Source="icon_location.svg"
+                                           WidthRequest="14"
+                                           HeightRequest="14"
+                                           Aspect="AspectFit" />
+                                    <Label Text="{Binding Location}"
+                                           FontSize="12"
+                                           TextColor="#747474"
+                                           LineBreakMode="TailTruncation"
+                                           VerticalOptions="Center"
+                                           HorizontalOptions="Fill" />
+                                </HorizontalStackLayout>
+                            </Grid>
+
+                            <Grid Grid.Row="4"
+                                  ColumnDefinitions="*,Auto"
+                                  Padding="16,0,16,0">
+                                <HorizontalStackLayout Spacing="6" VerticalOptions="Center">
+                                    <Image Source="icon_tag.svg"
+                                           WidthRequest="15"
+                                           HeightRequest="15"
+                                           Aspect="AspectFit" />
+                                    <Label Text="{Binding Price, StringFormat='${0:F2}'}"
+                                           FontSize="16"
+                                           FontAttributes="Bold"
+                                           TextColor="#C9A227"
+                                           VerticalOptions="Center" />
+                                </HorizontalStackLayout>
+
+                                <HorizontalStackLayout Grid.Column="1"
+                                                       Spacing="6"
+                                                       VerticalOptions="Center"
+                                                       HorizontalOptions="End">
+                                    <Image Source="icon_users.svg"
+                                           WidthRequest="15"
+                                           HeightRequest="15"
+                                           Aspect="AspectFit" />
+                                    <Label Text="{Binding CurrentParticipants, StringFormat='{0} inscritos'}"
+                                           FontSize="12"
+                                           TextColor="#747474"
+                                           HorizontalTextAlignment="End"
+                                           LineBreakMode="TailTruncation"
+                                           VerticalOptions="Center" />
+                                </HorizontalStackLayout>
+                            </Grid>
+
+                            <Button Grid.Row="5"
+                                    Text="Agregar al carrito"
+                                    ImageSource="icon_cart.svg"
+                                    ContentLayout="Left,8"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.AddToCartCommand}"
+                                    CommandParameter="{Binding}"
+                                    BackgroundColor="White"
+                                    TextColor="#C9A227"
+                                    BorderColor="#C9A227"
+                                    BorderWidth="1"
+                                    Padding="16,10"
+                                    Margin="16,12,16,16"
+                                    FontSize="13"
+                                    FontAttributes="Bold"
+                                    CornerRadius="10"
+                                    HeightRequest="46" />
+                        </Grid>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>
