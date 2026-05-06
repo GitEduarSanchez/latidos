@@ -73,7 +73,7 @@ public class EventsViewModel : BindableObject
         }
     }
 
-    public string FiltersToggleText => IsFiltersExpanded ? "Ocultar filtros" : "Mostrar filtros";
+    public string FiltersToggleText => IsFiltersExpanded ? "Cerrar" : "Filtros";
 
     private string _searchText = string.Empty;
     public string SearchText

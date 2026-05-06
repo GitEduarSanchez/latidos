@@ -202,6 +202,7 @@ public class RegistrationViewModel : BindableObject
                 _photoPath = value;
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(HasPhoto));
+                OnPropertyChanged(nameof(HasNoPhoto));
             }
         }
     }
@@ -229,6 +230,7 @@ public class RegistrationViewModel : BindableObject
     };
 
     public bool HasPhoto => !string.IsNullOrWhiteSpace(PhotoPath);
+    public bool HasNoPhoto => !HasPhoto;
     public bool HasStatusMessage => !string.IsNullOrWhiteSpace(StatusMessage);
     public string CompetitorNumberText => string.IsNullOrWhiteSpace(CompetitorNumber) ? "Pendiente" : CompetitorNumber;
     public string AgeText => $"{CalculateAge(BirthDate)} anos - {GetAgeCategory(BirthDate)}";

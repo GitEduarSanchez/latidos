@@ -8,31 +8,19 @@ public class LoginViewModel : BindableObject
 {
     private readonly IAuthService _authService;
 
-    private string _fullName = string.Empty;
-    public string FullName
+    private string _username = "admin";
+    public string Username
     {
-        get => _fullName;
+        get => _username;
         set
         {
-            if (_fullName == value) return;
-            _fullName = value;
+            if (_username == value) return;
+            _username = value;
             OnPropertyChanged();
         }
     }
 
-    private string _email = string.Empty;
-    public string Email
-    {
-        get => _email;
-        set
-        {
-            if (_email == value) return;
-            _email = value;
-            OnPropertyChanged();
-        }
-    }
-
-    private string _password = string.Empty;
+    private string _password = "admin123";
     public string Password
     {
         get => _password;
@@ -43,20 +31,6 @@ public class LoginViewModel : BindableObject
             OnPropertyChanged();
         }
     }
-
-    private string _selectedRole = "Competidor";
-    public string SelectedRole
-    {
-        get => _selectedRole;
-        set
-        {
-            if (_selectedRole == value) return;
-            _selectedRole = value;
-            OnPropertyChanged();
-        }
-    }
-
-    public List<string> Roles { get; } = new() { "Competidor", "Admin" };
 
     private string _statusMessage = string.Empty;
     public string StatusMessage
@@ -84,8 +58,7 @@ public class LoginViewModel : BindableObject
     private async Task LoginAsync()
     {
         StatusMessage = string.Empty;
-        var role = SelectedRole == "Admin" ? UserRole.Admin : UserRole.Competitor;
-        var result = await _authService.LoginAsync(FullName, Email, Password, role);
+        var result = await _authService.LoginAsync(Username, Password);
         if (!result.Success)
         {
             StatusMessage = result.Message;

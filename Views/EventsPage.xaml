@@ -2,332 +2,373 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Latidos.Views.EventsPage"
-             Title="Eventos">
+             Title="Eventos"
+             BackgroundColor="#F8F7F2">
+
+    <ContentPage.Resources>
+        <Color x:Key="Surface">#FFFFFF</Color>
+        <Color x:Key="SurfaceSoft">#FBF9F3</Color>
+        <Color x:Key="HairLine">#EDE6D8</Color>
+        <Color x:Key="TextPrimary">#24211C</Color>
+        <Color x:Key="TextSecondary">#706A5E</Color>
+        <Color x:Key="TextMuted">#9B9384</Color>
+        <Color x:Key="Accent">#C9A227</Color>
+        <Color x:Key="AccentSoft">#FFF7DC</Color>
+
+        <Style x:Key="MetaText" TargetType="Label">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="TextColor" Value="{StaticResource TextSecondary}" />
+            <Setter Property="VerticalTextAlignment" Value="Center" />
+            <Setter Property="LineBreakMode" Value="TailTruncation" />
+        </Style>
+
+        <Style x:Key="IconMeta" TargetType="Image">
+            <Setter Property="WidthRequest" Value="13" />
+            <Setter Property="HeightRequest" Value="13" />
+            <Setter Property="Aspect" Value="AspectFit" />
+            <Setter Property="Opacity" Value="0.58" />
+        </Style>
+    </ContentPage.Resources>
 
     <Grid RowDefinitions="Auto,Auto,*"
-          Padding="16,12"
-          RowSpacing="12"
-          BackgroundColor="#F7F7F5">
+          Padding="20,18,20,0"
+          RowSpacing="14">
 
-        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
-            <VerticalStackLayout Spacing="2">
-                <Label Text="Explora Eventos"
-                       FontSize="26"
-                       FontAttributes="Bold"
-                       TextColor="#C9A227"
-                       LineBreakMode="TailTruncation" />
+        <Grid ColumnDefinitions="*,Auto"
+              ColumnSpacing="14">
+            <VerticalStackLayout Spacing="2"
+                                 VerticalOptions="Center">
+                <Label Text="Eventos"
+                       FontSize="28"
+                       FontFamily="OpenSansSemibold"
+                       TextColor="{StaticResource TextPrimary}" />
                 <Label Text="{Binding EventsCountText}"
-                       FontSize="12"
-                       TextColor="#767676" />
+                       FontSize="13"
+                       TextColor="{StaticResource TextSecondary}" />
             </VerticalStackLayout>
 
             <Border Grid.Column="1"
-                    Padding="12,0"
-                    HeightRequest="44"
-                    Stroke="#C9A227"
-                    StrokeThickness="1.2"
-                    StrokeShape="RoundRectangle 12"
-                    BackgroundColor="White"
+                    WidthRequest="46"
+                    HeightRequest="46"
+                    Stroke="{StaticResource HairLine}"
+                    StrokeThickness="1"
+                    StrokeShape="RoundRectangle 16"
+                    BackgroundColor="{StaticResource Surface}"
                     VerticalOptions="Center">
                 <Border.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding GoToCartCommand}" />
                 </Border.GestureRecognizers>
-                <HorizontalStackLayout Spacing="7"
-                                       VerticalOptions="Center"
-                                       HorizontalOptions="Center">
+                <Grid>
                     <Image Source="icon_cart.svg"
-                           WidthRequest="18"
-                           HeightRequest="18"
-                           Aspect="AspectFit" />
-                    <Label Text="Carrito"
-                           FontSize="12"
-                           FontAttributes="Bold"
-                           TextColor="#C9A227"
+                           WidthRequest="19"
+                           HeightRequest="19"
+                           Aspect="AspectFit"
+                           HorizontalOptions="Center"
                            VerticalOptions="Center" />
                     <Border IsVisible="{Binding IsCartBadgeVisible}"
-                            InputTransparent="True"
-                            MinimumWidthRequest="22"
-                            HeightRequest="22"
+                            MinimumWidthRequest="21"
+                            HeightRequest="21"
                             Padding="5,0"
                             StrokeThickness="0"
                             StrokeShape="RoundRectangle 11"
-                            BackgroundColor="#252525"
-                            VerticalOptions="Center">
+                            BackgroundColor="{StaticResource TextPrimary}"
+                            HorizontalOptions="End"
+                            VerticalOptions="Start"
+                            TranslationX="6"
+                            TranslationY="-6"
+                            InputTransparent="True">
                         <Label Text="{Binding CartItemCount}"
                                FontSize="10"
-                               FontAttributes="Bold"
+                               FontFamily="OpenSansSemibold"
                                TextColor="White"
                                HorizontalTextAlignment="Center"
                                VerticalTextAlignment="Center" />
                     </Border>
-                </HorizontalStackLayout>
+                </Grid>
             </Border>
         </Grid>
 
-        <Border Grid.Row="1"
-                Padding="12"
-                Stroke="#E8E3D5"
-                StrokeThickness="1"
-                StrokeShape="RoundRectangle 14"
-                BackgroundColor="White">
-            <VerticalStackLayout Spacing="10">
-                <Grid ColumnDefinitions="*,Auto"
-                      ColumnSpacing="10">
-                    <Label Text="Buscador de eventos"
-                           FontSize="14"
-                           FontAttributes="Bold"
-                           TextColor="#4F4F4F"
-                           VerticalOptions="Center" />
-                    <Button Grid.Column="1"
-                            Text="{Binding FiltersToggleText}"
-                            Command="{Binding ToggleFiltersCommand}"
-                            BackgroundColor="White"
-                            TextColor="#C9A227"
-                            BorderColor="#C9A227"
-                            BorderWidth="1"
-                            CornerRadius="10"
-                            FontAttributes="Bold"
-                            FontSize="12"
-                            HeightRequest="36"
-                            Padding="12,0" />
-                </Grid>
-
-                <VerticalStackLayout Spacing="10"
-                                     IsVisible="{Binding IsFiltersExpanded}">
+        <VerticalStackLayout Grid.Row="1"
+                             Spacing="10">
+            <Grid ColumnDefinitions="*,Auto"
+                  ColumnSpacing="10">
+                <Border HeightRequest="48"
+                        Padding="12,0"
+                        Stroke="{StaticResource HairLine}"
+                        StrokeThickness="1"
+                        StrokeShape="RoundRectangle 16"
+                        BackgroundColor="{StaticResource Surface}">
                     <SearchBar Text="{Binding SearchText}"
-                               Placeholder="Buscar por nombre"
-                               HeightRequest="44"
-                               Margin="0" />
+                               Placeholder="Buscar evento"
+                               BackgroundColor="Transparent"
+                               HeightRequest="46"
+                               Margin="-8,0" />
+                </Border>
 
+                <Button Grid.Column="1"
+                        Text="{Binding FiltersToggleText}"
+                        Command="{Binding ToggleFiltersCommand}"
+                        BackgroundColor="{StaticResource TextPrimary}"
+                        TextColor="White"
+                        BorderWidth="0"
+                        CornerRadius="16"
+                        FontFamily="OpenSansSemibold"
+                        FontSize="12"
+                        HeightRequest="48"
+                        Padding="14,0" />
+            </Grid>
+
+            <Border IsVisible="{Binding IsFiltersExpanded}"
+                    Padding="12"
+                    Stroke="{StaticResource HairLine}"
+                    StrokeThickness="1"
+                    StrokeShape="RoundRectangle 18"
+                    BackgroundColor="{StaticResource Surface}">
+                <VerticalStackLayout Spacing="10">
                     <Grid ColumnDefinitions="*,Auto"
                           ColumnSpacing="10">
-                        <Border Padding="10,0"
-                                Stroke="#E8E3D5"
-                                StrokeThickness="1"
-                                StrokeShape="RoundRectangle 10"
-                                BackgroundColor="#FAFAFA">
+                        <Border HeightRequest="46"
+                                Padding="12,0"
+                                StrokeThickness="0"
+                                StrokeShape="RoundRectangle 14"
+                                BackgroundColor="{StaticResource SurfaceSoft}">
                             <Entry Text="{Binding CitySearchText}"
                                    Placeholder="Ciudad o lugar"
-                                   HeightRequest="44"
-                                   ClearButtonVisibility="WhileEditing" />
+                                   BackgroundColor="Transparent"
+                                   ClearButtonVisibility="WhileEditing"
+                                   FontSize="14" />
                         </Border>
 
                         <Button Grid.Column="1"
                                 Text="Limpiar"
                                 Command="{Binding ClearFiltersCommand}"
-                                BackgroundColor="White"
-                                TextColor="#C9A227"
-                                BorderColor="#C9A227"
-                                BorderWidth="1"
-                                CornerRadius="10"
-                                FontAttributes="Bold"
-                                FontSize="12"
-                                HeightRequest="44"
-                                Padding="14,0" />
+                                BackgroundColor="Transparent"
+                                TextColor="{StaticResource TextSecondary}"
+                                BorderWidth="0"
+                                FontSize="13"
+                                HeightRequest="46"
+                                Padding="8,0" />
                     </Grid>
 
-                    <Border Padding="10,0"
-                            Stroke="#E8E3D5"
-                            StrokeThickness="1"
-                            StrokeShape="RoundRectangle 10"
-                            BackgroundColor="#FAFAFA">
-                        <Grid ColumnDefinitions="Auto,*,Auto"
-                              ColumnSpacing="8"
-                              HeightRequest="44">
-                            <CheckBox IsChecked="{Binding IsDateFilterEnabled}"
-                                      VerticalOptions="Center" />
-                            <Label Grid.Column="1"
-                                   Text="Filtrar por fecha"
-                                   TextColor="#4F4F4F"
-                                   FontSize="13"
-                                   VerticalOptions="Center" />
-                            <DatePicker Grid.Column="2"
-                                        Date="{Binding FilterDate}"
-                                        IsEnabled="{Binding IsDateFilterEnabled}"
-                                        Format="dd MMM yyyy"
-                                        FontSize="13"
-                                        VerticalOptions="Center" />
-                        </Grid>
-                    </Border>
-                </VerticalStackLayout>
-            </VerticalStackLayout>
-        </Border>
-
-        <CollectionView Grid.Row="2"
-                        ItemsSource="{Binding Events}"
-                        SelectionMode="None">
-            <CollectionView.EmptyView>
-                <Grid Padding="24,36">
-                    <VerticalStackLayout Spacing="10"
-                                         HorizontalOptions="Center"
-                                         VerticalOptions="Center">
-                        <Label Text="No se encontraron eventos"
-                               FontSize="18"
-                               FontAttributes="Bold"
-                               TextColor="#252525"
-                               HorizontalTextAlignment="Center" />
-                        <Label Text="Ajusta el nombre, la ciudad o la fecha para ver mas resultados."
+                    <Grid ColumnDefinitions="Auto,*,Auto"
+                          ColumnSpacing="8"
+                          HeightRequest="44">
+                        <CheckBox IsChecked="{Binding IsDateFilterEnabled}"
+                                  Color="{StaticResource Accent}"
+                                  VerticalOptions="Center" />
+                        <Label Grid.Column="1"
+                               Text="Filtrar por fecha"
                                FontSize="13"
-                               TextColor="#767676"
-                               HorizontalTextAlignment="Center" />
-                    </VerticalStackLayout>
-                </Grid>
-            </CollectionView.EmptyView>
+                               TextColor="{StaticResource TextSecondary}"
+                               VerticalTextAlignment="Center" />
+                        <DatePicker Grid.Column="2"
+                                    Date="{Binding FilterDate}"
+                                    IsEnabled="{Binding IsDateFilterEnabled}"
+                                    Format="dd MMM yyyy"
+                                    FontSize="13"
+                                    TextColor="{StaticResource TextPrimary}"
+                                    VerticalOptions="Center" />
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+        </VerticalStackLayout>
 
-            <CollectionView.ItemsLayout>
-                <LinearItemsLayout Orientation="Vertical" ItemSpacing="14" />
-            </CollectionView.ItemsLayout>
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Frame Padding="0"
-                           CornerRadius="14"
-                           IsClippedToBounds="True"
-                           HasShadow="True"
-                           BorderColor="#E8E3D5"
-                           BackgroundColor="White"
-                           Margin="0">
-                        <Grid RowDefinitions="148,Auto,Auto,Auto,Auto,Auto"
-                              RowSpacing="0">
-
-                            <Grid Grid.Row="0">
-                                <Image Source="{Binding ImageUrl}"
-                                       Aspect="AspectFill"
-                                       HorizontalOptions="Fill"
-                                       VerticalOptions="Fill"
-                                       HeightRequest="148" />
-                                <Border Padding="10,5"
-                                        Margin="12"
-                                        StrokeThickness="0"
-                                        StrokeShape="RoundRectangle 12"
-                                        BackgroundColor="{Binding StatusBackgroundColor}"
-                                        HorizontalOptions="End"
-                                        VerticalOptions="Start">
-                                    <Label Text="{Binding StatusText}"
-                                           FontSize="11"
-                                           FontAttributes="Bold"
-                                           TextColor="{Binding StatusTextColor}" />
-                                </Border>
-                            </Grid>
-
-                            <Label Grid.Row="1"
-                                   Text="{Binding Name}"
+        <Grid Grid.Row="2">
+            <CollectionView ItemsSource="{Binding Events}"
+                            SelectionMode="None">
+                <CollectionView.EmptyView>
+                    <Grid Padding="24,62">
+                        <VerticalStackLayout Spacing="8"
+                                             MaximumWidthRequest="300"
+                                             HorizontalOptions="Center"
+                                             VerticalOptions="Center">
+                            <Border WidthRequest="64"
+                                    HeightRequest="64"
+                                    StrokeThickness="0"
+                                    StrokeShape="RoundRectangle 32"
+                                    BackgroundColor="{StaticResource AccentSoft}"
+                                    HorizontalOptions="Center">
+                                <Image Source="icon_calendar.svg"
+                                       WidthRequest="26"
+                                       HeightRequest="26"
+                                       Opacity="0.7"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center" />
+                            </Border>
+                            <Label Text="Sin resultados"
                                    FontSize="18"
-                                   FontAttributes="Bold"
-                                   TextColor="#252525"
-                                   Padding="16,14,16,4"
-                                   MaxLines="2"
-                                   LineBreakMode="TailTruncation" />
-
-                            <Label Grid.Row="2"
-                                   Text="{Binding Description}"
+                                   FontFamily="OpenSansSemibold"
+                                   TextColor="{StaticResource TextPrimary}"
+                                   HorizontalTextAlignment="Center"
+                                   Margin="0,8,0,0" />
+                            <Label Text="Ajusta el nombre, ciudad o fecha para ver m&#225;s eventos."
                                    FontSize="13"
-                                   TextColor="#666666"
-                                   Padding="16,0,16,12"
-                                   LineBreakMode="TailTruncation"
-                                   MaxLines="2" />
+                                   TextColor="{StaticResource TextSecondary}"
+                                   HorizontalTextAlignment="Center"
+                                   LineBreakMode="WordWrap" />
+                        </VerticalStackLayout>
+                    </Grid>
+                </CollectionView.EmptyView>
 
-                            <Grid Grid.Row="3"
-                                  ColumnDefinitions="Auto,*"
-                                  ColumnSpacing="16"
-                                  Padding="16,0,16,10">
-                                <HorizontalStackLayout Spacing="6" VerticalOptions="Center">
-                                    <Image Source="icon_calendar.svg"
-                                           WidthRequest="14"
-                                           HeightRequest="14"
-                                           Aspect="AspectFit" />
-                                    <Label Text="{Binding EventDate, StringFormat='{0:dd MMM}'}"
-                                           FontSize="12"
-                                           TextColor="#4F4F4F"
-                                           FontAttributes="Bold"
-                                           VerticalOptions="Center" />
-                                </HorizontalStackLayout>
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Vertical" ItemSpacing="10" />
+                </CollectionView.ItemsLayout>
 
-                                <HorizontalStackLayout Grid.Column="1"
-                                                       Spacing="6"
-                                                       VerticalOptions="Center"
-                                                       HorizontalOptions="Fill">
-                                    <Image Source="icon_location.svg"
-                                           WidthRequest="14"
-                                           HeightRequest="14"
-                                           Aspect="AspectFit" />
-                                    <Label Text="{Binding CityLocationText}"
-                                           FontSize="12"
-                                           TextColor="#747474"
-                                           LineBreakMode="TailTruncation"
-                                           VerticalOptions="Center"
-                                           HorizontalOptions="Fill" />
-                                </HorizontalStackLayout>
-                            </Grid>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border Stroke="{StaticResource HairLine}"
+                                StrokeThickness="1"
+                                StrokeShape="RoundRectangle 18"
+                                BackgroundColor="{StaticResource Surface}"
+                                Padding="10">
+                            <Border.Shadow>
+                                <Shadow Brush="#0A0A0A"
+                                        Opacity="0.035"
+                                        Radius="14"
+                                        Offset="0,4" />
+                            </Border.Shadow>
+                            <Grid ColumnDefinitions="104,*"
+                                  ColumnSpacing="12"
+                                  MinimumHeightRequest="172">
 
-                            <Grid Grid.Row="4"
-                                  ColumnDefinitions="*,Auto"
-                                  Padding="16,0,16,0">
-                                <HorizontalStackLayout Spacing="6" VerticalOptions="Center">
-                                    <Image Source="icon_tag.svg"
-                                           WidthRequest="15"
-                                           HeightRequest="15"
-                                           Aspect="AspectFit" />
-                                    <Label Text="{Binding PriceText}"
-                                           FontSize="16"
-                                           FontAttributes="Bold"
-                                           TextColor="#C9A227"
-                                           VerticalOptions="Center" />
-                                </HorizontalStackLayout>
-
-                                <HorizontalStackLayout Grid.Column="1"
-                                                       Spacing="6"
-                                                       VerticalOptions="Center"
-                                                       HorizontalOptions="End">
-                                    <Image Source="icon_users.svg"
-                                           WidthRequest="15"
-                                           HeightRequest="15"
-                                           Aspect="AspectFit" />
-                                    <Label Text="{Binding CurrentParticipants, StringFormat='{0} inscritos'}"
-                                           FontSize="12"
-                                           TextColor="#747474"
-                                           HorizontalTextAlignment="End"
-                                           LineBreakMode="TailTruncation"
-                                           VerticalOptions="Center" />
-                                </HorizontalStackLayout>
-                            </Grid>
-
-                            <Grid Grid.Row="5"
-                                  Margin="16,12,16,16">
-                                <Button Text="Inscribir competidor"
-                                        ImageSource="icon_cart.svg"
-                                        ContentLayout="Left,8"
-                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.AddToCartCommand}"
-                                        CommandParameter="{Binding}"
-                                        IsVisible="{Binding CanRegister}"
-                                        BackgroundColor="White"
-                                        TextColor="#C9A227"
-                                        BorderColor="#C9A227"
-                                        BorderWidth="1"
-                                        Padding="16,10"
-                                        FontSize="13"
-                                        FontAttributes="Bold"
-                                        CornerRadius="10"
-                                        HeightRequest="46" />
-
-                                <Border IsVisible="{Binding IsRegistrationClosed}"
-                                        Padding="16,0"
-                                        Stroke="#E2E2E2"
-                                        StrokeThickness="1"
-                                        StrokeShape="RoundRectangle 10"
-                                        BackgroundColor="#F6F6F6"
-                                        HeightRequest="46">
-                                    <Label Text="{Binding RegistrationClosedText}"
-                                           FontSize="13"
-                                           FontAttributes="Bold"
-                                           TextColor="#777777"
-                                           HorizontalTextAlignment="Center"
-                                           VerticalTextAlignment="Center" />
+                                <Border WidthRequest="104"
+                                        StrokeThickness="0"
+                                        StrokeShape="RoundRectangle 14"
+                                        BackgroundColor="#EFEAE0"
+                                        VerticalOptions="Fill">
+                                    <Image Source="{Binding ImageUrl}"
+                                           Aspect="AspectFill" />
                                 </Border>
+
+                                <Grid Grid.Column="0">
+                                    <Border Padding="10,5"
+                                            Margin="8"
+                                            StrokeThickness="0"
+                                            StrokeShape="RoundRectangle 12"
+                                            BackgroundColor="{Binding StatusBackgroundColor}"
+                                            HorizontalOptions="Start"
+                                            VerticalOptions="Start">
+                                        <Label Text="{Binding StatusText}"
+                                               FontSize="11"
+                                               FontFamily="OpenSansSemibold"
+                                               TextColor="{Binding StatusTextColor}" />
+                                    </Border>
+                                </Grid>
+
+                                <Grid Grid.Column="1"
+                                      RowDefinitions="Auto,Auto,*,Auto"
+                                      RowSpacing="6">
+                                    <VerticalStackLayout Spacing="4">
+                                        <Label Text="{Binding Name}"
+                                               FontSize="16"
+                                               FontFamily="OpenSansSemibold"
+                                               TextColor="{StaticResource TextPrimary}"
+                                               MaxLines="2"
+                                               LineBreakMode="TailTruncation" />
+                                        <Label Text="{Binding Description}"
+                                               FontSize="12"
+                                               TextColor="{StaticResource TextSecondary}"
+                                               LineBreakMode="TailTruncation"
+                                               MaxLines="2" />
+                                    </VerticalStackLayout>
+
+                                    <VerticalStackLayout Grid.Row="1"
+                                                         Spacing="4">
+                                        <HorizontalStackLayout Spacing="6">
+                                            <Image Source="icon_calendar.svg"
+                                                   Style="{StaticResource IconMeta}" />
+                                            <Label Text="{Binding EventDate, StringFormat='{0:dd MMM}'}"
+                                                   Style="{StaticResource MetaText}" />
+                                        </HorizontalStackLayout>
+
+                                        <HorizontalStackLayout Spacing="6">
+                                            <Image Source="icon_location.svg"
+                                                   Style="{StaticResource IconMeta}" />
+                                            <Label Text="{Binding CityLocationText}"
+                                                   Style="{StaticResource MetaText}" />
+                                        </HorizontalStackLayout>
+                                    </VerticalStackLayout>
+
+                                    <HorizontalStackLayout Grid.Row="2"
+                                                           Spacing="5"
+                                                           VerticalOptions="End">
+                                        <Image Source="icon_users.svg"
+                                               WidthRequest="12"
+                                               HeightRequest="12"
+                                               Aspect="AspectFit"
+                                               Opacity="0.55" />
+                                        <Label Text="{Binding CurrentParticipants, StringFormat='{0} inscritos'}"
+                                               FontSize="11"
+                                               TextColor="{StaticResource TextMuted}"
+                                               VerticalTextAlignment="Center" />
+                                    </HorizontalStackLayout>
+
+                                    <Grid Grid.Row="3"
+                                          ColumnDefinitions="*,Auto"
+                                          ColumnSpacing="10">
+                                        <VerticalStackLayout Spacing="0"
+                                                             VerticalOptions="Center">
+                                            <Label Text="Inscripci&#243;n"
+                                                   FontSize="10"
+                                                   TextColor="{StaticResource TextMuted}" />
+                                            <Label Text="{Binding PriceText}"
+                                                   FontSize="17"
+                                                   FontFamily="OpenSansSemibold"
+                                                   TextColor="{StaticResource TextPrimary}" />
+                                        </VerticalStackLayout>
+
+                                        <Button Text="Inscribir"
+                                                Grid.Column="1"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.AddToCartCommand}"
+                                                CommandParameter="{Binding}"
+                                                IsVisible="{Binding CanRegister}"
+                                                BackgroundColor="{StaticResource TextPrimary}"
+                                                TextColor="White"
+                                                BorderWidth="0"
+                                                Padding="14,0"
+                                                FontSize="12"
+                                                FontFamily="OpenSansSemibold"
+                                                CornerRadius="12"
+                                                HeightRequest="42"
+                                                MinimumWidthRequest="96" />
+
+                                        <Border IsVisible="{Binding IsRegistrationClosed}"
+                                                Grid.Column="1"
+                                                Padding="10,0"
+                                                StrokeThickness="0"
+                                                StrokeShape="RoundRectangle 12"
+                                                BackgroundColor="#EFEDE8"
+                                                HeightRequest="42"
+                                                MinimumWidthRequest="96">
+                                            <Label Text="{Binding RegistrationClosedText}"
+                                                   FontSize="11"
+                                                   FontFamily="OpenSansSemibold"
+                                                   TextColor="{StaticResource TextSecondary}"
+                                                   HorizontalTextAlignment="Center"
+                                                   VerticalTextAlignment="Center"
+                                                   LineBreakMode="TailTruncation" />
+                                        </Border>
+                                    </Grid>
+                                </Grid>
                             </Grid>
-                        </Grid>
-                    </Frame>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <Border IsVisible="{Binding IsLoading}"
+                    StrokeThickness="0"
+                    StrokeShape="RoundRectangle 18"
+                    BackgroundColor="#CCFFFFFF"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    Padding="18">
+                <ActivityIndicator IsRunning="{Binding IsLoading}"
+                                   IsVisible="{Binding IsLoading}"
+                                   Color="{StaticResource Accent}"
+                                   WidthRequest="34"
+                                   HeightRequest="34" />
+            </Border>
+        </Grid>
     </Grid>
 </ContentPage>

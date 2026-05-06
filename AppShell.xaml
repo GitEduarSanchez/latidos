@@ -6,48 +6,52 @@
     xmlns:local="clr-namespace:Latidos"
     xmlns:views="clr-namespace:Latidos.Views"
     Title="Latidos"
-    BackgroundColor="{StaticResource LightBackground}"
-    ForegroundColor="{StaticResource Gold}"
-    TitleColor="{StaticResource Gold}"
-    DisabledColor="{StaticResource LightGray}"
-    UnselectedColor="{StaticResource LightGray}"
-    TabBarBackgroundColor="{StaticResource CardBackground}">
+    BackgroundColor="#F8F7F2"
+    ForegroundColor="#C9A227"
+    TitleColor="#C9A227"
+    DisabledColor="#D8D2C4"
+    UnselectedColor="#AFA797"
+    Shell.NavBarHasShadow="False"
+    Shell.TabBarBackgroundColor="#FFFEFA"
+    Shell.TabBarForegroundColor="#C9A227"
+    Shell.TabBarTitleColor="#C9A227"
+    Shell.TabBarUnselectedColor="#AFA797">
 
     <TabBar>
         <ShellContent
             x:Name="EventsTab"
             Title="Eventos"
-            Icon="shopping.png"
+            Icon="icon_calendar.svg"
             ContentTemplate="{DataTemplate views:EventsPage}"
             Route="events" />
 
         <ShellContent
             x:Name="CartTab"
             Title="Carrito"
-            Icon="cart.png"
+            Icon="icon_cart.svg"
             ContentTemplate="{DataTemplate views:CartPage}"
             Route="cart" />
 
         <ShellContent
             x:Name="AdminTab"
             Title="Admin"
-            Icon="icon_calendar.svg"
+            Icon="icon_admin.svg"
             ContentTemplate="{DataTemplate views:AdminEventsPage}"
             Route="admin" />
 
         <ShellContent
             x:Name="TimesTab"
             Title="Tiempos"
-            Icon="icon_calendar.svg"
+            Icon="icon_timer.svg"
             ContentTemplate="{DataTemplate views:AdminTimesPage}"
             Route="admin-times" />
     </TabBar>
 
     <Shell.TitleView>
-        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10" Padding="10" BackgroundColor="{StaticResource CardBackground}">
+        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10" Padding="10" BackgroundColor="#FFFEFA">
             <Image 
                 Grid.Column="0"
-                Source="latidos_logo.png"
+                Source="latidos_logo.jpg"
                 WidthRequest="40"
                 HeightRequest="40"
                 Aspect="AspectFit" />

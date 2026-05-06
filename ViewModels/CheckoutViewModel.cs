@@ -1,5 +1,6 @@
 using Latidos.Models;
 using Latidos.Services;
+using Latidos.Views;
 using System.Windows.Input;
 
 namespace Latidos.ViewModels;
@@ -272,6 +273,7 @@ public class CheckoutViewModel : BindableObject
         try
         {
             StatusMessage = "Procesando pago...";
+            _cartItems = await _cartService.GetCartItemsAsync();
 
             var paymentRequest = new PaymentRequest
             {
@@ -314,7 +316,7 @@ public class CheckoutViewModel : BindableObject
                 await _cartService.ClearCartAsync();
 
                 StatusMessage = $"Pago exitoso. Orden: {paymentResponse.TransactionId}. Factura: {invoicePath}";
-                await Application.Current!.MainPage!.DisplayAlert("Pago exitoso", "El pago fue procesado correctamente.", "Aceptar");
+                await ShowInvoiceModalAsync(invoicePath);
             }
             else
             {
@@ -338,36 +340,11 @@ public class CheckoutViewModel : BindableObject
     {
         try
         {
-            var order = new Order
-            {
-                OrderNumber = $"PREVIEW-{DateTime.Now.Ticks}",
-                CustomerName = string.IsNullOrWhiteSpace(CustomerName) ? "Borrador" : CustomerName,
-                CustomerEmail = string.IsNullOrWhiteSpace(CustomerEmail) ? "borrador@latidos.com" : CustomerEmail,
-                TotalAmount = Total,
-                OrderDate = DateTime.Now,
-                Status = "Borrador",
-                TransactionId = "N/A",
-                Items = _cartItems.Select(ci => new OrderItem
-                {
-                    EventId = ci.EventId,
-                    EventName = ci.Event?.Name ?? "Evento sin nombre",
-                    CompetitorNumber = ci.Competitor?.CompetitorNumber ?? string.Empty,
-                    CompetitorName = ci.Competitor?.FullName ?? string.Empty,
-                    CompetitorDocument = ci.Competitor == null ? string.Empty : $"{ci.Competitor.DocumentType}: {ci.Competitor.DocumentNumber}",
-                    CompetitorAgeCategory = ci.Competitor?.AgeCategory ?? string.Empty,
-                    Quantity = ci.Quantity,
-                    UnitPrice = ci.Price,
-                    TotalPrice = ci.TotalPrice
-                }).ToList()
-            };
+            var order = await BuildPreviewOrderFromCurrentCartAsync();
 
             var invoicePath = await _invoiceService.GenerateOrderTicketPdfAsync(order);
             LastInvoicePath = invoicePath;
-            await Microsoft.Maui.ApplicationModel.Launcher.OpenAsync(new Microsoft.Maui.ApplicationModel.OpenFileRequest
-            {
-                Title = "Vista Previa de Ticket",
-                File = new Microsoft.Maui.Storage.ReadOnlyFile(invoicePath)
-            });
+            await ShowInvoiceModalAsync(invoicePath);
         }
         catch (Exception ex)
         {
@@ -380,23 +357,52 @@ public class CheckoutViewModel : BindableObject
     {
         try
         {
-            if (string.IsNullOrWhiteSpace(LastInvoicePath) || !File.Exists(LastInvoicePath))
-            {
-                // Si no hay factura final aun, abrir una preliminar.
-                await PreviewTicketAsync();
-                return;
-            }
-
-            await Microsoft.Maui.ApplicationModel.Launcher.OpenAsync(new Microsoft.Maui.ApplicationModel.OpenFileRequest
-            {
-                Title = "Factura",
-                File = new Microsoft.Maui.Storage.ReadOnlyFile(LastInvoicePath)
-            });
+            // Siempre regenerar con el carrito actual para evitar abrir una factura anterior.
+            await PreviewTicketAsync();
         }
         catch (Exception ex)
         {
             StatusMessage = $"No se pudo abrir la factura: {ex.Message}";
             await Application.Current!.MainPage!.DisplayAlert("Error", $"Error: {ex.Message}", "Aceptar");
         }
+    }
+
+    private async Task<Order> BuildPreviewOrderFromCurrentCartAsync()
+    {
+        _cartItems = await _cartService.GetCartItemsAsync();
+
+        return new Order
+        {
+            OrderNumber = $"PREVIEW-{DateTime.Now.Ticks}",
+            CustomerName = string.IsNullOrWhiteSpace(CustomerName) ? "Borrador" : CustomerName,
+            CustomerEmail = string.IsNullOrWhiteSpace(CustomerEmail) ? "borrador@latidos.com" : CustomerEmail,
+            TotalAmount = _cartItems.Sum(ci => ci.TotalPrice) * 1.19m,
+            OrderDate = DateTime.Now,
+            Status = "Borrador",
+            TransactionId = "N/A",
+            Items = _cartItems.Select(ci => new OrderItem
+            {
+                EventId = ci.EventId,
+                EventName = ci.Event?.Name ?? "Evento sin nombre",
+                CompetitorNumber = ci.Competitor?.CompetitorNumber ?? string.Empty,
+                CompetitorName = ci.Competitor?.FullName ?? string.Empty,
+                CompetitorDocument = ci.Competitor == null ? string.Empty : $"{ci.Competitor.DocumentType}: {ci.Competitor.DocumentNumber}",
+                CompetitorAgeCategory = ci.Competitor?.AgeCategory ?? string.Empty,
+                Quantity = ci.Quantity,
+                UnitPrice = ci.Price,
+                TotalPrice = ci.TotalPrice
+            }).ToList()
+        };
+    }
+
+    private static async Task ShowInvoiceModalAsync(string invoicePath)
+    {
+        var currentPage = Application.Current?.Windows.FirstOrDefault()?.Page;
+        if (currentPage == null)
+        {
+            return;
+        }
+
+        await currentPage.Navigation.PushModalAsync(new InvoicePreviewPage(invoicePath));
     }
 }

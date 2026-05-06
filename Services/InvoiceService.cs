@@ -2,6 +2,7 @@ using Latidos.Models;
 using QuestPDF.Fluent;
 using QuestPDF.Infrastructure;
 using QColors = QuestPDF.Helpers.Colors;
+
 namespace Latidos.Services;
 
 public class InvoiceService : IInvoiceService
@@ -13,84 +14,8 @@ public class InvoiceService : IInvoiceService
 
         if (DeviceInfo.Platform == DevicePlatform.Android)
         {
-            // QuestPDF no soporta runtime Android. En móvil generamos ticket HTML.
             var htmlPath = Path.Combine(folder, $"{order.OrderNumber}.html");
-
-            var rows = string.Join("", order.Items.Select(item => $"""
-                <tr>
-                    <td>{Escape(item.EventName)}</td>
-                    <td>{Escape(item.CompetitorName)}</td>
-                    <td>{Escape(item.CompetitorDocument)}</td>
-                    <td>{Escape(item.CompetitorNumber)}</td>
-                    <td>{Escape(item.CompetitorAgeCategory)}</td>
-                    <td class="num">{CurrencyFormatter.FormatCop(item.TotalPrice)}</td>
-                </tr>
-                """));
-            if (string.IsNullOrWhiteSpace(rows))
-            {
-                rows = """
-                    <tr>
-                        <td colspan="6">Sin competidores registrados en esta orden.</td>
-                    </tr>
-                    """;
-            }
-
-            var html = $$"""
-                <!doctype html>
-                <html lang="es">
-                <head>
-                    <meta charset="utf-8" />
-                    <meta name="viewport" content="width=device-width, initial-scale=1" />
-                    <title>Factura {{Escape(order.OrderNumber)}}</title>
-                    <style>
-                        body { font-family: Arial, sans-serif; margin: 20px; color: #1f1f1f; }
-                        .card { border: 1px solid #e5e5e5; border-radius: 10px; padding: 16px; }
-                        h1 { margin: 0; color: #c9a227; font-size: 24px; }
-                        .sub { margin: 4px 0 12px; color: #666; font-size: 13px; }
-                        .meta { font-size: 13px; line-height: 1.55; margin-bottom: 12px; }
-                        table { width: 100%; border-collapse: collapse; font-size: 12px; }
-                        th, td { border-bottom: 1px solid #eee; padding: 8px 6px; text-align: left; }
-                        th { background: #fafafa; }
-                        .num { text-align: right; white-space: nowrap; }
-                        .total { margin-top: 14px; font-size: 16px; font-weight: 700; color: #111; }
-                    </style>
-                </head>
-                <body>
-                    <div class="card">
-                        <h1>LATIDOS</h1>
-                        <div class="sub">Factura de inscripción</div>
-
-                        <div class="meta">
-                            <div><strong>Orden:</strong> {{Escape(order.OrderNumber)}}</div>
-                            <div><strong>Fecha:</strong> {{order.OrderDate:dd/MM/yyyy HH:mm}}</div>
-                            <div><strong>Cliente:</strong> {{Escape(order.CustomerName)}}</div>
-                            <div><strong>Correo:</strong> {{Escape(order.CustomerEmail)}}</div>
-                            <div><strong>Transacción:</strong> {{Escape(order.TransactionId)}}</div>
-                        </div>
-
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Evento</th>
-                                    <th>Competidor</th>
-                                    <th>Documento</th>
-                                    <th>Número</th>
-                                    <th>Categoría</th>
-                                    <th class="num">Valor</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {{rows}}
-                            </tbody>
-                        </table>
-
-                        <div class="total">Total pagado: {{CurrencyFormatter.FormatCop(order.TotalAmount)}}</div>
-                    </div>
-                </body>
-                </html>
-                """;
-
-            File.WriteAllText(htmlPath, html);
+            File.WriteAllText(htmlPath, BuildMobileInvoiceHtml(order));
             return Task.FromResult(htmlPath);
         }
 
@@ -102,7 +27,6 @@ public class InvoiceService : IInvoiceService
         {
             container.Page(page =>
             {
-                // 80mm roll continuous size
                 page.ContinuousSize(80, Unit.Millimetre);
                 page.Margin(10);
                 page.DefaultTextStyle(x => x.FontSize(9).FontFamily("Arial"));
@@ -110,23 +34,20 @@ public class InvoiceService : IInvoiceService
                 page.Content().Column(col =>
                 {
                     col.Spacing(5);
-                    
-                    // Header
+
                     col.Item().AlignCenter().Text("LATIDOS").Bold().FontSize(16);
                     col.Item().AlignCenter().Text("TICKET DE INSCRIPCION").Bold();
                     col.Item().LineHorizontal(1).LineColor(QColors.Grey.Medium);
-                    
-                    // Order Info
+
                     col.Item().Text($"Orden: {order.OrderNumber}").Bold();
                     col.Item().Text($"Fecha: {order.OrderDate:dd/MM/yyyy HH:mm}");
                     col.Item().Text($"Cliente: {order.CustomerName}");
                     col.Item().Text($"Correo: {order.CustomerEmail}");
-                    
+
                     col.Item().LineHorizontal(1).LineColor(QColors.Grey.Medium);
                     col.Item().AlignCenter().Text("COMPETIDORES").Bold().FontSize(10);
                     col.Item().LineHorizontal(1).LineColor(QColors.Grey.Medium);
 
-                    // Items / Competitors
                     foreach (var item in order.Items)
                     {
                         col.Item().Column(row =>
@@ -142,11 +63,9 @@ public class InvoiceService : IInvoiceService
                         });
                     }
 
-                    // Totals
                     col.Item().PaddingTop(5).AlignRight().Text($"TOTAL: {CurrencyFormatter.FormatCop(order.TotalAmount)}").Bold().FontSize(11);
                     col.Item().Text($"Transaccion: {order.TransactionId}");
-                    
-                    // Footer
+
                     col.Item().PaddingTop(10).LineHorizontal(1).LineColor(QColors.Grey.Medium);
                     col.Item().AlignCenter().Text("Gracias por tu compra").Italic();
                     col.Item().AlignCenter().Text("www.latidos.com");
@@ -155,6 +74,174 @@ public class InvoiceService : IInvoiceService
         }).GeneratePdf(filePath);
 
         return Task.FromResult(filePath);
+    }
+
+    private static string BuildMobileInvoiceHtml(Order order)
+    {
+        var rows = string.Join("", order.Items.Select(item => $"""
+            <section class="item">
+                <div class="item-top">
+                    <div>
+                        <div class="event">{Escape(item.EventName)}</div>
+                        <div class="name">{Escape(item.CompetitorName)}</div>
+                    </div>
+                    <div class="amount">{CurrencyFormatter.FormatCop(item.TotalPrice)}</div>
+                </div>
+                <div class="details">
+                    <div><span>Documento</span>{Escape(item.CompetitorDocument)}</div>
+                    <div><span>Numero</span>{Escape(item.CompetitorNumber)}</div>
+                    <div><span>Categoria</span>{Escape(item.CompetitorAgeCategory)}</div>
+                </div>
+            </section>
+            """));
+
+        if (string.IsNullOrWhiteSpace(rows))
+        {
+            rows = """<section class="empty">Sin competidores registrados en esta orden.</section>""";
+        }
+
+        return $$"""
+            <!doctype html>
+            <html lang="es">
+            <head>
+                <meta charset="utf-8" />
+                <meta name="viewport" content="width=device-width, initial-scale=1" />
+                <title>Factura {{Escape(order.OrderNumber)}}</title>
+                <style>
+                    :root {
+                        --ink: #24211c;
+                        --muted: #756e61;
+                        --line: #ede5d6;
+                        --soft: #fbf8f1;
+                        --gold: #c9a227;
+                    }
+                    * { box-sizing: border-box; }
+                    body {
+                        margin: 0;
+                        padding: 14px;
+                        color: var(--ink);
+                        background: #f8f7f2;
+                        font-family: Arial, sans-serif;
+                    }
+                    .invoice {
+                        overflow: hidden;
+                        border: 1px solid var(--line);
+                        border-radius: 22px;
+                        background: white;
+                    }
+                    .hero {
+                        padding: 20px;
+                        color: white;
+                        background: #24211c;
+                    }
+                    h1 {
+                        margin: 0;
+                        color: var(--gold);
+                        font-size: 26px;
+                    }
+                    .sub { margin-top: 4px; color: #d7d0c1; font-size: 13px; }
+                    .meta {
+                        display: grid;
+                        gap: 10px;
+                        padding: 16px 20px;
+                        font-size: 13px;
+                        background: var(--soft);
+                        border-bottom: 1px solid var(--line);
+                    }
+                    .meta div { display: grid; gap: 2px; }
+                    .meta strong { color: var(--muted); font-size: 11px; text-transform: uppercase; }
+                    .meta span { overflow-wrap: anywhere; }
+                    .items { display: grid; gap: 10px; padding: 14px; }
+                    .item {
+                        padding: 14px;
+                        border: 1px solid var(--line);
+                        border-radius: 16px;
+                        background: white;
+                    }
+                    .item-top {
+                        display: grid;
+                        grid-template-columns: 1fr auto;
+                        gap: 12px;
+                        align-items: start;
+                    }
+                    .event { font-size: 14px; font-weight: 700; }
+                    .name { margin-top: 3px; color: var(--muted); font-size: 13px; }
+                    .amount { white-space: nowrap; font-size: 13px; font-weight: 700; color: var(--gold); }
+                    .details {
+                        display: grid;
+                        grid-template-columns: 1fr;
+                        gap: 8px;
+                        margin-top: 12px;
+                    }
+                    .details div {
+                        padding: 8px;
+                        border-radius: 12px;
+                        background: var(--soft);
+                        font-size: 12px;
+                        overflow-wrap: anywhere;
+                    }
+                    .details span {
+                        display: block;
+                        margin-bottom: 3px;
+                        color: var(--muted);
+                        font-size: 10px;
+                        font-weight: 700;
+                        text-transform: uppercase;
+                    }
+                    .empty { padding: 18px; color: var(--muted); text-align: center; }
+                    .total {
+                        margin: 0 14px 14px;
+                        padding: 16px;
+                        display: flex;
+                        flex-direction: column;
+                        gap: 4px;
+                        border-radius: 16px;
+                        color: white;
+                        background: #24211c;
+                        font-size: 14px;
+                        font-weight: 700;
+                    }
+                    .total span:last-child { color: var(--gold); font-size: 20px; }
+                    .footer {
+                        padding: 0 20px 20px;
+                        color: var(--muted);
+                        font-size: 12px;
+                        text-align: center;
+                    }
+                    @media (min-width: 520px) {
+                        .details { grid-template-columns: repeat(3, 1fr); }
+                        .total { align-items: center; flex-direction: row; justify-content: space-between; }
+                    }
+                </style>
+            </head>
+            <body>
+                <main class="invoice">
+                    <header class="hero">
+                        <h1>LATIDOS</h1>
+                        <div class="sub">Factura de inscripcion</div>
+                    </header>
+
+                    <div class="meta">
+                        <div><strong>Orden</strong><span>{{Escape(order.OrderNumber)}}</span></div>
+                        <div><strong>Fecha</strong><span>{{order.OrderDate:dd/MM/yyyy HH:mm}}</span></div>
+                        <div><strong>Cliente</strong><span>{{Escape(order.CustomerName)}}</span></div>
+                        <div><strong>Correo</strong><span>{{Escape(order.CustomerEmail)}}</span></div>
+                        <div><strong>Transaccion</strong><span>{{Escape(order.TransactionId)}}</span></div>
+                    </div>
+
+                    <div class="items">
+                        {{rows}}
+                    </div>
+
+                    <div class="total">
+                        <span>Total pagado</span>
+                        <span>{{CurrencyFormatter.FormatCop(order.TotalAmount)}}</span>
+                    </div>
+                    <div class="footer">Gracias por tu compra</div>
+                </main>
+            </body>
+            </html>
+            """;
     }
 
     private static string Escape(string? value)

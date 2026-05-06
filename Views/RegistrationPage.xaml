@@ -4,423 +4,475 @@
              xmlns:vm="clr-namespace:Latidos.ViewModels"
              x:Class="Latidos.Views.RegistrationPage"
              Title="Inscripcion"
-             BackgroundColor="#F7F7F5">
+             BackgroundColor="#F8F7F2">
 
-    <ScrollView Padding="16,12">
-        <VerticalStackLayout Spacing="14">
-            <VerticalStackLayout Spacing="2">
-                <Label Text="Ficha del competidor"
-                       FontSize="26"
-                       FontAttributes="Bold"
-                       TextColor="#C9A227" />
-                <Label Text="Completa los datos antes de agregar la inscripcion al carrito."
-                       FontSize="13"
-                       TextColor="#767676" />
-            </VerticalStackLayout>
+    <ContentPage.Resources>
+        <Color x:Key="Surface">#FFFFFF</Color>
+        <Color x:Key="SurfaceSoft">#FBF8F1</Color>
+        <Color x:Key="HairLine">#EDE5D6</Color>
+        <Color x:Key="TextPrimary">#24211C</Color>
+        <Color x:Key="TextSecondary">#756E61</Color>
+        <Color x:Key="TextMuted">#A19889</Color>
+        <Color x:Key="Accent">#C9A227</Color>
+        <Color x:Key="AccentSoft">#FFF5D4</Color>
+        <Color x:Key="DangerSoft">#FFF1EF</Color>
 
-            <Border Padding="14"
-                    Stroke="#E8E3D5"
-                    StrokeThickness="1"
-                    StrokeShape="RoundRectangle 14"
-                    BackgroundColor="White">
-                <Grid ColumnDefinitions="*,Auto"
-                      ColumnSpacing="12">
-                    <VerticalStackLayout Spacing="4">
-                        <Label Text="{Binding EventName}"
-                               FontSize="18"
-                               FontAttributes="Bold"
-                               TextColor="#252525"
-                               MaxLines="2"
-                               LineBreakMode="TailTruncation" />
-                        <Label Text="{Binding EventInfoText}"
-                               FontSize="12"
-                               TextColor="#767676"
-                               MaxLines="2"
-                               LineBreakMode="TailTruncation" />
-                    </VerticalStackLayout>
+        <Style x:Key="Card" TargetType="Border">
+            <Setter Property="Padding" Value="16" />
+            <Setter Property="Stroke" Value="{StaticResource HairLine}" />
+            <Setter Property="StrokeThickness" Value="1" />
+            <Setter Property="StrokeShape" Value="RoundRectangle 20" />
+            <Setter Property="BackgroundColor" Value="{StaticResource Surface}" />
+        </Style>
 
-                    <Border Grid.Column="1"
-                            Padding="10,6"
-                            StrokeThickness="0"
-                            StrokeShape="RoundRectangle 12"
-                            BackgroundColor="#FFF7DB"
-                            VerticalOptions="Start">
-                        <Label Text="{Binding EventPriceText}"
-                               FontSize="13"
-                               FontAttributes="Bold"
-                               TextColor="#C9A227" />
-                    </Border>
-                </Grid>
-            </Border>
+        <Style x:Key="FieldLabel" TargetType="Label">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="TextColor" Value="{StaticResource TextSecondary}" />
+            <Setter Property="FontFamily" Value="OpenSansSemibold" />
+        </Style>
 
-            <Border Padding="14"
-                    Stroke="#E8E3D5"
-                    StrokeThickness="1"
-                    StrokeShape="RoundRectangle 14"
-                    BackgroundColor="White">
-                <VerticalStackLayout Spacing="10">
-                    <Grid RowDefinitions="Auto,Auto"
-                          RowSpacing="10"
-                          ColumnDefinitions="*">
-                        <VerticalStackLayout Grid.Row="0"
-                                             Spacing="2">
-                            <Label Text="Buscar competidor"
-                                   FontSize="18"
-                                   FontAttributes="Bold"
-                                   TextColor="#252525" />
-                            <Label Text="Busca por cedula o nombre si ya esta registrado."
-                                   FontSize="12"
-                                   TextColor="#767676" />
-                        </VerticalStackLayout>
+        <Style x:Key="FieldShell" TargetType="Border">
+            <Setter Property="HeightRequest" Value="48" />
+            <Setter Property="Padding" Value="12,0" />
+            <Setter Property="Stroke" Value="{StaticResource HairLine}" />
+            <Setter Property="StrokeThickness" Value="1" />
+            <Setter Property="StrokeShape" Value="RoundRectangle 14" />
+            <Setter Property="BackgroundColor" Value="{StaticResource SurfaceSoft}" />
+        </Style>
 
-                        <HorizontalStackLayout Grid.Row="1"
-                                               Spacing="8"
-                                               HorizontalOptions="Fill"
-                                               FlowDirection="LeftToRight">
-                            <Button Text="{Binding BrowseToggleButtonText, FallbackValue=Ver, TargetNullValue=Ver}"
-                                    Command="{Binding ToggleBrowseCompetitorsCommand}"
-                                    BackgroundColor="White"
-                                    TextColor="#252525"
-                                    BorderColor="#252525"
-                                    BorderWidth="1"
-                                    FontSize="12"
-                                    FontAttributes="Bold"
-                                    CornerRadius="10"
-                                    HeightRequest="40"
-                                    MinimumWidthRequest="72"
-                                    Padding="14,0"
-                                    HorizontalOptions="Start" />
-                            <Button Text="Limpiar"
-                                    Command="{Binding ClearSearchCommand}"
-                                    BackgroundColor="White"
-                                    TextColor="#C9A227"
-                                    BorderColor="#C9A227"
-                                    BorderWidth="1"
-                                    FontSize="12"
-                                    FontAttributes="Bold"
-                                    CornerRadius="10"
-                                    HeightRequest="40"
-                                    MinimumWidthRequest="88"
-                                    Padding="14,0"
-                                    HorizontalOptions="Start" />
-                        </HorizontalStackLayout>
-                    </Grid>
+        <Style x:Key="FormEntry" TargetType="Entry">
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="TextColor" Value="{StaticResource TextPrimary}" />
+            <Setter Property="PlaceholderColor" Value="#BDB5A7" />
+            <Setter Property="BackgroundColor" Value="Transparent" />
+            <Setter Property="HeightRequest" Value="46" />
+        </Style>
 
-                    <SearchBar Text="{Binding CompetitorSearchText}"
-                               SearchCommand="{Binding SearchCompetitorsCommand}"
-                               Placeholder="Cedula o nombre"
-                               HeightRequest="44"
-                               Margin="0" />
+        <Style x:Key="OutlineButton" TargetType="Button">
+            <Setter Property="BackgroundColor" Value="Transparent" />
+            <Setter Property="TextColor" Value="{StaticResource TextPrimary}" />
+            <Setter Property="BorderColor" Value="{StaticResource HairLine}" />
+            <Setter Property="BorderWidth" Value="1" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="FontFamily" Value="OpenSansSemibold" />
+            <Setter Property="CornerRadius" Value="14" />
+            <Setter Property="HeightRequest" Value="42" />
+            <Setter Property="Padding" Value="14,0" />
+        </Style>
+    </ContentPage.Resources>
 
-                    <VerticalStackLayout Spacing="8"
-                                         IsVisible="{Binding IsBrowseCompetitorsVisible}">
-                        <Label Text="Lista de competidores"
-                               FontSize="13"
-                               FontAttributes="Bold"
-                               TextColor="#4F4F4F" />
-                        <Label Text="Marca los que quieras inscribir; los mismos marcadores se usan en la seccion de arriba."
-                               FontSize="11"
-                               TextColor="#999999"
-                               LineBreakMode="WordWrap" />
-                        <Label Text="{Binding SelectedSavedSummaryText}"
-                               FontSize="12"
-                               FontAttributes="Bold"
-                               TextColor="#4F4F4F"
-                               IsVisible="{Binding HasSavedCompetitors}" />
-                        <Label Text="No hay competidores guardados aun. Completa el formulario primero."
-                               FontSize="12"
-                               TextColor="#999999"
-                               IsVisible="{Binding ShowEmptySavedCompetitorsHelp}" />
-                        <CollectionView ItemsSource="{Binding SavedCompetitors}"
-                                        HeightRequest="200"
-                                        IsVisible="{Binding HasSavedCompetitors}">
-                            <CollectionView.ItemTemplate>
-                                <DataTemplate x:DataType="vm:SelectableCompetitorItem">
-                                    <Grid Padding="4,6"
-                                          ColumnDefinitions="Auto,*">
-                                        <CheckBox VerticalOptions="Center"
-                                                  IsChecked="{Binding IsSelected, Mode=TwoWay}" />
-                                        <VerticalStackLayout Grid.Column="1"
-                                                             Spacing="2"
-                                                             VerticalOptions="Center">
-                                            <Label Text="{Binding Competitor.FullName}"
-                                                   FontSize="14"
-                                                   FontAttributes="Bold"
-                                                   TextColor="#252525"
-                                                   MaxLines="1"
-                                                   LineBreakMode="TailTruncation" />
-                                            <Label Text="{Binding Competitor.ProfileSummaryText}"
-                                                   FontSize="11"
-                                                   TextColor="#767676"
-                                                   MaxLines="2"
-                                                   LineBreakMode="TailTruncation" />
-                                        </VerticalStackLayout>
-                                    </Grid>
-                                </DataTemplate>
-                            </CollectionView.ItemTemplate>
-                        </CollectionView>
+    <Grid RowDefinitions="*,Auto">
+        <ScrollView Grid.Row="0">
+            <VerticalStackLayout Padding="18,18,18,120"
+                                 Spacing="14">
 
-                        <Grid ColumnDefinitions="*,*"
-                              ColumnSpacing="10"
-                              IsVisible="{Binding HasSavedCompetitors}">
-                            <Button Text="Inscribir seleccionados"
-                                    Command="{Binding AddSelectedToCartCommand}"
-                                    IsEnabled="{Binding HasSelectedSavedCompetitors}"
-                                    BackgroundColor="#C9A227"
-                                    TextColor="White"
-                                    FontSize="12"
-                                    FontAttributes="Bold"
-                                    CornerRadius="10"
-                                    HeightRequest="44" />
-                            <Button Grid.Column="1"
-                                    Text="Agregar y seguir"
-                                    Command="{Binding AddSelectedAndContinueCommand}"
-                                    IsEnabled="{Binding HasSelectedSavedCompetitors}"
-                                    BackgroundColor="White"
-                                    TextColor="#C9A227"
-                                    BorderColor="#C9A227"
-                                    BorderWidth="1"
-                                    FontSize="12"
-                                    FontAttributes="Bold"
-                                    CornerRadius="10"
-                                    HeightRequest="44" />
-                        </Grid>
-                    </VerticalStackLayout>
-
-                    <Label Text="No se encontraron competidores con esa busqueda."
-                           IsVisible="{Binding HasSearchTextWithoutResults}"
-                           FontSize="12"
-                           TextColor="#767676" />
-
-                    <VerticalStackLayout Spacing="8"
-                                         IsVisible="{Binding HasSearchResults}"
-                                         BindableLayout.ItemsSource="{Binding SearchResults}">
-                        <BindableLayout.ItemTemplate>
-                            <DataTemplate>
-                                <Border Padding="10"
-                                        Stroke="#E8E3D5"
-                                        StrokeThickness="1"
-                                        StrokeShape="RoundRectangle 12"
-                                        BackgroundColor="#FAFAFA">
-                                    <Grid ColumnDefinitions="*,Auto"
-                                          ColumnSpacing="10">
-                                        <VerticalStackLayout Spacing="2">
-                                            <Label Text="{Binding FullName}"
-                                                   FontSize="14"
-                                                   FontAttributes="Bold"
-                                                   TextColor="#252525"
-                                                   MaxLines="1"
-                                                   LineBreakMode="TailTruncation" />
-                                            <Label Text="{Binding ProfileSummaryText}"
-                                                   FontSize="11"
-                                                   TextColor="#767676"
-                                                   MaxLines="1"
-                                                   LineBreakMode="TailTruncation" />
-                                        </VerticalStackLayout>
-
-                                        <Button Grid.Column="1"
-                                                Text="Usar"
-                                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.SelectCompetitorCommand}"
-                                                CommandParameter="{Binding}"
-                                                BackgroundColor="#C9A227"
-                                                TextColor="White"
-                                                FontSize="12"
-                                                FontAttributes="Bold"
-                                                CornerRadius="10"
-                                                HeightRequest="38"
-                                                Padding="12,0" />
-                                    </Grid>
-                                </Border>
-                            </DataTemplate>
-                        </BindableLayout.ItemTemplate>
-                    </VerticalStackLayout>
+                <VerticalStackLayout Spacing="3">
+                    <Label Text="Ficha del competidor"
+                           FontSize="26"
+                           FontFamily="OpenSansSemibold"
+                           TextColor="{StaticResource TextPrimary}" />
+                    <Label Text="Completa la informacion y agrega la inscripcion al carrito."
+                           FontSize="13"
+                           TextColor="{StaticResource TextSecondary}"
+                           LineBreakMode="WordWrap" />
                 </VerticalStackLayout>
-            </Border>
 
-            <Border Padding="14"
-                    Stroke="#E8E3D5"
-                    StrokeThickness="1"
-                    StrokeShape="RoundRectangle 14"
-                    BackgroundColor="White">
-                <VerticalStackLayout Spacing="12">
-                    <Grid ColumnDefinitions="*,Auto"
-                          ColumnSpacing="12">
-                        <VerticalStackLayout Spacing="3">
-                            <Label Text="Numero asignado"
+                <Border StrokeThickness="0"
+                        StrokeShape="RoundRectangle 22"
+                        BackgroundColor="{StaticResource TextPrimary}"
+                        Padding="0">
+                    <Grid RowDefinitions="Auto,Auto,Auto"
+                          ColumnDefinitions="*,Auto"
+                          Padding="16"
+                          RowSpacing="12"
+                          ColumnSpacing="14">
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="{Binding EventName}"
+                                   FontSize="18"
+                                   FontFamily="OpenSansSemibold"
+                                   TextColor="White"
+                                   MaxLines="2"
+                                   LineBreakMode="TailTruncation" />
+                            <Label Text="{Binding EventInfoText}"
                                    FontSize="12"
-                                   FontAttributes="Bold"
-                                   TextColor="#4F4F4F" />
-                            <Label Text="{Binding CompetitorNumberText}"
-                                   FontSize="26"
-                                   FontAttributes="Bold"
-                                   TextColor="#C9A227" />
+                                   TextColor="#D7D0C1"
+                                   MaxLines="2"
+                                   LineBreakMode="TailTruncation" />
                         </VerticalStackLayout>
 
                         <Border Grid.Column="1"
-                                WidthRequest="72"
-                                HeightRequest="72"
-                                Stroke="#E8E3D5"
-                                StrokeThickness="1"
-                                StrokeShape="RoundRectangle 36"
-                                BackgroundColor="#FAFAFA">
-                            <Grid>
-                                <Image Source="{Binding PhotoPath}"
-                                       IsVisible="{Binding HasPhoto}"
-                                       Aspect="AspectFill"
-                                       WidthRequest="72"
-                                       HeightRequest="72" />
-                                <Label Text="Foto"
-                                       FontSize="12"
-                                       TextColor="#999999"
-                                       HorizontalTextAlignment="Center"
-                                       VerticalTextAlignment="Center" />
-                            </Grid>
+                                Padding="10,6"
+                                StrokeThickness="0"
+                                StrokeShape="RoundRectangle 13"
+                                BackgroundColor="{StaticResource AccentSoft}"
+                                VerticalOptions="Start">
+                            <Label Text="{Binding EventPriceText}"
+                                   FontSize="12"
+                                   FontFamily="OpenSansSemibold"
+                                   TextColor="{StaticResource Accent}" />
                         </Border>
-                    </Grid>
 
-                    <Label Text="Nombre completo"
-                           FontSize="12"
-                           FontAttributes="Bold"
-                           TextColor="#4F4F4F" />
-                    <Border Padding="10,0"
-                            Stroke="#E8E3D5"
-                            StrokeThickness="1"
-                            StrokeShape="RoundRectangle 10"
-                            BackgroundColor="#FAFAFA">
-                        <Entry Text="{Binding FullName}"
-                               Placeholder="Nombre del competidor"
-                               HeightRequest="44"
-                               ClearButtonVisibility="WhileEditing" />
-                    </Border>
+                        <BoxView Grid.Row="1"
+                                 Grid.ColumnSpan="2"
+                                 HeightRequest="1"
+                                 Color="#3B372F"
+                                 Opacity="0.75" />
 
-                    <Grid ColumnDefinitions="*,*"
-                          ColumnSpacing="10">
-                        <VerticalStackLayout Spacing="6">
-                            <Label Text="Tipo de documento"
-                                   FontSize="12"
-                                   FontAttributes="Bold"
-                                   TextColor="#4F4F4F" />
-                            <Border Padding="10,0"
-                                    Stroke="#E8E3D5"
+                        <Grid Grid.Row="2"
+                              Grid.ColumnSpan="2"
+                              ColumnDefinitions="*,Auto"
+                              ColumnSpacing="12">
+                            <VerticalStackLayout Spacing="1"
+                                                 VerticalOptions="Center">
+                                <Label Text="Dorsal asignado"
+                                       FontSize="11"
+                                       TextColor="#D7D0C1" />
+                                <Label Text="{Binding CompetitorNumberText}"
+                                       FontSize="32"
+                                       FontFamily="OpenSansSemibold"
+                                       TextColor="{StaticResource Accent}" />
+                            </VerticalStackLayout>
+
+                            <Border Grid.Column="1"
+                                    WidthRequest="76"
+                                    HeightRequest="76"
+                                    Stroke="#4B4538"
                                     StrokeThickness="1"
-                                    StrokeShape="RoundRectangle 10"
-                                    BackgroundColor="#FAFAFA">
-                                <Picker ItemsSource="{Binding DocumentTypes}"
-                                        SelectedItem="{Binding SelectedDocumentType}"
+                                    StrokeShape="RoundRectangle 38"
+                                    BackgroundColor="#302C25">
+                                <Grid>
+                                    <Image Source="{Binding PhotoPath}"
+                                           IsVisible="{Binding HasPhoto}"
+                                           Aspect="AspectFill"
+                                           WidthRequest="76"
+                                           HeightRequest="76" />
+                                    <Label Text="Foto"
+                                           FontSize="12"
+                                           TextColor="#D7D0C1"
+                                           HorizontalTextAlignment="Center"
+                                           VerticalTextAlignment="Center" />
+                                </Grid>
+                            </Border>
+                        </Grid>
+                    </Grid>
+                </Border>
+
+                <Border Style="{StaticResource Card}">
+                    <VerticalStackLayout Spacing="12">
+                        <Grid ColumnDefinitions="*,Auto,Auto"
+                              ColumnSpacing="8">
+                            <VerticalStackLayout Spacing="2"
+                                                 VerticalOptions="Center">
+                                <Label Text="Buscar competidor"
+                                       FontSize="16"
+                                       FontFamily="OpenSansSemibold"
+                                       TextColor="{StaticResource TextPrimary}" />
+                                <Label Text="Usa datos guardados si ya existe."
+                                       FontSize="12"
+                                       TextColor="{StaticResource TextSecondary}" />
+                            </VerticalStackLayout>
+
+                            <Button Grid.Column="1"
+                                    Text="{Binding BrowseToggleButtonText, FallbackValue=Ver, TargetNullValue=Ver}"
+                                    Command="{Binding ToggleBrowseCompetitorsCommand}"
+                                    Style="{StaticResource OutlineButton}"
+                                    MinimumWidthRequest="64" />
+                            <Button Grid.Column="2"
+                                    Text="Limpiar"
+                                    Command="{Binding ClearSearchCommand}"
+                                    Style="{StaticResource OutlineButton}"
+                                    TextColor="{StaticResource Accent}"
+                                    BorderColor="{StaticResource Accent}"
+                                    MinimumWidthRequest="78" />
+                        </Grid>
+
+                        <Border HeightRequest="48"
+                                Padding="10,0"
+                                Stroke="{StaticResource HairLine}"
+                                StrokeThickness="1"
+                                StrokeShape="RoundRectangle 16"
+                                BackgroundColor="{StaticResource SurfaceSoft}">
+                            <SearchBar Text="{Binding CompetitorSearchText}"
+                                       SearchCommand="{Binding SearchCompetitorsCommand}"
+                                       Placeholder="Cedula o nombre"
+                                       BackgroundColor="Transparent"
+                                       HeightRequest="46"
+                                       Margin="-8,0" />
+                        </Border>
+
+                        <VerticalStackLayout Spacing="8"
+                                             IsVisible="{Binding IsBrowseCompetitorsVisible}">
+                            <Label Text="{Binding SelectedSavedSummaryText}"
+                                   FontSize="12"
+                                   FontFamily="OpenSansSemibold"
+                                   TextColor="{StaticResource TextSecondary}"
+                                   IsVisible="{Binding HasSavedCompetitors}" />
+                            <Label Text="No hay competidores guardados aun."
+                                   FontSize="12"
+                                   TextColor="{StaticResource TextMuted}"
+                                   IsVisible="{Binding ShowEmptySavedCompetitorsHelp}" />
+                            <CollectionView ItemsSource="{Binding SavedCompetitors}"
+                                            HeightRequest="180"
+                                            IsVisible="{Binding HasSavedCompetitors}">
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate x:DataType="vm:SelectableCompetitorItem">
+                                        <Grid Padding="0,7"
+                                              ColumnDefinitions="Auto,*"
+                                              ColumnSpacing="6">
+                                            <CheckBox VerticalOptions="Center"
+                                                      IsChecked="{Binding IsSelected, Mode=TwoWay}" />
+                                            <VerticalStackLayout Grid.Column="1"
+                                                                 Spacing="2"
+                                                                 VerticalOptions="Center">
+                                                <Label Text="{Binding Competitor.FullName}"
+                                                       FontSize="14"
+                                                       FontFamily="OpenSansSemibold"
+                                                       TextColor="{StaticResource TextPrimary}"
+                                                       MaxLines="1"
+                                                       LineBreakMode="TailTruncation" />
+                                                <Label Text="{Binding Competitor.ProfileSummaryText}"
+                                                       FontSize="11"
+                                                       TextColor="{StaticResource TextSecondary}"
+                                                       MaxLines="2"
+                                                       LineBreakMode="TailTruncation" />
+                                            </VerticalStackLayout>
+                                        </Grid>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+
+                            <Grid ColumnDefinitions="*,*"
+                                  ColumnSpacing="10"
+                                  IsVisible="{Binding HasSavedCompetitors}">
+                                <Button Text="Inscribir"
+                                        Command="{Binding AddSelectedToCartCommand}"
+                                        IsEnabled="{Binding HasSelectedSavedCompetitors}"
+                                        BackgroundColor="{StaticResource TextPrimary}"
+                                        TextColor="White"
+                                        FontSize="12"
+                                        FontFamily="OpenSansSemibold"
+                                        CornerRadius="13"
                                         HeightRequest="44" />
-                            </Border>
+                                <Button Grid.Column="1"
+                                        Text="Agregar y seguir"
+                                        Command="{Binding AddSelectedAndContinueCommand}"
+                                        IsEnabled="{Binding HasSelectedSavedCompetitors}"
+                                        Style="{StaticResource OutlineButton}"
+                                        TextColor="{StaticResource Accent}"
+                                        BorderColor="{StaticResource Accent}"
+                                        HeightRequest="44" />
+                            </Grid>
                         </VerticalStackLayout>
 
-                        <VerticalStackLayout Grid.Column="1" Spacing="6">
-                            <Label Text="Documento"
-                                   FontSize="12"
-                                   FontAttributes="Bold"
-                                   TextColor="#4F4F4F" />
-                            <Border Padding="10,0"
-                                    Stroke="#E8E3D5"
-                                    StrokeThickness="1"
-                                    StrokeShape="RoundRectangle 10"
-                                    BackgroundColor="#FAFAFA">
-                                <Entry Text="{Binding DocumentNumber}"
-                                       Placeholder="Numero"
-                                       HeightRequest="44"
-                                       ClearButtonVisibility="WhileEditing" />
-                            </Border>
-                        </VerticalStackLayout>
-                    </Grid>
+                        <Label Text="No se encontraron competidores con esa busqueda."
+                               IsVisible="{Binding HasSearchTextWithoutResults}"
+                               FontSize="12"
+                               TextColor="{StaticResource TextSecondary}" />
 
-                    <Grid ColumnDefinitions="*,*"
-                          ColumnSpacing="10">
+                        <VerticalStackLayout Spacing="8"
+                                             IsVisible="{Binding HasSearchResults}"
+                                             BindableLayout.ItemsSource="{Binding SearchResults}">
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Padding="10"
+                                            StrokeThickness="0"
+                                            StrokeShape="RoundRectangle 14"
+                                            BackgroundColor="{StaticResource SurfaceSoft}">
+                                        <Grid ColumnDefinitions="*,Auto"
+                                              ColumnSpacing="10">
+                                            <VerticalStackLayout Spacing="2">
+                                                <Label Text="{Binding FullName}"
+                                                       FontSize="14"
+                                                       FontFamily="OpenSansSemibold"
+                                                       TextColor="{StaticResource TextPrimary}"
+                                                       MaxLines="1"
+                                                       LineBreakMode="TailTruncation" />
+                                                <Label Text="{Binding ProfileSummaryText}"
+                                                       FontSize="11"
+                                                       TextColor="{StaticResource TextSecondary}"
+                                                       MaxLines="1"
+                                                       LineBreakMode="TailTruncation" />
+                                            </VerticalStackLayout>
+
+                                            <Button Grid.Column="1"
+                                                    Text="Usar"
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.SelectCompetitorCommand}"
+                                                    CommandParameter="{Binding}"
+                                                    BackgroundColor="{StaticResource Accent}"
+                                                    TextColor="White"
+                                                    FontSize="12"
+                                                    FontFamily="OpenSansSemibold"
+                                                    CornerRadius="12"
+                                                    HeightRequest="38"
+                                                    Padding="12,0" />
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border Style="{StaticResource Card}">
+                    <VerticalStackLayout Spacing="14">
+                        <Grid ColumnDefinitions="*,Auto"
+                              ColumnSpacing="12">
+                            <VerticalStackLayout Spacing="2">
+                                <Label Text="Datos personales"
+                                       FontSize="17"
+                                       FontFamily="OpenSansSemibold"
+                                       TextColor="{StaticResource TextPrimary}" />
+                                <Label Text="Informacion requerida para la inscripcion."
+                                       FontSize="12"
+                                       TextColor="{StaticResource TextSecondary}" />
+                            </VerticalStackLayout>
+
+                            <HorizontalStackLayout Grid.Column="1"
+                                                   Spacing="8"
+                                                   VerticalOptions="Center">
+                                <Button Text="Foto"
+                                        Command="{Binding CapturePhotoCommand}"
+                                        Style="{StaticResource OutlineButton}"
+                                        TextColor="{StaticResource Accent}"
+                                        BorderColor="{StaticResource Accent}"
+                                        HeightRequest="40"
+                                        Padding="12,0" />
+                                <Button Text="+"
+                                        Command="{Binding PickPhotoCommand}"
+                                        BackgroundColor="{StaticResource AccentSoft}"
+                                        TextColor="{StaticResource Accent}"
+                                        BorderWidth="0"
+                                        FontSize="18"
+                                        FontFamily="OpenSansSemibold"
+                                        CornerRadius="20"
+                                        WidthRequest="40"
+                                        HeightRequest="40"
+                                        Padding="0" />
+                            </HorizontalStackLayout>
+                        </Grid>
+
                         <VerticalStackLayout Spacing="6">
-                            <Label Text="Fecha de nacimiento"
-                                   FontSize="12"
-                                   FontAttributes="Bold"
-                                   TextColor="#4F4F4F" />
-                            <Border Padding="10,0"
-                                    Stroke="#E8E3D5"
-                                    StrokeThickness="1"
-                                    StrokeShape="RoundRectangle 10"
-                                    BackgroundColor="#FAFAFA">
-                                <DatePicker Date="{Binding BirthDate}"
-                                            Format="dd MMM yyyy"
-                                            HeightRequest="44" />
+                            <Label Text="Nombre completo"
+                                   Style="{StaticResource FieldLabel}" />
+                            <Border Style="{StaticResource FieldShell}">
+                                <Entry Text="{Binding FullName}"
+                                       Placeholder="Nombre del competidor"
+                                       ClearButtonVisibility="WhileEditing"
+                                       Style="{StaticResource FormEntry}" />
                             </Border>
                         </VerticalStackLayout>
 
-                        <VerticalStackLayout Grid.Column="1" Spacing="6">
-                            <Label Text="Categoria"
+                        <Grid ColumnDefinitions="*,*"
+                              ColumnSpacing="10">
+                            <VerticalStackLayout Spacing="6">
+                                <Label Text="Tipo documento"
+                                       Style="{StaticResource FieldLabel}" />
+                                <Border Style="{StaticResource FieldShell}">
+                                    <Picker ItemsSource="{Binding DocumentTypes}"
+                                            SelectedItem="{Binding SelectedDocumentType}"
+                                            BackgroundColor="Transparent"
+                                            FontSize="14"
+                                            HeightRequest="46" />
+                                </Border>
+                            </VerticalStackLayout>
+
+                            <VerticalStackLayout Grid.Column="1"
+                                                 Spacing="6">
+                                <Label Text="Documento"
+                                       Style="{StaticResource FieldLabel}" />
+                                <Border Style="{StaticResource FieldShell}">
+                                    <Entry Text="{Binding DocumentNumber}"
+                                           Placeholder="Numero"
+                                           ClearButtonVisibility="WhileEditing"
+                                           Style="{StaticResource FormEntry}" />
+                                </Border>
+                            </VerticalStackLayout>
+                        </Grid>
+
+                        <Grid ColumnDefinitions="*,*"
+                              ColumnSpacing="10">
+                            <VerticalStackLayout Spacing="6">
+                                <Label Text="Nacimiento"
+                                       Style="{StaticResource FieldLabel}" />
+                                <Border Style="{StaticResource FieldShell}">
+                                    <DatePicker Date="{Binding BirthDate}"
+                                                Format="dd MMM yyyy"
+                                                BackgroundColor="Transparent"
+                                                FontSize="14"
+                                                HeightRequest="46" />
+                                </Border>
+                            </VerticalStackLayout>
+
+                            <VerticalStackLayout Grid.Column="1"
+                                                 Spacing="6">
+                                <Label Text="Categoria"
+                                       Style="{StaticResource FieldLabel}" />
+                                <Border Style="{StaticResource FieldShell}">
+                                    <Label Text="{Binding AgeText}"
+                                           FontSize="13"
+                                           TextColor="{StaticResource TextPrimary}"
+                                           VerticalTextAlignment="Center"
+                                           HeightRequest="46" />
+                                </Border>
+                            </VerticalStackLayout>
+                        </Grid>
+
+                        <Border IsVisible="{Binding HasStatusMessage}"
+                                StrokeThickness="0"
+                                StrokeShape="RoundRectangle 14"
+                                BackgroundColor="{StaticResource DangerSoft}"
+                                Padding="12,10">
+                            <Label Text="{Binding StatusMessage}"
                                    FontSize="12"
-                                   FontAttributes="Bold"
-                                   TextColor="#4F4F4F" />
-                            <Border Padding="10,0"
-                                    Stroke="#E8E3D5"
-                                    StrokeThickness="1"
-                                    StrokeShape="RoundRectangle 10"
-                                    BackgroundColor="#FAFAFA">
-                                <Label Text="{Binding AgeText}"
-                                       FontSize="13"
-                                       TextColor="#252525"
-                                       VerticalTextAlignment="Center"
-                                       HeightRequest="44" />
-                            </Border>
-                        </VerticalStackLayout>
-                    </Grid>
+                                   TextColor="#B94A48"
+                                   LineBreakMode="WordWrap" />
+                        </Border>
+                    </VerticalStackLayout>
+                </Border>
 
-                    <Grid ColumnDefinitions="*,*"
-                          ColumnSpacing="10">
-                        <Button Text="Tomar foto"
-                                Command="{Binding CapturePhotoCommand}"
-                                BackgroundColor="White"
-                                TextColor="#C9A227"
-                                BorderColor="#C9A227"
-                                BorderWidth="1"
-                                FontAttributes="Bold"
-                                CornerRadius="10"
-                                HeightRequest="46" />
-                        <Button Grid.Column="1"
-                                Text="Seleccionar foto"
-                                Command="{Binding PickPhotoCommand}"
-                                BackgroundColor="White"
-                                TextColor="#C9A227"
-                                BorderColor="#C9A227"
-                                BorderWidth="1"
-                                FontAttributes="Bold"
-                                CornerRadius="10"
-                                HeightRequest="46" />
-                    </Grid>
+                <Button Text="Volver a eventos"
+                        Command="{Binding CancelCommand}"
+                        BackgroundColor="Transparent"
+                        TextColor="{StaticResource TextSecondary}"
+                        FontFamily="OpenSansSemibold"
+                        HeightRequest="42" />
+            </VerticalStackLayout>
+        </ScrollView>
 
-                    <Label Text="{Binding StatusMessage}"
-                           IsVisible="{Binding HasStatusMessage}"
-                           FontSize="12"
-                           TextColor="#B94A48"
-                           LineBreakMode="WordWrap" />
-                </VerticalStackLayout>
-            </Border>
+        <Border Grid.Row="1"
+                Padding="16,12"
+                StrokeThickness="0"
+                BackgroundColor="#F8F7F2">
+            <Border.Shadow>
+                <Shadow Brush="#0A0A0A"
+                        Opacity="0.08"
+                        Radius="18"
+                        Offset="0,-4" />
+            </Border.Shadow>
+            <Grid ColumnDefinitions="*,Auto"
+                  ColumnSpacing="10">
+                <Button Text="Agregar al carrito"
+                        Command="{Binding AddToCartCommand}"
+                        BackgroundColor="{StaticResource TextPrimary}"
+                        TextColor="White"
+                        FontFamily="OpenSansSemibold"
+                        FontSize="14"
+                        CornerRadius="14"
+                        HeightRequest="50" />
 
-            <Button Text="Agregar al carrito"
-                    Command="{Binding AddToCartCommand}"
-                    BackgroundColor="#C9A227"
-                    TextColor="White"
-                    FontAttributes="Bold"
-                    CornerRadius="10"
-                    HeightRequest="48" />
-
-            <Button Text="Agregar otro competidor"
-                    Command="{Binding AddAnotherCommand}"
-                    BackgroundColor="White"
-                    TextColor="#C9A227"
-                    BorderColor="#C9A227"
-                    BorderWidth="1"
-                    FontAttributes="Bold"
-                    CornerRadius="10"
-                    HeightRequest="48" />
-
-            <Button Text="Volver a eventos"
-                    Command="{Binding CancelCommand}"
-                    BackgroundColor="Transparent"
-                    TextColor="#777777"
-                    FontAttributes="Bold"
-                    HeightRequest="44" />
-        </VerticalStackLayout>
-    </ScrollView>
+                <Button Grid.Column="1"
+                        Text="Otro"
+                        Command="{Binding AddAnotherCommand}"
+                        BackgroundColor="{StaticResource Surface}"
+                        TextColor="{StaticResource Accent}"
+                        BorderColor="{StaticResource Accent}"
+                        BorderWidth="1"
+                        FontFamily="OpenSansSemibold"
+                        FontSize="13"
+                        CornerRadius="14"
+                        HeightRequest="50"
+                        Padding="18,0" />
+            </Grid>
+        </Border>
+    </Grid>
 </ContentPage>

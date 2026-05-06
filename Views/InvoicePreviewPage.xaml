@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Latidos.Views.InvoicePreviewPage"
+             NavigationPage.HasNavigationBar="False"
+             BackgroundColor="#80000000">
+
+    <Grid Padding="18,46,18,26">
+        <Border StrokeThickness="0"
+                StrokeShape="RoundRectangle 24"
+                BackgroundColor="#FFFFFF">
+            <Border.Shadow>
+                <Shadow Brush="#000000"
+                        Opacity="0.22"
+                        Radius="28"
+                        Offset="0,10" />
+            </Border.Shadow>
+
+            <Grid RowDefinitions="Auto,*">
+                <Grid Padding="16,14"
+                      ColumnDefinitions="*,Auto"
+                      ColumnSpacing="12"
+                      BackgroundColor="#FFFEFA">
+                    <VerticalStackLayout Spacing="1">
+                        <Label Text="Factura"
+                               FontSize="20"
+                               FontFamily="OpenSansSemibold"
+                               TextColor="#24211C" />
+                        <Label Text="Vista previa de inscripcion"
+                               FontSize="12"
+                               TextColor="#756E61" />
+                    </VerticalStackLayout>
+
+                    <Button Grid.Column="1"
+                            Text="Cerrar"
+                            Clicked="OnCloseClicked"
+                            BackgroundColor="#24211C"
+                            TextColor="White"
+                            FontSize="12"
+                            FontFamily="OpenSansSemibold"
+                            CornerRadius="14"
+                            HeightRequest="40"
+                            Padding="14,0" />
+                </Grid>
+
+                <WebView x:Name="InvoiceWebView"
+                         Grid.Row="1" />
+            </Grid>
+        </Border>
+    </Grid>
+</ContentPage>

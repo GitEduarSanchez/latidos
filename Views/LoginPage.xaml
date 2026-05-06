@@ -2,61 +2,183 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Latidos.Views.LoginPage"
-             Title="Ingreso"
-             BackgroundColor="#F7F7F5">
+             NavigationPage.HasNavigationBar="False"
+             BackgroundColor="#F8F7F2">
 
-    <ScrollView Padding="20">
-        <VerticalStackLayout Spacing="14" VerticalOptions="Center">
-            <Image Source="latidos_logo.jpg"
-                   HeightRequest="72"
-                   WidthRequest="72"
-                   Aspect="AspectFit"
-                   HorizontalOptions="Center" />
+    <ContentPage.Resources>
+        <LinearGradientBrush x:Key="LoginBackgroundBrush"
+                             StartPoint="0,0"
+                             EndPoint="1,1">
+            <GradientStop Color="#FFFDF6" Offset="0.0" />
+            <GradientStop Color="#F7F4EB" Offset="0.58" />
+            <GradientStop Color="#FFFFFF" Offset="1.0" />
+        </LinearGradientBrush>
 
-            <Label Text="LATIDOS"
-                   FontSize="32"
-                   FontAttributes="Bold"
-                   TextColor="#C9A227"
-                   HorizontalTextAlignment="Center" />
+        <Style x:Key="FieldLabel" TargetType="Label">
+            <Setter Property="TextColor" Value="#6B6558" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="CharacterSpacing" Value="0.4" />
+            <Setter Property="FontFamily" Value="OpenSansSemibold" />
+        </Style>
 
-            <Label Text="Ingresa como admin o competidor"
-                   FontSize="13"
-                   TextColor="#777777"
-                   HorizontalTextAlignment="Center" />
+        <Style x:Key="FieldShell" TargetType="Border">
+            <Setter Property="Stroke" Value="#E8E0CF" />
+            <Setter Property="StrokeThickness" Value="1" />
+            <Setter Property="StrokeShape" Value="RoundRectangle 14" />
+            <Setter Property="BackgroundColor" Value="#FFFEFB" />
+            <Setter Property="Padding" Value="14,0" />
+            <Setter Property="HeightRequest" Value="54" />
+        </Style>
 
-            <Border Padding="12" Stroke="#E8E3D5" StrokeThickness="1" StrokeShape="RoundRectangle 12" BackgroundColor="White">
-                <Entry Text="{Binding FullName}" Placeholder="Nombre completo" />
+        <Style x:Key="FieldEntry" TargetType="Entry">
+            <Setter Property="TextColor" Value="#252525" />
+            <Setter Property="PlaceholderColor" Value="#B8B0A0" />
+            <Setter Property="FontSize" Value="15" />
+            <Setter Property="FontFamily" Value="OpenSansRegular" />
+            <Setter Property="BackgroundColor" Value="Transparent" />
+        </Style>
+
+        <Style x:Key="CaptionLabel" TargetType="Label">
+            <Setter Property="TextColor" Value="#918978" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="LineBreakMode" Value="WordWrap" />
+        </Style>
+    </ContentPage.Resources>
+
+    <ScrollView Background="{StaticResource LoginBackgroundBrush}">
+        <Grid Padding="24"
+              RowDefinitions="*,Auto,*"
+              MinimumHeightRequest="720">
+
+            <Border Grid.Row="1"
+                    MaximumWidthRequest="420"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    Padding="28"
+                    Stroke="#EFE7D7"
+                    StrokeThickness="1"
+                    StrokeShape="RoundRectangle 28"
+                    BackgroundColor="#FFFFFF">
+                <Border.Shadow>
+                    <Shadow Brush="#C9A227"
+                            Offset="0,16"
+                            Radius="38"
+                            Opacity="0.14" />
+                </Border.Shadow>
+
+                <VerticalStackLayout Spacing="0">
+                    <Border HeightRequest="84"
+                            WidthRequest="84"
+                            Stroke="#F0E6CF"
+                            StrokeThickness="1"
+                            StrokeShape="RoundRectangle 42"
+                            BackgroundColor="#FFFBF0"
+                            HorizontalOptions="Center"
+                            Padding="10">
+                        <Image Source="latidos_logo.jpg"
+                               Aspect="AspectFill" />
+                    </Border>
+
+                    <Label Text="Latidos"
+                           FontSize="34"
+                           FontFamily="OpenSansSemibold"
+                           TextColor="#252525"
+                           HorizontalTextAlignment="Center"
+                           Margin="0,22,0,4" />
+
+                    <Label Text="Accede a tu panel de eventos"
+                           Style="{StaticResource CaptionLabel}"
+                           HorizontalTextAlignment="Center"
+                           Margin="0,0,0,30" />
+
+                    <Label Text="Usuario"
+                           Style="{StaticResource FieldLabel}"
+                           Margin="2,0,0,8" />
+
+                    <Border Style="{StaticResource FieldShell}">
+                        <Grid ColumnDefinitions="Auto,*"
+                              ColumnSpacing="10">
+                            <Label Text="@"
+                                   FontSize="16"
+                                   TextColor="#C9A227"
+                                   FontFamily="OpenSansSemibold"
+                                   VerticalTextAlignment="Center" />
+                            <Entry Grid.Column="1"
+                                   Text="{Binding Username}"
+                                   Placeholder="tu usuario"
+                                   Style="{StaticResource FieldEntry}" />
+                        </Grid>
+                    </Border>
+
+                    <Label Text="Clave"
+                           Style="{StaticResource FieldLabel}"
+                           Margin="2,18,0,8" />
+
+                    <Border Style="{StaticResource FieldShell}">
+                        <Grid ColumnDefinitions="Auto,*"
+                              ColumnSpacing="10">
+                            <Label Text="*"
+                                   FontSize="18"
+                                   TextColor="#C9A227"
+                                   FontFamily="OpenSansSemibold"
+                                   VerticalTextAlignment="Center" />
+                            <Entry Grid.Column="1"
+                                   Text="{Binding Password}"
+                                   Placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;"
+                                   IsPassword="True"
+                                   Style="{StaticResource FieldEntry}" />
+                        </Grid>
+                    </Border>
+
+                    <Border IsVisible="{Binding HasStatusMessage}"
+                            StrokeThickness="0"
+                            StrokeShape="RoundRectangle 12"
+                            BackgroundColor="#FFF1EF"
+                            Padding="12,10"
+                            Margin="0,18,0,0">
+                        <Label Text="{Binding StatusMessage}"
+                               TextColor="#B94A48"
+                               FontSize="13"
+                               HorizontalTextAlignment="Center" />
+                    </Border>
+
+                    <Button Text="Entrar"
+                            Command="{Binding LoginCommand}"
+                            BackgroundColor="#C9A227"
+                            TextColor="#FFFFFF"
+                            FontFamily="OpenSansSemibold"
+                            FontSize="15"
+                            HeightRequest="54"
+                            CornerRadius="14"
+                            Margin="0,24,0,0" />
+
+                    <Border StrokeThickness="0"
+                            StrokeShape="RoundRectangle 16"
+                            BackgroundColor="#FAF7EF"
+                            Padding="14"
+                            Margin="0,22,0,0">
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="Credenciales demo"
+                                   FontSize="12"
+                                   TextColor="#6B6558"
+                                   FontFamily="OpenSansSemibold"
+                                   HorizontalTextAlignment="Center" />
+                            <Label FontSize="12"
+                                   TextColor="#918978"
+                                   HorizontalTextAlignment="Center"
+                                   LineBreakMode="WordWrap">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="admin / admin123" TextColor="#4A4438" FontFamily="OpenSansSemibold" />
+                                        <Span Text="  o  " />
+                                        <Span Text="corredor / correr123" TextColor="#4A4438" FontFamily="OpenSansSemibold" />
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+                        </VerticalStackLayout>
+                    </Border>
+                </VerticalStackLayout>
             </Border>
-
-            <Border Padding="12" Stroke="#E8E3D5" StrokeThickness="1" StrokeShape="RoundRectangle 12" BackgroundColor="White">
-                <Entry Text="{Binding Email}" Placeholder="Correo" Keyboard="Email" />
-            </Border>
-
-            <Border Padding="12" Stroke="#E8E3D5" StrokeThickness="1" StrokeShape="RoundRectangle 12" BackgroundColor="White">
-                <Entry Text="{Binding Password}" Placeholder="Contrasena" IsPassword="True" />
-            </Border>
-
-            <Border Padding="12,0" Stroke="#E8E3D5" StrokeThickness="1" StrokeShape="RoundRectangle 12" BackgroundColor="White">
-                <Picker ItemsSource="{Binding Roles}" SelectedItem="{Binding SelectedRole}" HeightRequest="44" />
-            </Border>
-
-            <Button Text="Ingresar"
-                    Command="{Binding LoginCommand}"
-                    BackgroundColor="#C9A227"
-                    TextColor="White"
-                    FontAttributes="Bold"
-                    HeightRequest="48"
-                    CornerRadius="10" />
-
-            <Label Text="{Binding StatusMessage}"
-                   IsVisible="{Binding HasStatusMessage}"
-                   TextColor="#B94A48"
-                   FontSize="12" />
-
-            <Label Text="Clave admin demo: admin123"
-                   FontSize="11"
-                   TextColor="#999999"
-                   HorizontalTextAlignment="Center" />
-        </VerticalStackLayout>
+        </Grid>
     </ScrollView>
 </ContentPage>
