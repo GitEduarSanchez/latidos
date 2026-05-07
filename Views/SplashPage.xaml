@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Latidos.Views.SplashPage"
+             NavigationPage.HasNavigationBar="False"
+             Shell.NavBarIsVisible="False">
+
+    <Grid>
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#0F0C08" Offset="0.0" />
+                <GradientStop Color="#1A1813" Offset="0.5" />
+                <GradientStop Color="#3A2F18" Offset="1.0" />
+            </LinearGradientBrush>
+        </Grid.Background>
+
+        <VerticalStackLayout VerticalOptions="Center"
+                             HorizontalOptions="Center"
+                             Spacing="20">
+
+            <!-- Logo + ripple rings -->
+            <Grid WidthRequest="220" HeightRequest="220"
+                  HorizontalOptions="Center"
+                  VerticalOptions="Center">
+
+                <!-- Outer pulsing ring -->
+                <Border x:Name="Ring1"
+                        WidthRequest="140"
+                        HeightRequest="140"
+                        StrokeShape="Ellipse"
+                        StrokeThickness="2"
+                        Stroke="#C9A227"
+                        BackgroundColor="Transparent"
+                        Opacity="0"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center" />
+
+                <!-- Inner pulsing ring -->
+                <Border x:Name="Ring2"
+                        WidthRequest="140"
+                        HeightRequest="140"
+                        StrokeShape="Ellipse"
+                        StrokeThickness="2"
+                        Stroke="#E6CB6E"
+                        BackgroundColor="Transparent"
+                        Opacity="0"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center" />
+
+                <!-- Soft glow halo behind logo -->
+                <Border x:Name="Glow"
+                        WidthRequest="160"
+                        HeightRequest="160"
+                        StrokeShape="Ellipse"
+                        StrokeThickness="0"
+                        BackgroundColor="#33C9A227"
+                        Opacity="0"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center" />
+
+                <!-- Logo frame (circular) -->
+                <Border x:Name="LogoFrame"
+                        WidthRequest="128"
+                        HeightRequest="128"
+                        StrokeShape="Ellipse"
+                        StrokeThickness="3"
+                        Stroke="#C9A227"
+                        BackgroundColor="White"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center"
+                        Opacity="0"
+                        Scale="0.7">
+                    <Border.Shadow>
+                        <Shadow Brush="#C9A227" Opacity="0.4" Radius="22" Offset="0,4" />
+                    </Border.Shadow>
+                    <Image Source="latidos_logo.jpg"
+                           Aspect="AspectFill" />
+                </Border>
+            </Grid>
+
+            <!-- Wordmark -->
+            <Label x:Name="Title"
+                   Text="LATIDOS"
+                   FontSize="34"
+                   FontFamily="OpenSansSemibold"
+                   FontAttributes="Bold"
+                   TextColor="#C9A227"
+                   CharacterSpacing="6"
+                   HorizontalTextAlignment="Center"
+                   Opacity="0"
+                   TranslationY="10" />
+
+            <Label x:Name="Subtitle"
+                   Text="Cada paso, un latido"
+                   FontSize="13"
+                   TextColor="#E6CB6E"
+                   CharacterSpacing="2"
+                   HorizontalTextAlignment="Center"
+                   Opacity="0"
+                   TranslationY="10" />
+        </VerticalStackLayout>
+
+        <!-- Bottom brand mark -->
+        <Label Text="latidos.run"
+               FontSize="10"
+               TextColor="#7A6E48"
+               CharacterSpacing="3"
+               HorizontalOptions="Center"
+               VerticalOptions="End"
+               Margin="0,0,0,28"
+               Opacity="0.6" />
+    </Grid>
+</ContentPage>

@@ -13,6 +13,21 @@ public class CheckoutViewModel : BindableObject
     private readonly IInvoiceService _invoiceService;
     private readonly IAuthService _authService;
     private List<CartItem> _cartItems = new();
+    public List<CartItem> CartItems
+    {
+        get => _cartItems;
+        private set
+        {
+            if (_cartItems != value)
+            {
+                _cartItems = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(HasItems));
+            }
+        }
+    }
+
+    public bool HasItems => _cartItems.Count > 0;
 
     private string _customerName = string.Empty;
     public string CustomerName
@@ -244,7 +259,7 @@ public class CheckoutViewModel : BindableObject
     {
         try
         {
-            _cartItems = await _cartService.GetCartItemsAsync();
+            CartItems = await _cartService.GetCartItemsAsync();
             ItemCount = _cartItems.Sum(ci => ci.Quantity);
             Subtotal = _cartItems.Sum(ci => ci.TotalPrice);
             Tax = Subtotal * 0.19m;
@@ -273,7 +288,7 @@ public class CheckoutViewModel : BindableObject
         try
         {
             StatusMessage = "Procesando pago...";
-            _cartItems = await _cartService.GetCartItemsAsync();
+            CartItems = await _cartService.GetCartItemsAsync();
 
             var paymentRequest = new PaymentRequest
             {

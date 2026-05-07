@@ -1,67 +1,193 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:Latidos.Models"
              x:Class="Latidos.Views.CheckoutPage"
              Title="Pago"
-             BackgroundColor="#F7F7F5">
+             BackgroundColor="#F2ECDC">
 
     <ScrollView Padding="16,12">
         <VerticalStackLayout Spacing="14">
-            <Frame Padding="16"
-                   CornerRadius="14"
-                   HasShadow="True"
-                   BorderColor="#E8E3D5"
-                   BackgroundColor="White">
-                <VerticalStackLayout Spacing="10">
-                    <Label Text="Resumen del pedido"
-                           FontSize="18"
-                           FontAttributes="Bold"
-                           TextColor="#C9A227" />
-                    <BoxView Color="#E8E3D5" HeightRequest="1" />
-                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
-                        <Label Text="Articulos"
-                               FontSize="14"
-                               TextColor="#2d2d2d" />
-                        <Label Grid.Column="1"
-                               Text="{Binding ItemCount}"
-                               FontSize="14"
-                               FontAttributes="Bold"
-                               TextColor="#2d2d2d" />
+            <Border StrokeThickness="0"
+                    StrokeShape="RoundRectangle 20"
+                    BackgroundColor="White"
+                    Padding="0">
+                <Border.Shadow>
+                    <Shadow Brush="#3A2F18" Opacity="0.1" Radius="16" Offset="0,6" />
+                </Border.Shadow>
+
+                <VerticalStackLayout Spacing="0">
+
+                    <!-- ===== Header ===== -->
+                    <Grid Padding="16,16,16,12"
+                          ColumnDefinitions="40,*,Auto"
+                          ColumnSpacing="12">
+                        <Border Grid.Column="0"
+                                WidthRequest="40"
+                                HeightRequest="40"
+                                StrokeThickness="0"
+                                StrokeShape="RoundRectangle 12"
+                                BackgroundColor="#FFF4D4"
+                                VerticalOptions="Center">
+                            <Image Source="icon_cart.svg"
+                                   WidthRequest="20"
+                                   HeightRequest="20"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center" />
+                        </Border>
+
+                        <VerticalStackLayout Grid.Column="1"
+                                             Spacing="2"
+                                             VerticalOptions="Center">
+                            <Label Text="Resumen del pedido"
+                                   FontSize="16"
+                                   FontFamily="OpenSansSemibold"
+                                   TextColor="#1A1813" />
+                            <Label Text="Revisa antes de pagar"
+                                   FontSize="11"
+                                   TextColor="#8A8270" />
+                        </VerticalStackLayout>
+
+                        <Border Grid.Column="2"
+                                Padding="10,4"
+                                StrokeThickness="0"
+                                StrokeShape="RoundRectangle 999"
+                                BackgroundColor="#FFF4D4"
+                                VerticalOptions="Center">
+                            <Label Text="{Binding ItemCount, StringFormat='{0} items'}"
+                                   FontSize="11"
+                                   FontAttributes="Bold"
+                                   TextColor="#8C6E0F" />
+                        </Border>
                     </Grid>
-                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
-                        <Label Text="Subtotal"
-                               FontSize="14"
-                               TextColor="#2d2d2d" />
-                        <Label Grid.Column="1"
-                               Text="{Binding SubtotalText}"
-                               FontSize="14"
-                               FontAttributes="Bold"
-                               TextColor="#2d2d2d" />
-                    </Grid>
-                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
-                        <Label Text="IVA"
-                               FontSize="14"
-                               TextColor="#2d2d2d" />
-                        <Label Grid.Column="1"
-                               Text="{Binding TaxText}"
-                               FontSize="14"
-                               FontAttributes="Bold"
-                               TextColor="#2d2d2d" />
-                    </Grid>
-                    <BoxView Color="#C9A227" HeightRequest="2" Margin="0,8,0,8" />
-                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
-                        <Label Text="Total"
-                               FontSize="16"
-                               FontAttributes="Bold"
-                               TextColor="#C9A227" />
-                        <Label Grid.Column="1"
-                               Text="{Binding TotalText}"
-                               FontSize="16"
-                               FontAttributes="Bold"
-                               TextColor="#C9A227" />
-                    </Grid>
+
+                    <BoxView HeightRequest="1" Color="#F1EAD5" Margin="16,0" />
+
+                    <!-- ===== Itemized list ===== -->
+                    <VerticalStackLayout Padding="16,8,16,8"
+                                         Spacing="0"
+                                         IsVisible="{Binding HasItems}"
+                                         BindableLayout.ItemsSource="{Binding CartItems}">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate x:DataType="models:CartItem">
+                                <Grid ColumnDefinitions="36,*,Auto"
+                                      ColumnSpacing="10"
+                                      Padding="0,8">
+                                    <Border Grid.Column="0"
+                                            WidthRequest="36"
+                                            HeightRequest="36"
+                                            StrokeThickness="0"
+                                            StrokeShape="RoundRectangle 10"
+                                            BackgroundColor="#F1EAD5"
+                                            VerticalOptions="Center">
+                                        <Image Source="{Binding Event.ImageUrl}"
+                                               Aspect="AspectFit"
+                                               Margin="6" />
+                                    </Border>
+
+                                    <VerticalStackLayout Grid.Column="1"
+                                                         Spacing="2"
+                                                         VerticalOptions="Center">
+                                        <Label Text="{Binding Event.Name}"
+                                               FontSize="13"
+                                               FontFamily="OpenSansSemibold"
+                                               TextColor="#1A1813"
+                                               MaxLines="1"
+                                               LineBreakMode="TailTruncation" />
+                                        <Label Text="{Binding CompetitorNameText}"
+                                               FontSize="11"
+                                               TextColor="#5B5443"
+                                               MaxLines="1"
+                                               LineBreakMode="TailTruncation" />
+                                    </VerticalStackLayout>
+
+                                    <Label Grid.Column="2"
+                                           Text="{Binding TotalPriceText}"
+                                           FontSize="13"
+                                           FontFamily="OpenSansSemibold"
+                                           TextColor="#8C6E0F"
+                                           VerticalOptions="Center" />
+                                </Grid>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </VerticalStackLayout>
+
+                    <BoxView HeightRequest="1" Color="#F1EAD5" Margin="16,0" />
+
+                    <!-- ===== Breakdown ===== -->
+                    <VerticalStackLayout Padding="16,12,16,12" Spacing="8">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Text="Subtotal"
+                                   FontSize="13"
+                                   TextColor="#5B5443" />
+                            <Label Grid.Column="1"
+                                   Text="{Binding SubtotalText}"
+                                   FontSize="13"
+                                   TextColor="#1A1813" />
+                        </Grid>
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Text="IVA (19%)"
+                                   FontSize="13"
+                                   TextColor="#5B5443" />
+                            <Label Grid.Column="1"
+                                   Text="{Binding TaxText}"
+                                   FontSize="13"
+                                   TextColor="#1A1813" />
+                        </Grid>
+                    </VerticalStackLayout>
+
+                    <!-- ===== Total hero ===== -->
+                    <Border Margin="12,4,12,12"
+                            Padding="16,14"
+                            StrokeThickness="0"
+                            StrokeShape="RoundRectangle 16">
+                        <Border.Shadow>
+                            <Shadow Brush="#C9A227" Opacity="0.3" Radius="14" Offset="0,4" />
+                        </Border.Shadow>
+                        <Border.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#1A1813" Offset="0.0" />
+                                <GradientStop Color="#3A2F18" Offset="0.55" />
+                                <GradientStop Color="#8C6E0F" Offset="1.0" />
+                            </LinearGradientBrush>
+                        </Border.Background>
+                        <Grid ColumnDefinitions="*,Auto"
+                              VerticalOptions="Center">
+                            <VerticalStackLayout Spacing="-2"
+                                                 VerticalOptions="Center">
+                                <Label Text="TOTAL A PAGAR"
+                                       FontSize="10"
+                                       CharacterSpacing="2"
+                                       FontAttributes="Bold"
+                                       TextColor="#F0DA8E" />
+                                <Label Text="{Binding TotalText}"
+                                       FontSize="22"
+                                       FontFamily="OpenSansSemibold"
+                                       TextColor="White" />
+                            </VerticalStackLayout>
+                            <Border Grid.Column="1"
+                                    Padding="10,5"
+                                    StrokeThickness="0"
+                                    StrokeShape="RoundRectangle 999"
+                                    BackgroundColor="#33FFFFFF"
+                                    VerticalOptions="Center">
+                                <HorizontalStackLayout Spacing="5">
+                                    <Image Source="icon_users.svg"
+                                           WidthRequest="11"
+                                           HeightRequest="11"
+                                           Opacity="0.85"
+                                           VerticalOptions="Center" />
+                                    <Label Text="{Binding ItemCount}"
+                                           FontSize="11"
+                                           FontAttributes="Bold"
+                                           TextColor="White"
+                                           VerticalOptions="Center" />
+                                </HorizontalStackLayout>
+                            </Border>
+                        </Grid>
+                    </Border>
                 </VerticalStackLayout>
-            </Frame>
+            </Border>
 
             <Frame Padding="16"
                    CornerRadius="14"

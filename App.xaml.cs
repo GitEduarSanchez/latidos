@@ -19,7 +19,7 @@ namespace Latidos
 
         protected override Window CreateWindow(IActivationState? activationState)
         {
-            return new Window(new NavigationPage(new LoginPage()));
+            return new Window(new SplashPage());
         }
     }
 }

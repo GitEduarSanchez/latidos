@@ -1,81 +1,125 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:Latidos.Models"
              x:Class="Latidos.Views.EventsPage"
              Title="Eventos"
-             BackgroundColor="#F8F7F2">
+             BackgroundColor="#F2ECDC">
 
     <ContentPage.Resources>
-        <Color x:Key="Surface">#FFFFFF</Color>
-        <Color x:Key="SurfaceSoft">#FBF9F3</Color>
-        <Color x:Key="HairLine">#EDE6D8</Color>
-        <Color x:Key="TextPrimary">#24211C</Color>
-        <Color x:Key="TextSecondary">#706A5E</Color>
-        <Color x:Key="TextMuted">#9B9384</Color>
-        <Color x:Key="Accent">#C9A227</Color>
-        <Color x:Key="AccentSoft">#FFF7DC</Color>
+        <ResourceDictionary>
+            <!-- Tonal palette: warm neutrals + multi-hue accents -->
+            <Color x:Key="Surface">#FFFFFF</Color>
+            <Color x:Key="SurfaceSoft">#F1EAD5</Color>
+            <Color x:Key="Cream">#F2ECDC</Color>
+            <Color x:Key="HairLine">#E5DBBE</Color>
+            <Color x:Key="Ink">#171410</Color>
+            <Color x:Key="InkSoft">#5B5443</Color>
+            <Color x:Key="InkMute">#9A9176</Color>
 
-        <Style x:Key="MetaText" TargetType="Label">
-            <Setter Property="FontSize" Value="12" />
-            <Setter Property="TextColor" Value="{StaticResource TextSecondary}" />
-            <Setter Property="VerticalTextAlignment" Value="Center" />
-            <Setter Property="LineBreakMode" Value="TailTruncation" />
-        </Style>
+            <!-- Multi-tone accent family -->
+            <Color x:Key="GoldLight">#F0DA8E</Color>
+            <Color x:Key="Gold">#C9A227</Color>
+            <Color x:Key="GoldDeep">#8C6E0F</Color>
+            <Color x:Key="GoldSoft">#FFF4D4</Color>
 
-        <Style x:Key="IconMeta" TargetType="Image">
-            <Setter Property="WidthRequest" Value="13" />
-            <Setter Property="HeightRequest" Value="13" />
-            <Setter Property="Aspect" Value="AspectFit" />
-            <Setter Property="Opacity" Value="0.58" />
-        </Style>
+            <Color x:Key="Sage">#D7F0DC</Color>
+            <Color x:Key="SageInk">#1F7A3A</Color>
+
+            <Color x:Key="Clay">#EFE4D2</Color>
+            <Color x:Key="ClayInk">#7C6442</Color>
+
+            <Color x:Key="Peach">#FFE0D0</Color>
+            <Color x:Key="PeachInk">#A04420</Color>
+
+            <!-- Warm sepia shadow tint (matches cream bg) -->
+            <Color x:Key="ShadowTint">#3A2F18</Color>
+
+            <!-- Typography: 4 sizes max -->
+            <Style x:Key="TitleXL" TargetType="Label">
+                <Setter Property="FontSize" Value="24" />
+                <Setter Property="FontFamily" Value="OpenSansSemibold" />
+                <Setter Property="TextColor" Value="{StaticResource Ink}" />
+            </Style>
+
+            <Style x:Key="TitleS" TargetType="Label">
+                <Setter Property="FontSize" Value="14" />
+                <Setter Property="FontFamily" Value="OpenSansSemibold" />
+                <Setter Property="TextColor" Value="{StaticResource Ink}" />
+                <Setter Property="LineBreakMode" Value="TailTruncation" />
+            </Style>
+
+            <Style x:Key="Body" TargetType="Label">
+                <Setter Property="FontSize" Value="11" />
+                <Setter Property="TextColor" Value="{StaticResource InkSoft}" />
+                <Setter Property="LineBreakMode" Value="TailTruncation" />
+            </Style>
+
+            <Style x:Key="Mini" TargetType="Label">
+                <Setter Property="FontSize" Value="9" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="CharacterSpacing" Value="1" />
+            </Style>
+
+            <Style x:Key="MetaIcon" TargetType="Image">
+                <Setter Property="WidthRequest" Value="11" />
+                <Setter Property="HeightRequest" Value="11" />
+                <Setter Property="Aspect" Value="AspectFit" />
+                <Setter Property="Opacity" Value="0.5" />
+            </Style>
+        </ResourceDictionary>
     </ContentPage.Resources>
 
     <Grid RowDefinitions="Auto,Auto,*"
-          Padding="20,18,20,0"
-          RowSpacing="14">
+          RowSpacing="12"
+          Padding="12,12,12,0">
 
-        <Grid ColumnDefinitions="*,Auto"
-              ColumnSpacing="14">
-            <VerticalStackLayout Spacing="2"
+        <!-- ===== Title row ===== -->
+        <Grid Grid.Row="0"
+              ColumnDefinitions="*,44"
+              ColumnSpacing="12">
+
+            <VerticalStackLayout Grid.Column="0"
+                                 Spacing="2"
                                  VerticalOptions="Center">
-                <Label Text="Eventos"
-                       FontSize="28"
-                       FontFamily="OpenSansSemibold"
-                       TextColor="{StaticResource TextPrimary}" />
-                <Label Text="{Binding EventsCountText}"
-                       FontSize="13"
-                       TextColor="{StaticResource TextSecondary}" />
+                <Label Text="Eventos" Style="{StaticResource TitleXL}" />
+                <Label Text="{Binding EventsCountText}" Style="{StaticResource Body}" />
             </VerticalStackLayout>
 
             <Border Grid.Column="1"
-                    WidthRequest="46"
-                    HeightRequest="46"
+                    WidthRequest="44"
+                    HeightRequest="44"
                     Stroke="{StaticResource HairLine}"
                     StrokeThickness="1"
-                    StrokeShape="RoundRectangle 16"
+                    StrokeShape="RoundRectangle 14"
                     BackgroundColor="{StaticResource Surface}"
-                    VerticalOptions="Center">
+                    VerticalOptions="Center"
+                    SemanticProperties.Description="Ir al carrito"
+                    AutomationId="GoToCartButton">
+                <Border.Shadow>
+                    <Shadow Brush="{StaticResource ShadowTint}" Opacity="0.1" Radius="10" Offset="0,3" />
+                </Border.Shadow>
                 <Border.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding GoToCartCommand}" />
                 </Border.GestureRecognizers>
                 <Grid>
                     <Image Source="icon_cart.svg"
-                           WidthRequest="19"
-                           HeightRequest="19"
-                           Aspect="AspectFit"
+                           WidthRequest="18"
+                           HeightRequest="18"
                            HorizontalOptions="Center"
                            VerticalOptions="Center" />
                     <Border IsVisible="{Binding IsCartBadgeVisible}"
-                            MinimumWidthRequest="21"
-                            HeightRequest="21"
+                            MinimumWidthRequest="20"
+                            HeightRequest="20"
                             Padding="5,0"
-                            StrokeThickness="0"
-                            StrokeShape="RoundRectangle 11"
-                            BackgroundColor="{StaticResource TextPrimary}"
+                            StrokeThickness="2"
+                            Stroke="{StaticResource Surface}"
+                            StrokeShape="RoundRectangle 10"
+                            BackgroundColor="{StaticResource Gold}"
                             HorizontalOptions="End"
                             VerticalOptions="Start"
-                            TranslationX="6"
-                            TranslationY="-6"
+                            TranslationX="7"
+                            TranslationY="-7"
                             InputTransparent="True">
                         <Label Text="{Binding CartItemCount}"
                                FontSize="10"
@@ -88,122 +132,142 @@
             </Border>
         </Grid>
 
-        <VerticalStackLayout Grid.Row="1"
-                             Spacing="10">
-            <Grid ColumnDefinitions="*,Auto"
-                  ColumnSpacing="10">
-                <Border HeightRequest="48"
-                        Padding="12,0"
+        <!-- ===== Search + filters ===== -->
+        <Grid Grid.Row="1"
+              RowDefinitions="Auto,Auto"
+              RowSpacing="8">
+
+            <Grid Grid.Row="0"
+                  ColumnDefinitions="*,Auto"
+                  ColumnSpacing="8">
+                <Border HeightRequest="44"
+                        Padding="10,0"
                         Stroke="{StaticResource HairLine}"
                         StrokeThickness="1"
-                        StrokeShape="RoundRectangle 16"
+                        StrokeShape="RoundRectangle 14"
                         BackgroundColor="{StaticResource Surface}">
                     <SearchBar Text="{Binding SearchText}"
                                Placeholder="Buscar evento"
+                               PlaceholderColor="{StaticResource InkMute}"
+                               TextColor="{StaticResource Ink}"
                                BackgroundColor="Transparent"
-                               HeightRequest="46"
-                               Margin="-8,0" />
+                               FontSize="13"
+                               HeightRequest="42"
+                               Margin="-8,0"
+                               SemanticProperties.Description="Buscar evento por nombre"
+                               AutomationId="EventsSearchBar" />
                 </Border>
 
                 <Button Grid.Column="1"
                         Text="{Binding FiltersToggleText}"
                         Command="{Binding ToggleFiltersCommand}"
-                        BackgroundColor="{StaticResource TextPrimary}"
+                        BackgroundColor="{StaticResource Ink}"
                         TextColor="White"
                         BorderWidth="0"
-                        CornerRadius="16"
+                        CornerRadius="14"
                         FontFamily="OpenSansSemibold"
                         FontSize="12"
-                        HeightRequest="48"
-                        Padding="14,0" />
+                        HeightRequest="44"
+                        Padding="14,0"
+                        SemanticProperties.Description="Mostrar u ocultar filtros"
+                        AutomationId="ToggleFiltersButton" />
             </Grid>
 
-            <Border IsVisible="{Binding IsFiltersExpanded}"
+            <Border Grid.Row="1"
+                    IsVisible="{Binding IsFiltersExpanded}"
                     Padding="12"
                     Stroke="{StaticResource HairLine}"
                     StrokeThickness="1"
-                    StrokeShape="RoundRectangle 18"
+                    StrokeShape="RoundRectangle 14"
                     BackgroundColor="{StaticResource Surface}">
-                <VerticalStackLayout Spacing="10">
-                    <Grid ColumnDefinitions="*,Auto"
-                          ColumnSpacing="10">
-                        <Border HeightRequest="46"
-                                Padding="12,0"
+                <Grid RowDefinitions="Auto,Auto" RowSpacing="8">
+                    <Grid Grid.Row="0" ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                        <Border HeightRequest="40"
+                                Padding="10,0"
                                 StrokeThickness="0"
-                                StrokeShape="RoundRectangle 14"
+                                StrokeShape="RoundRectangle 12"
                                 BackgroundColor="{StaticResource SurfaceSoft}">
-                            <Entry Text="{Binding CitySearchText}"
-                                   Placeholder="Ciudad o lugar"
-                                   BackgroundColor="Transparent"
-                                   ClearButtonVisibility="WhileEditing"
-                                   FontSize="14" />
+                            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="6">
+                                <Image Source="icon_location.svg"
+                                       WidthRequest="13"
+                                       HeightRequest="13"
+                                       Opacity="0.5"
+                                       VerticalOptions="Center" />
+                                <Entry Grid.Column="1"
+                                       Text="{Binding CitySearchText}"
+                                       Placeholder="Ciudad o lugar"
+                                       PlaceholderColor="{StaticResource InkMute}"
+                                       TextColor="{StaticResource Ink}"
+                                       BackgroundColor="Transparent"
+                                       ClearButtonVisibility="WhileEditing"
+                                       FontSize="13" />
+                            </Grid>
                         </Border>
 
                         <Button Grid.Column="1"
                                 Text="Limpiar"
                                 Command="{Binding ClearFiltersCommand}"
                                 BackgroundColor="Transparent"
-                                TextColor="{StaticResource TextSecondary}"
-                                BorderWidth="0"
-                                FontSize="13"
-                                HeightRequest="46"
-                                Padding="8,0" />
+                                TextColor="{StaticResource InkSoft}"
+                                BorderColor="{StaticResource HairLine}"
+                                BorderWidth="1"
+                                CornerRadius="12"
+                                FontSize="12"
+                                HeightRequest="40"
+                                Padding="10,0" />
                     </Grid>
 
-                    <Grid ColumnDefinitions="Auto,*,Auto"
-                          ColumnSpacing="8"
-                          HeightRequest="44">
+                    <Grid Grid.Row="1" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="6" HeightRequest="40">
                         <CheckBox IsChecked="{Binding IsDateFilterEnabled}"
-                                  Color="{StaticResource Accent}"
+                                  Color="{StaticResource Gold}"
                                   VerticalOptions="Center" />
                         <Label Grid.Column="1"
                                Text="Filtrar por fecha"
-                               FontSize="13"
-                               TextColor="{StaticResource TextSecondary}"
+                               FontSize="12"
+                               TextColor="{StaticResource InkSoft}"
                                VerticalTextAlignment="Center" />
                         <DatePicker Grid.Column="2"
                                     Date="{Binding FilterDate}"
                                     IsEnabled="{Binding IsDateFilterEnabled}"
                                     Format="dd MMM yyyy"
-                                    FontSize="13"
-                                    TextColor="{StaticResource TextPrimary}"
+                                    FontSize="12"
+                                    TextColor="{StaticResource Ink}"
                                     VerticalOptions="Center" />
                     </Grid>
-                </VerticalStackLayout>
+                </Grid>
             </Border>
-        </VerticalStackLayout>
+        </Grid>
 
+        <!-- ===== 2-column events grid ===== -->
         <Grid Grid.Row="2">
             <CollectionView ItemsSource="{Binding Events}"
                             SelectionMode="None">
                 <CollectionView.EmptyView>
-                    <Grid Padding="24,62">
-                        <VerticalStackLayout Spacing="8"
-                                             MaximumWidthRequest="300"
+                    <Grid Padding="24,40">
+                        <VerticalStackLayout Spacing="12"
+                                             MaximumWidthRequest="280"
                                              HorizontalOptions="Center"
                                              VerticalOptions="Center">
-                            <Border WidthRequest="64"
-                                    HeightRequest="64"
+                            <Border WidthRequest="72"
+                                    HeightRequest="72"
                                     StrokeThickness="0"
-                                    StrokeShape="RoundRectangle 32"
-                                    BackgroundColor="{StaticResource AccentSoft}"
+                                    StrokeShape="RoundRectangle 36"
+                                    BackgroundColor="{StaticResource GoldSoft}"
                                     HorizontalOptions="Center">
                                 <Image Source="icon_calendar.svg"
-                                       WidthRequest="26"
-                                       HeightRequest="26"
-                                       Opacity="0.7"
+                                       WidthRequest="28"
+                                       HeightRequest="28"
+                                       Opacity="0.65"
                                        HorizontalOptions="Center"
                                        VerticalOptions="Center" />
                             </Border>
                             <Label Text="Sin resultados"
-                                   FontSize="18"
+                                   FontSize="17"
                                    FontFamily="OpenSansSemibold"
-                                   TextColor="{StaticResource TextPrimary}"
-                                   HorizontalTextAlignment="Center"
-                                   Margin="0,8,0,0" />
+                                   TextColor="{StaticResource Ink}"
+                                   HorizontalTextAlignment="Center" />
                             <Label Text="Ajusta el nombre, ciudad o fecha para ver m&#225;s eventos."
-                                   FontSize="13"
-                                   TextColor="{StaticResource TextSecondary}"
+                                   Style="{StaticResource Body}"
                                    HorizontalTextAlignment="Center"
                                    LineBreakMode="WordWrap" />
                         </VerticalStackLayout>
@@ -211,142 +275,219 @@
                 </CollectionView.EmptyView>
 
                 <CollectionView.ItemsLayout>
-                    <LinearItemsLayout Orientation="Vertical" ItemSpacing="10" />
+                    <GridItemsLayout Orientation="Vertical"
+                                     Span="2"
+                                     HorizontalItemSpacing="10"
+                                     VerticalItemSpacing="12" />
                 </CollectionView.ItemsLayout>
 
                 <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Border Stroke="{StaticResource HairLine}"
-                                StrokeThickness="1"
+                    <DataTemplate x:DataType="models:RunningEvent">
+                        <Border StrokeThickness="0"
                                 StrokeShape="RoundRectangle 18"
                                 BackgroundColor="{StaticResource Surface}"
-                                Padding="10">
+                                Padding="0">
                             <Border.Shadow>
-                                <Shadow Brush="#0A0A0A"
-                                        Opacity="0.035"
+                                <Shadow Brush="{StaticResource ShadowTint}"
+                                        Opacity="0.12"
                                         Radius="14"
-                                        Offset="0,4" />
+                                        Offset="0,6" />
                             </Border.Shadow>
-                            <Grid ColumnDefinitions="104,*"
-                                  ColumnSpacing="12"
-                                  MinimumHeightRequest="172">
 
-                                <Border WidthRequest="104"
+                            <Grid RowDefinitions="112,Auto">
+
+                                <!-- ===== Image hero ===== -->
+                                <Border Grid.Row="0"
                                         StrokeThickness="0"
-                                        StrokeShape="RoundRectangle 14"
-                                        BackgroundColor="#EFEAE0"
-                                        VerticalOptions="Fill">
-                                    <Image Source="{Binding ImageUrl}"
-                                           Aspect="AspectFill" />
+                                        StrokeShape="RoundRectangle 18,18,0,0"
+                                        BackgroundColor="{StaticResource Clay}">
+                                    <Grid>
+                                        <Image Source="{Binding ImageUrl}"
+                                               Aspect="AspectFill" />
+
+                                        <!-- Top vignette -->
+                                        <Border StrokeThickness="0"
+                                                StrokeShape="RoundRectangle 18,18,0,0"
+                                                InputTransparent="True">
+                                            <Border.Background>
+                                                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                                    <GradientStop Color="#55000000" Offset="0.0" />
+                                                    <GradientStop Color="#00000000" Offset="0.5" />
+                                                </LinearGradientBrush>
+                                            </Border.Background>
+                                        </Border>
+
+                                        <!-- Date pill (compact, glassy) -->
+                                        <Border Padding="0"
+                                                Margin="8,8,0,0"
+                                                WidthRequest="42"
+                                                HeightRequest="48"
+                                                StrokeThickness="0"
+                                                StrokeShape="RoundRectangle 12"
+                                                BackgroundColor="#F2FFFFFF"
+                                                HorizontalOptions="Start"
+                                                VerticalOptions="Start">
+                                            <Border.Shadow>
+                                                <Shadow Brush="{StaticResource ShadowTint}"
+                                                        Opacity="0.25"
+                                                        Radius="8"
+                                                        Offset="0,2" />
+                                            </Border.Shadow>
+                                            <Grid RowDefinitions="Auto,Auto"
+                                                  HorizontalOptions="Center"
+                                                  VerticalOptions="Center">
+                                                <Label Grid.Row="0"
+                                                       Text="{Binding EventDate, StringFormat='{0:dd}'}"
+                                                       FontSize="16"
+                                                       FontFamily="OpenSansSemibold"
+                                                       TextColor="{StaticResource Ink}"
+                                                       HorizontalTextAlignment="Center"
+                                                       Margin="0,0,0,-3" />
+                                                <Label Grid.Row="1"
+                                                       Text="{Binding EventDate, StringFormat='{0:MMM}'}"
+                                                       FontSize="9"
+                                                       CharacterSpacing="1"
+                                                       FontAttributes="Bold"
+                                                       TextColor="{StaticResource GoldDeep}"
+                                                       HorizontalTextAlignment="Center" />
+                                            </Grid>
+                                        </Border>
+
+                                        <!-- Status mini pill (top-right) -->
+                                        <Border Padding="7,3"
+                                                Margin="0,8,8,0"
+                                                StrokeThickness="0"
+                                                StrokeShape="RoundRectangle 999"
+                                                BackgroundColor="{Binding StatusBackgroundColor}"
+                                                HorizontalOptions="End"
+                                                VerticalOptions="Start">
+                                            <Label Text="{Binding StatusText}"
+                                                   FontSize="9"
+                                                   FontAttributes="Bold"
+                                                   TextColor="{Binding StatusTextColor}" />
+                                        </Border>
+
+                                        <!-- Urgency chip (bottom-right of image) -->
+                                        <Border IsVisible="{Binding IsAlmostFull}"
+                                                Padding="7,3"
+                                                Margin="0,0,8,8"
+                                                StrokeThickness="0"
+                                                StrokeShape="RoundRectangle 999"
+                                                BackgroundColor="{StaticResource Peach}"
+                                                HorizontalOptions="End"
+                                                VerticalOptions="End">
+                                            <Label Text="{Binding RemainingSpotsText, StringFormat='{0}!'}"
+                                                   FontSize="9"
+                                                   FontAttributes="Bold"
+                                                   TextColor="{StaticResource PeachInk}" />
+                                        </Border>
+                                    </Grid>
                                 </Border>
 
-                                <Grid Grid.Column="0">
-                                    <Border Padding="10,5"
-                                            Margin="8"
-                                            StrokeThickness="0"
-                                            StrokeShape="RoundRectangle 12"
-                                            BackgroundColor="{Binding StatusBackgroundColor}"
-                                            HorizontalOptions="Start"
-                                            VerticalOptions="Start">
-                                        <Label Text="{Binding StatusText}"
-                                               FontSize="11"
-                                               FontFamily="OpenSansSemibold"
-                                               TextColor="{Binding StatusTextColor}" />
-                                    </Border>
-                                </Grid>
+                                <!-- ===== Compact body ===== -->
+                                <Grid Grid.Row="1"
+                                      RowDefinitions="Auto,Auto,Auto,Auto"
+                                      RowSpacing="6"
+                                      Padding="12,10,12,12">
 
-                                <Grid Grid.Column="1"
-                                      RowDefinitions="Auto,Auto,*,Auto"
-                                      RowSpacing="6">
-                                    <VerticalStackLayout Spacing="4">
-                                        <Label Text="{Binding Name}"
-                                               FontSize="16"
-                                               FontFamily="OpenSansSemibold"
-                                               TextColor="{StaticResource TextPrimary}"
-                                               MaxLines="2"
-                                               LineBreakMode="TailTruncation" />
-                                        <Label Text="{Binding Description}"
-                                               FontSize="12"
-                                               TextColor="{StaticResource TextSecondary}"
-                                               LineBreakMode="TailTruncation"
-                                               MaxLines="2" />
-                                    </VerticalStackLayout>
+                                    <Label Grid.Row="0"
+                                           Text="{Binding Name}"
+                                           Style="{StaticResource TitleS}"
+                                           MaxLines="1" />
 
-                                    <VerticalStackLayout Grid.Row="1"
-                                                         Spacing="4">
-                                        <HorizontalStackLayout Spacing="6">
-                                            <Image Source="icon_calendar.svg"
-                                                   Style="{StaticResource IconMeta}" />
-                                            <Label Text="{Binding EventDate, StringFormat='{0:dd MMM}'}"
-                                                   Style="{StaticResource MetaText}" />
-                                        </HorizontalStackLayout>
+                                    <Grid Grid.Row="1"
+                                          ColumnDefinitions="Auto,*"
+                                          ColumnSpacing="4">
+                                        <Image Source="icon_location.svg" Style="{StaticResource MetaIcon}" />
+                                        <Label Grid.Column="1"
+                                               Text="{Binding CityLocationText}"
+                                               Style="{StaticResource Body}"
+                                               MaxLines="1" />
+                                    </Grid>
 
-                                        <HorizontalStackLayout Spacing="6">
-                                            <Image Source="icon_location.svg"
-                                                   Style="{StaticResource IconMeta}" />
-                                            <Label Text="{Binding CityLocationText}"
-                                                   Style="{StaticResource MetaText}" />
-                                        </HorizontalStackLayout>
-                                    </VerticalStackLayout>
-
-                                    <HorizontalStackLayout Grid.Row="2"
-                                                           Spacing="5"
-                                                           VerticalOptions="End">
-                                        <Image Source="icon_users.svg"
-                                               WidthRequest="12"
-                                               HeightRequest="12"
-                                               Aspect="AspectFit"
-                                               Opacity="0.55" />
-                                        <Label Text="{Binding CurrentParticipants, StringFormat='{0} inscritos'}"
-                                               FontSize="11"
-                                               TextColor="{StaticResource TextMuted}"
-                                               VerticalTextAlignment="Center" />
-                                    </HorizontalStackLayout>
+                                    <!-- Capacity bar -->
+                                    <Grid Grid.Row="2" HeightRequest="4" Margin="0,2,0,2">
+                                        <Border StrokeThickness="0"
+                                                StrokeShape="RoundRectangle 999"
+                                                BackgroundColor="{StaticResource SurfaceSoft}"
+                                                HorizontalOptions="Fill"
+                                                VerticalOptions="Fill" />
+                                        <Border StrokeThickness="0"
+                                                StrokeShape="RoundRectangle 999"
+                                                HorizontalOptions="Fill"
+                                                VerticalOptions="Fill"
+                                                AnchorX="0"
+                                                ScaleX="{Binding CapacityProgress}">
+                                            <Border.Background>
+                                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                                    <GradientStop Color="#F0DA8E" Offset="0.0" />
+                                                    <GradientStop Color="#C9A227" Offset="1.0" />
+                                                </LinearGradientBrush>
+                                            </Border.Background>
+                                        </Border>
+                                    </Grid>
 
                                     <Grid Grid.Row="3"
                                           ColumnDefinitions="*,Auto"
-                                          ColumnSpacing="10">
-                                        <VerticalStackLayout Spacing="0"
+                                          ColumnSpacing="6">
+                                        <VerticalStackLayout Spacing="-2"
                                                              VerticalOptions="Center">
-                                            <Label Text="Inscripci&#243;n"
-                                                   FontSize="10"
-                                                   TextColor="{StaticResource TextMuted}" />
+                                            <Label Text="DESDE"
+                                                   Style="{StaticResource Mini}"
+                                                   TextColor="{StaticResource InkMute}" />
                                             <Label Text="{Binding PriceText}"
-                                                   FontSize="17"
+                                                   FontSize="14"
                                                    FontFamily="OpenSansSemibold"
-                                                   TextColor="{StaticResource TextPrimary}" />
+                                                   TextColor="{StaticResource GoldDeep}" />
                                         </VerticalStackLayout>
 
-                                        <Button Text="Inscribir"
-                                                Grid.Column="1"
-                                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.AddToCartCommand}"
-                                                CommandParameter="{Binding}"
+                                        <Border Grid.Column="1"
                                                 IsVisible="{Binding CanRegister}"
-                                                BackgroundColor="{StaticResource TextPrimary}"
-                                                TextColor="White"
-                                                BorderWidth="0"
-                                                Padding="14,0"
-                                                FontSize="12"
-                                                FontFamily="OpenSansSemibold"
-                                                CornerRadius="12"
-                                                HeightRequest="42"
-                                                MinimumWidthRequest="96" />
-
-                                        <Border IsVisible="{Binding IsRegistrationClosed}"
-                                                Grid.Column="1"
-                                                Padding="10,0"
+                                                Padding="0"
                                                 StrokeThickness="0"
-                                                StrokeShape="RoundRectangle 12"
-                                                BackgroundColor="#EFEDE8"
-                                                HeightRequest="42"
-                                                MinimumWidthRequest="96">
-                                            <Label Text="{Binding RegistrationClosedText}"
-                                                   FontSize="11"
+                                                StrokeShape="RoundRectangle 11"
+                                                HeightRequest="34"
+                                                MinimumWidthRequest="64">
+                                            <Border.Shadow>
+                                                <Shadow Brush="{StaticResource Gold}"
+                                                        Opacity="0.35"
+                                                        Radius="10"
+                                                        Offset="0,3" />
+                                            </Border.Shadow>
+                                            <Border.Background>
+                                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                                    <GradientStop Color="#C9A227" Offset="0.0" />
+                                                    <GradientStop Color="#8C6E0F" Offset="1.0" />
+                                                </LinearGradientBrush>
+                                            </Border.Background>
+                                            <Button Text="Inscribir"
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.AddToCartCommand}"
+                                                    CommandParameter="{Binding}"
+                                                    BackgroundColor="Transparent"
+                                                    TextColor="White"
+                                                    BorderWidth="0"
+                                                    Padding="10,0"
+                                                    FontSize="11"
+                                                    FontFamily="OpenSansSemibold"
+                                                    CornerRadius="11"
+                                                    HeightRequest="34"
+                                                    SemanticProperties.Description="Inscribir competidor en el evento" />
+                                        </Border>
+
+                                        <Border Grid.Column="1"
+                                                IsVisible="{Binding IsRegistrationClosed}"
+                                                Padding="8,0"
+                                                StrokeThickness="0"
+                                                StrokeShape="RoundRectangle 11"
+                                                BackgroundColor="{StaticResource Clay}"
+                                                HeightRequest="34"
+                                                MinimumWidthRequest="64">
+                                            <Label Text="Cerrado"
+                                                   FontSize="10"
                                                    FontFamily="OpenSansSemibold"
-                                                   TextColor="{StaticResource TextSecondary}"
+                                                   TextColor="{StaticResource ClayInk}"
                                                    HorizontalTextAlignment="Center"
-                                                   VerticalTextAlignment="Center"
-                                                   LineBreakMode="TailTruncation" />
+                                                   VerticalTextAlignment="Center" />
                                         </Border>
                                     </Grid>
                                 </Grid>
@@ -356,19 +497,13 @@
                 </CollectionView.ItemTemplate>
             </CollectionView>
 
-            <Border IsVisible="{Binding IsLoading}"
-                    StrokeThickness="0"
-                    StrokeShape="RoundRectangle 18"
-                    BackgroundColor="#CCFFFFFF"
-                    HorizontalOptions="Center"
-                    VerticalOptions="Center"
-                    Padding="18">
-                <ActivityIndicator IsRunning="{Binding IsLoading}"
-                                   IsVisible="{Binding IsLoading}"
-                                   Color="{StaticResource Accent}"
-                                   WidthRequest="34"
-                                   HeightRequest="34" />
-            </Border>
+            <ActivityIndicator IsRunning="{Binding IsLoading}"
+                               IsVisible="{Binding IsLoading}"
+                               Color="{StaticResource Gold}"
+                               WidthRequest="32"
+                               HeightRequest="32"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center" />
         </Grid>
     </Grid>
 </ContentPage>

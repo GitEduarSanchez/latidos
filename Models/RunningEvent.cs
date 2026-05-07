@@ -96,4 +96,35 @@ public class RunningEvent
             return $"{City} - {Location}";
         }
     }
+
+    public double CapacityProgress
+    {
+        get
+        {
+            if (MaxParticipants <= 0)
+            {
+                return 0;
+            }
+
+            var ratio = (double)CurrentParticipants / MaxParticipants;
+            return Math.Clamp(ratio, 0d, 1d);
+        }
+    }
+
+    public int RemainingSpots => Math.Max(0, MaxParticipants - CurrentParticipants);
+
+    public string RemainingSpotsText
+    {
+        get
+        {
+            if (RemainingSpots <= 0)
+            {
+                return "Cupo lleno";
+            }
+
+            return RemainingSpots == 1 ? "1 cupo" : $"{RemainingSpots} cupos";
+        }
+    }
+
+    public bool IsAlmostFull => CapacityProgress >= 0.8 && RemainingSpots > 0;
 }

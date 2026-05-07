@@ -2,341 +2,592 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Latidos.Views.AdminEventsPage"
-             Title="Admin">
+             Title="Admin"
+             BackgroundColor="#F5F2EA">
 
-    <ScrollView BackgroundColor="#F7F7F5">
-        <VerticalStackLayout Padding="16,12,16,24"
-                             Spacing="14">
-            <VerticalStackLayout Spacing="2">
-                <Label Text="Gestion de eventos"
-                       FontSize="26"
-                       FontAttributes="Bold"
-                       TextColor="#C9A227" />
-                <Label Text="{Binding EventsCountText}"
-                       FontSize="12"
-                       TextColor="#767676" />
-            </VerticalStackLayout>
+    <ContentPage.Resources>
+        <ResourceDictionary>
 
-            <Border Padding="14"
-                    Stroke="#E8E3D5"
+            <Color x:Key="AdminGold">#C9A227</Color>
+            <Color x:Key="AdminGoldSoft">#E6CB6E</Color>
+            <Color x:Key="AdminInk">#1F1B12</Color>
+            <Color x:Key="AdminMute">#7A7363</Color>
+            <Color x:Key="AdminLine">#E8E0CB</Color>
+            <Color x:Key="AdminField">#FAF7EE</Color>
+            <Color x:Key="AdminPanel">#FFFFFF</Color>
+            <Color x:Key="AdminDanger">#B42318</Color>
+            <Color x:Key="AdminDangerSoft">#FDECEC</Color>
+
+            <Style x:Key="SectionLabel" TargetType="Label">
+                <Setter Property="FontSize" Value="11" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="TextColor" Value="{StaticResource AdminGold}" />
+                <Setter Property="CharacterSpacing" Value="2" />
+            </Style>
+
+            <Style x:Key="FieldLabel" TargetType="Label">
+                <Setter Property="FontSize" Value="12" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="TextColor" Value="#3F3A2D" />
+            </Style>
+
+            <Style x:Key="FieldShell" TargetType="Border">
+                <Setter Property="Padding" Value="12,0" />
+                <Setter Property="Stroke" Value="{StaticResource AdminLine}" />
+                <Setter Property="StrokeThickness" Value="1" />
+                <Setter Property="StrokeShape" Value="RoundRectangle 12" />
+                <Setter Property="BackgroundColor" Value="{StaticResource AdminField}" />
+            </Style>
+
+            <Style x:Key="FieldEntry" TargetType="Entry">
+                <Setter Property="HeightRequest" Value="46" />
+                <Setter Property="FontSize" Value="14" />
+                <Setter Property="TextColor" Value="{StaticResource AdminInk}" />
+                <Setter Property="PlaceholderColor" Value="#A89E86" />
+                <Setter Property="ClearButtonVisibility" Value="WhileEditing" />
+            </Style>
+
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="16"
+                             Padding="0,0,0,28">
+
+            <!-- ============ HERO ============ -->
+            <Border StrokeThickness="0"
+                    StrokeShape="RoundRectangle 0,0,24,24"
+                    Margin="0">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#1F1B12" Offset="0.0" />
+                        <GradientStop Color="#3A2F18" Offset="0.55" />
+                        <GradientStop Color="#C9A227" Offset="1.0" />
+                    </LinearGradientBrush>
+                </Border.Background>
+                <Grid Padding="20,22,20,24"
+                      RowDefinitions="Auto,Auto"
+                      RowSpacing="14">
+                    <Grid ColumnDefinitions="Auto,*,Auto"
+                          ColumnSpacing="12">
+                        <Border WidthRequest="44"
+                                HeightRequest="44"
+                                StrokeThickness="0"
+                                StrokeShape="RoundRectangle 12"
+                                BackgroundColor="#26FFFFFF"
+                                VerticalOptions="Center">
+                            <Image Source="icon_admin.svg"
+                                   WidthRequest="22"
+                                   HeightRequest="22"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center" />
+                        </Border>
+                        <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                            <Label Text="PANEL DE ADMINISTRACION"
+                                   FontSize="10"
+                                   FontAttributes="Bold"
+                                   CharacterSpacing="3"
+                                   TextColor="#F0DA8E" />
+                            <Label Text="Gestion de eventos"
+                                   FontSize="22"
+                                   FontAttributes="Bold"
+                                   TextColor="White" />
+                        </VerticalStackLayout>
+                        <Border Grid.Column="2"
+                                Padding="12,6"
+                                StrokeThickness="0"
+                                StrokeShape="RoundRectangle 999"
+                                BackgroundColor="#33FFFFFF"
+                                VerticalOptions="Center">
+                            <Label Text="{Binding EventsCountText}"
+                                   FontSize="11"
+                                   FontAttributes="Bold"
+                                   TextColor="White"
+                                   VerticalTextAlignment="Center" />
+                        </Border>
+                    </Grid>
+                </Grid>
+            </Border>
+
+            <!-- ============ FORM CARD ============ -->
+            <Border Margin="16,0"
+                    Padding="0"
                     StrokeThickness="1"
-                    StrokeShape="RoundRectangle 14"
-                    BackgroundColor="White">
-                <VerticalStackLayout Spacing="12">
-                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
-                        <Label Text="{Binding FormTitle}"
-                               FontSize="18"
-                               FontAttributes="Bold"
-                               TextColor="#252525"
-                               VerticalOptions="Center" />
-                        <Button Grid.Column="1"
-                                Text="Nuevo"
-                                Command="{Binding NewEventCommand}"
-                                BackgroundColor="White"
-                                TextColor="#C9A227"
-                                BorderColor="#C9A227"
-                                BorderWidth="1"
-                                FontSize="12"
-                                FontAttributes="Bold"
-                                CornerRadius="10"
+                    Stroke="{StaticResource AdminLine}"
+                    StrokeShape="RoundRectangle 18"
+                    BackgroundColor="{StaticResource AdminPanel}">
+                <Border.Shadow>
+                    <Shadow Brush="Black"
+                            Offset="0,4"
+                            Radius="14"
+                            Opacity="0.06" />
+                </Border.Shadow>
+
+                <VerticalStackLayout Spacing="0">
+
+                    <!-- Form header strip -->
+                    <Grid Padding="16,16,12,14"
+                          ColumnDefinitions="Auto,*,Auto"
+                          ColumnSpacing="12"
+                          BackgroundColor="#FFFCF3">
+                        <Border Grid.Column="0"
+                                WidthRequest="40"
                                 HeightRequest="40"
-                                Padding="12,0" />
+                                StrokeThickness="0"
+                                StrokeShape="RoundRectangle 12"
+                                BackgroundColor="{StaticResource AdminGold}"
+                                VerticalOptions="Center">
+                            <Label Text="+"
+                                   FontSize="24"
+                                   FontAttributes="Bold"
+                                   TextColor="White"
+                                   HorizontalTextAlignment="Center"
+                                   VerticalTextAlignment="Center" />
+                        </Border>
+                        <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                            <Label Text="{Binding FormTitle}"
+                                   FontSize="17"
+                                   FontAttributes="Bold"
+                                   TextColor="{StaticResource AdminInk}" />
+                            <Label Text="Completa los datos para publicar la carrera"
+                                   FontSize="11"
+                                   TextColor="{StaticResource AdminMute}" />
+                        </VerticalStackLayout>
+                        <Button Grid.Column="2"
+                                Text="Limpiar"
+                                Command="{Binding NewEventCommand}"
+                                BackgroundColor="Transparent"
+                                TextColor="{StaticResource AdminGold}"
+                                BorderColor="{StaticResource AdminGold}"
+                                BorderWidth="1"
+                                FontSize="11"
+                                FontAttributes="Bold"
+                                CornerRadius="999"
+                                HeightRequest="34"
+                                Padding="14,0"
+                                VerticalOptions="Center" />
                     </Grid>
 
-                    <Label Text="Nombre"
-                           FontSize="12"
-                           FontAttributes="Bold"
-                           TextColor="#4F4F4F" />
-                    <Border Padding="10,0"
-                            Stroke="#E8E3D5"
-                            StrokeThickness="1"
-                            StrokeShape="RoundRectangle 10"
-                            BackgroundColor="#FAFAFA">
-                        <Entry Text="{Binding Name}"
-                               Placeholder="Nombre del evento"
-                               HeightRequest="44"
-                               ClearButtonVisibility="WhileEditing" />
-                    </Border>
+                    <BoxView HeightRequest="1" Color="{StaticResource AdminLine}" />
 
-                    <Label Text="Descripcion"
-                           FontSize="12"
-                           FontAttributes="Bold"
-                           TextColor="#4F4F4F" />
-                    <Border Padding="10,0"
-                            Stroke="#E8E3D5"
-                            StrokeThickness="1"
-                            StrokeShape="RoundRectangle 10"
-                            BackgroundColor="#FAFAFA">
-                        <Editor Text="{Binding Description}"
-                                Placeholder="Resumen corto para la tarjeta"
-                                AutoSize="TextChanges"
-                                MinimumHeightRequest="76" />
-                    </Border>
+                    <!-- Form body -->
+                    <VerticalStackLayout Padding="16,18" Spacing="18">
 
-                    <Grid ColumnDefinitions="*,*"
-                          ColumnSpacing="10">
-                        <VerticalStackLayout Spacing="6">
-                            <Label Text="Ciudad"
-                                   FontSize="12"
-                                   FontAttributes="Bold"
-                                   TextColor="#4F4F4F" />
-                            <Border Padding="10,0"
-                                    Stroke="#E8E3D5"
-                                    StrokeThickness="1"
-                                    StrokeShape="RoundRectangle 10"
-                                    BackgroundColor="#FAFAFA">
-                                <Entry Text="{Binding City}"
-                                       Placeholder="Ciudad"
-                                       HeightRequest="44"
-                                       ClearButtonVisibility="WhileEditing" />
-                            </Border>
+                        <!-- ========== Section: Información ========== -->
+                        <VerticalStackLayout Spacing="10">
+                            <Label Text="INFORMACION DEL EVENTO" Style="{StaticResource SectionLabel}" />
+
+                            <VerticalStackLayout Spacing="6">
+                                <Label Text="Nombre" Style="{StaticResource FieldLabel}" />
+                                <Border Style="{StaticResource FieldShell}">
+                                    <Entry Text="{Binding Name}"
+                                           Placeholder="Ej. Carrera Ciudad 5K"
+                                           Style="{StaticResource FieldEntry}" />
+                                </Border>
+                            </VerticalStackLayout>
+
+                            <VerticalStackLayout Spacing="6">
+                                <Label Text="Descripcion" Style="{StaticResource FieldLabel}" />
+                                <Border Padding="12,8"
+                                        Stroke="{StaticResource AdminLine}"
+                                        StrokeThickness="1"
+                                        StrokeShape="RoundRectangle 12"
+                                        BackgroundColor="{StaticResource AdminField}">
+                                    <Editor Text="{Binding Description}"
+                                            Placeholder="Resumen breve que veran los corredores"
+                                            PlaceholderColor="#A89E86"
+                                            TextColor="{StaticResource AdminInk}"
+                                            FontSize="14"
+                                            AutoSize="TextChanges"
+                                            MinimumHeightRequest="84" />
+                                </Border>
+                            </VerticalStackLayout>
                         </VerticalStackLayout>
 
-                        <VerticalStackLayout Grid.Column="1" Spacing="6">
-                            <Label Text="Lugar"
-                                   FontSize="12"
-                                   FontAttributes="Bold"
-                                   TextColor="#4F4F4F" />
-                            <Border Padding="10,0"
-                                    Stroke="#E8E3D5"
-                                    StrokeThickness="1"
-                                    StrokeShape="RoundRectangle 10"
-                                    BackgroundColor="#FAFAFA">
-                                <Entry Text="{Binding Location}"
-                                       Placeholder="Lugar"
-                                       HeightRequest="44"
-                                       ClearButtonVisibility="WhileEditing" />
-                            </Border>
-                        </VerticalStackLayout>
-                    </Grid>
+                        <BoxView HeightRequest="1" Color="{StaticResource AdminLine}" />
 
-                    <Grid ColumnDefinitions="*,*"
-                          ColumnSpacing="10">
-                        <VerticalStackLayout Spacing="6">
-                            <Label Text="Fecha"
-                                   FontSize="12"
-                                   FontAttributes="Bold"
-                                   TextColor="#4F4F4F" />
-                            <Border Padding="10,0"
-                                    Stroke="#E8E3D5"
-                                    StrokeThickness="1"
-                                    StrokeShape="RoundRectangle 10"
-                                    BackgroundColor="#FAFAFA">
-                                <DatePicker Date="{Binding EventDate}"
-                                            Format="dd MMM yyyy"
-                                            HeightRequest="44" />
-                            </Border>
+                        <!-- ========== Section: Ubicación ========== -->
+                        <VerticalStackLayout Spacing="10">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Label Text="UBICACION" Style="{StaticResource SectionLabel}" />
+                                <Image Grid.Column="1"
+                                       Source="icon_location.svg"
+                                       WidthRequest="14"
+                                       HeightRequest="14"
+                                       Opacity="0.55" />
+                            </Grid>
+
+                            <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                                <VerticalStackLayout Spacing="6">
+                                    <Label Text="Ciudad" Style="{StaticResource FieldLabel}" />
+                                    <Border Style="{StaticResource FieldShell}">
+                                        <Entry Text="{Binding City}"
+                                               Placeholder="Bogota"
+                                               Style="{StaticResource FieldEntry}" />
+                                    </Border>
+                                </VerticalStackLayout>
+
+                                <VerticalStackLayout Grid.Column="1" Spacing="6">
+                                    <Label Text="Lugar" Style="{StaticResource FieldLabel}" />
+                                    <Border Style="{StaticResource FieldShell}">
+                                        <Entry Text="{Binding Location}"
+                                               Placeholder="Parque Simon Bolivar"
+                                               Style="{StaticResource FieldEntry}" />
+                                    </Border>
+                                </VerticalStackLayout>
+                            </Grid>
                         </VerticalStackLayout>
 
-                        <VerticalStackLayout Grid.Column="1" Spacing="6">
-                            <Label Text="Precio (COP)"
-                                   FontSize="12"
-                                   FontAttributes="Bold"
-                                   TextColor="#4F4F4F" />
-                            <Border Padding="10,0"
-                                    Stroke="#E8E3D5"
-                                    StrokeThickness="1"
-                                    StrokeShape="RoundRectangle 10"
-                                    BackgroundColor="#FAFAFA">
-                                <Entry Text="{Binding PriceText}"
-                                       Placeholder="25000"
-                                       Keyboard="Numeric"
-                                       HeightRequest="44"
-                                       ClearButtonVisibility="WhileEditing" />
-                            </Border>
-                        </VerticalStackLayout>
-                    </Grid>
+                        <BoxView HeightRequest="1" Color="{StaticResource AdminLine}" />
 
-                    <Grid ColumnDefinitions="*,*"
-                          ColumnSpacing="10">
-                        <VerticalStackLayout Spacing="6">
-                            <Label Text="Capacidad"
-                                   FontSize="12"
-                                   FontAttributes="Bold"
-                                   TextColor="#4F4F4F" />
-                            <Border Padding="10,0"
-                                    Stroke="#E8E3D5"
-                                    StrokeThickness="1"
-                                    StrokeShape="RoundRectangle 10"
-                                    BackgroundColor="#FAFAFA">
-                                <Entry Text="{Binding MaxParticipantsText}"
-                                       Placeholder="100"
-                                       Keyboard="Numeric"
-                                       HeightRequest="44"
-                                       ClearButtonVisibility="WhileEditing" />
-                            </Border>
+                        <!-- ========== Section: Fecha y precio ========== -->
+                        <VerticalStackLayout Spacing="10">
+                            <Label Text="FECHA Y PRECIO" Style="{StaticResource SectionLabel}" />
+
+                            <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                                <VerticalStackLayout Spacing="6">
+                                    <Label Text="Fecha" Style="{StaticResource FieldLabel}" />
+                                    <Border Style="{StaticResource FieldShell}">
+                                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
+                                            <Image Source="icon_calendar.svg"
+                                                   WidthRequest="16"
+                                                   HeightRequest="16"
+                                                   VerticalOptions="Center"
+                                                   Opacity="0.6" />
+                                            <DatePicker Grid.Column="1"
+                                                        Date="{Binding EventDate}"
+                                                        Format="dd MMM yyyy"
+                                                        HeightRequest="46"
+                                                        TextColor="{StaticResource AdminInk}"
+                                                        FontSize="14" />
+                                        </Grid>
+                                    </Border>
+                                </VerticalStackLayout>
+
+                                <VerticalStackLayout Grid.Column="1" Spacing="6">
+                                    <Label Text="Precio (COP)" Style="{StaticResource FieldLabel}" />
+                                    <Border Style="{StaticResource FieldShell}">
+                                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="6">
+                                            <Label Text="$"
+                                                   FontSize="15"
+                                                   FontAttributes="Bold"
+                                                   TextColor="{StaticResource AdminGold}"
+                                                   VerticalOptions="Center" />
+                                            <Entry Grid.Column="1"
+                                                   Text="{Binding PriceText}"
+                                                   Placeholder="25000"
+                                                   Keyboard="Numeric"
+                                                   Style="{StaticResource FieldEntry}" />
+                                        </Grid>
+                                    </Border>
+                                </VerticalStackLayout>
+                            </Grid>
                         </VerticalStackLayout>
 
-                        <VerticalStackLayout Grid.Column="1" Spacing="6">
-                            <Label Text="Inscritos"
-                                   FontSize="12"
-                                   FontAttributes="Bold"
-                                   TextColor="#4F4F4F" />
-                            <Border Padding="10,0"
-                                    Stroke="#E8E3D5"
-                                    StrokeThickness="1"
-                                    StrokeShape="RoundRectangle 10"
-                                    BackgroundColor="#FAFAFA">
-                                <Entry Text="{Binding CurrentParticipantsText}"
-                                       Placeholder="0"
-                                       Keyboard="Numeric"
-                                       HeightRequest="44"
-                                       ClearButtonVisibility="WhileEditing" />
-                            </Border>
-                        </VerticalStackLayout>
-                    </Grid>
+                        <BoxView HeightRequest="1" Color="{StaticResource AdminLine}" />
 
-                    <Grid ColumnDefinitions="*,*"
-                          ColumnSpacing="10">
-                        <VerticalStackLayout Spacing="6">
-                            <Label Text="Estado"
-                                   FontSize="12"
-                                   FontAttributes="Bold"
-                                   TextColor="#4F4F4F" />
-                            <Border Padding="10,0"
-                                    Stroke="#E8E3D5"
-                                    StrokeThickness="1"
-                                    StrokeShape="RoundRectangle 10"
-                                    BackgroundColor="#FAFAFA">
+                        <!-- ========== Section: Cupo ========== -->
+                        <VerticalStackLayout Spacing="10">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Label Text="CUPO" Style="{StaticResource SectionLabel}" />
+                                <Image Grid.Column="1"
+                                       Source="icon_users.svg"
+                                       WidthRequest="14"
+                                       HeightRequest="14"
+                                       Opacity="0.55" />
+                            </Grid>
+
+                            <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                                <VerticalStackLayout Spacing="6">
+                                    <Label Text="Capacidad maxima" Style="{StaticResource FieldLabel}" />
+                                    <Border Style="{StaticResource FieldShell}">
+                                        <Entry Text="{Binding MaxParticipantsText}"
+                                               Placeholder="100"
+                                               Keyboard="Numeric"
+                                               Style="{StaticResource FieldEntry}" />
+                                    </Border>
+                                </VerticalStackLayout>
+
+                                <VerticalStackLayout Grid.Column="1" Spacing="6">
+                                    <Label Text="Inscritos actuales" Style="{StaticResource FieldLabel}" />
+                                    <Border Style="{StaticResource FieldShell}">
+                                        <Entry Text="{Binding CurrentParticipantsText}"
+                                               Placeholder="0"
+                                               Keyboard="Numeric"
+                                               Style="{StaticResource FieldEntry}" />
+                                    </Border>
+                                </VerticalStackLayout>
+                            </Grid>
+                        </VerticalStackLayout>
+
+                        <BoxView HeightRequest="1" Color="{StaticResource AdminLine}" />
+
+                        <!-- ========== Section: Estado ========== -->
+                        <VerticalStackLayout Spacing="10">
+                            <Label Text="ESTADO DE LA INSCRIPCION" Style="{StaticResource SectionLabel}" />
+                            <Border Style="{StaticResource FieldShell}">
                                 <Picker ItemsSource="{Binding StatusOptions}"
                                         SelectedItem="{Binding SelectedStatusText}"
-                                        HeightRequest="44" />
+                                        HeightRequest="46"
+                                        FontSize="14"
+                                        TextColor="{StaticResource AdminInk}" />
                             </Border>
                         </VerticalStackLayout>
 
-                        <VerticalStackLayout Grid.Column="1" Spacing="6">
-                            <Label Text="Imagen"
+                        <BoxView HeightRequest="1" Color="{StaticResource AdminLine}" />
+
+                        <!-- ========== Section: Imagen ========== -->
+                        <VerticalStackLayout Spacing="10">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Label Text="IMAGEN DEL EVENTO" Style="{StaticResource SectionLabel}" />
+                                <Label Grid.Column="1"
+                                       Text="Toca para elegir"
+                                       FontSize="10"
+                                       TextColor="{StaticResource AdminMute}"
+                                       VerticalOptions="Center" />
+                            </Grid>
+
+                            <CollectionView ItemsSource="{Binding ImageOptions}"
+                                            SelectionMode="Single"
+                                            SelectedItem="{Binding SelectedImageUrl}"
+                                            HeightRequest="108">
+                                <CollectionView.ItemsLayout>
+                                    <LinearItemsLayout Orientation="Horizontal" ItemSpacing="10" />
+                                </CollectionView.ItemsLayout>
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate x:DataType="x:String">
+                                        <Border Padding="0"
+                                                StrokeThickness="2"
+                                                StrokeShape="RoundRectangle 14"
+                                                BackgroundColor="#FFFCF3"
+                                                WidthRequest="96"
+                                                HeightRequest="96">
+                                            <Border.Stroke>
+                                                <SolidColorBrush Color="{StaticResource AdminLine}" />
+                                            </Border.Stroke>
+                                            <VisualStateManager.VisualStateGroups>
+                                                <VisualStateGroup x:Name="CommonStates">
+                                                    <VisualState x:Name="Normal" />
+                                                    <VisualState x:Name="Selected">
+                                                        <VisualState.Setters>
+                                                            <Setter Property="Stroke" Value="{StaticResource AdminGold}" />
+                                                            <Setter Property="BackgroundColor" Value="#FFF6DC" />
+                                                        </VisualState.Setters>
+                                                    </VisualState>
+                                                </VisualStateGroup>
+                                            </VisualStateManager.VisualStateGroups>
+                                            <Image Source="{Binding .}"
+                                                   Aspect="AspectFit"
+                                                   Margin="14"
+                                                   HorizontalOptions="Center"
+                                                   VerticalOptions="Center" />
+                                        </Border>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </VerticalStackLayout>
+
+                        <!-- Save button -->
+                        <Border Padding="0"
+                                StrokeThickness="0"
+                                StrokeShape="RoundRectangle 14"
+                                Margin="0,4,0,0">
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                    <GradientStop Color="#C9A227" Offset="0.0" />
+                                    <GradientStop Color="#E6CB6E" Offset="1.0" />
+                                </LinearGradientBrush>
+                            </Border.Background>
+                            <Button Text="{Binding PrimaryActionText}"
+                                    Command="{Binding SaveEventCommand}"
+                                    BackgroundColor="Transparent"
+                                    TextColor="White"
+                                    FontAttributes="Bold"
+                                    FontSize="15"
+                                    CornerRadius="14"
+                                    HeightRequest="52" />
+                        </Border>
+
+                        <!-- Status message -->
+                        <Border Padding="12,10"
+                                IsVisible="{Binding HasStatusMessage}"
+                                StrokeThickness="1"
+                                Stroke="#F0DA8E"
+                                StrokeShape="RoundRectangle 10"
+                                BackgroundColor="#FFFCF0">
+                            <Label Text="{Binding StatusMessage}"
                                    FontSize="12"
-                                   FontAttributes="Bold"
-                                   TextColor="#4F4F4F" />
-                            <Border Padding="10,0"
-                                    Stroke="#E8E3D5"
-                                    StrokeThickness="1"
-                                    StrokeShape="RoundRectangle 10"
-                                    BackgroundColor="#FAFAFA">
-                                <Picker ItemsSource="{Binding ImageOptions}"
-                                        SelectedItem="{Binding SelectedImageUrl}"
-                                        HeightRequest="44" />
-                            </Border>
-                        </VerticalStackLayout>
-                    </Grid>
-
-                    <Button Text="{Binding PrimaryActionText}"
-                            Command="{Binding SaveEventCommand}"
-                            BackgroundColor="#C9A227"
-                            TextColor="White"
-                            FontAttributes="Bold"
-                            CornerRadius="10"
-                            HeightRequest="48" />
-
-                    <Label Text="{Binding StatusMessage}"
-                           IsVisible="{Binding HasStatusMessage}"
-                           FontSize="12"
-                           TextColor="#4F4F4F"
-                           HorizontalTextAlignment="Center" />
+                                   TextColor="#5A4A18"
+                                   HorizontalTextAlignment="Center" />
+                        </Border>
+                    </VerticalStackLayout>
                 </VerticalStackLayout>
             </Border>
 
-            <Label Text="Eventos registrados"
-                   FontSize="18"
-                   FontAttributes="Bold"
-                   TextColor="#252525"
-                   Margin="0,4,0,0" />
+            <!-- ============ EVENT LIST ============ -->
+            <Grid Margin="16,4,16,0"
+                  ColumnDefinitions="*,Auto">
+                <Label Text="Eventos registrados"
+                       FontSize="17"
+                       FontAttributes="Bold"
+                       TextColor="{StaticResource AdminInk}" />
+                <Border Grid.Column="1"
+                        Padding="10,4"
+                        StrokeThickness="0"
+                        StrokeShape="RoundRectangle 999"
+                        BackgroundColor="#FFF6DC"
+                        VerticalOptions="Center">
+                    <Label Text="{Binding EventsCountText}"
+                           FontSize="10"
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource AdminGold}" />
+                </Border>
+            </Grid>
 
-            <VerticalStackLayout Spacing="10"
+            <VerticalStackLayout Margin="16,0"
+                                 Spacing="10"
                                  BindableLayout.ItemsSource="{Binding Events}">
                 <BindableLayout.ItemTemplate>
                     <DataTemplate>
                         <Border Padding="12"
-                                Stroke="#E8E3D5"
+                                Stroke="{StaticResource AdminLine}"
                                 StrokeThickness="1"
-                                StrokeShape="RoundRectangle 14"
+                                StrokeShape="RoundRectangle 16"
                                 BackgroundColor="White">
-                            <Grid RowDefinitions="Auto,Auto,Auto"
-                                  RowSpacing="10">
-                                <Grid ColumnDefinitions="*,Auto"
-                                      ColumnSpacing="10">
-                                    <VerticalStackLayout Spacing="3">
-                                        <Label Text="{Binding Name}"
-                                               FontSize="16"
+                            <Border.Shadow>
+                                <Shadow Brush="Black" Offset="0,2" Radius="8" Opacity="0.04" />
+                            </Border.Shadow>
+
+                            <Grid ColumnDefinitions="Auto,*"
+                                  ColumnSpacing="12">
+
+                                <!-- Thumbnail -->
+                                <Border Grid.Column="0"
+                                        WidthRequest="64"
+                                        HeightRequest="64"
+                                        StrokeThickness="0"
+                                        StrokeShape="RoundRectangle 14"
+                                        BackgroundColor="#FFF6DC"
+                                        VerticalOptions="Start">
+                                    <Image Source="{Binding ImageUrl}"
+                                           Aspect="AspectFit"
+                                           Margin="10" />
+                                </Border>
+
+                                <!-- Body -->
+                                <Grid Grid.Column="1"
+                                      RowDefinitions="Auto,Auto,Auto"
+                                      RowSpacing="8">
+
+                                    <!-- Title row + status pill -->
+                                    <Grid ColumnDefinitions="*,Auto"
+                                          ColumnSpacing="8">
+                                        <VerticalStackLayout Spacing="2">
+                                            <Label Text="{Binding Name}"
+                                                   FontSize="15"
+                                                   FontAttributes="Bold"
+                                                   TextColor="{StaticResource AdminInk}"
+                                                   MaxLines="2"
+                                                   LineBreakMode="TailTruncation" />
+                                            <Label Text="{Binding CityLocationText}"
+                                                   FontSize="11"
+                                                   TextColor="{StaticResource AdminMute}"
+                                                   MaxLines="1"
+                                                   LineBreakMode="TailTruncation" />
+                                        </VerticalStackLayout>
+                                        <Border Grid.Column="1"
+                                                Padding="9,3"
+                                                StrokeThickness="0"
+                                                StrokeShape="RoundRectangle 999"
+                                                BackgroundColor="{Binding StatusBackgroundColor}"
+                                                VerticalOptions="Start">
+                                            <Label Text="{Binding StatusText}"
+                                                   FontSize="10"
+                                                   FontAttributes="Bold"
+                                                   TextColor="{Binding StatusTextColor}" />
+                                        </Border>
+                                    </Grid>
+
+                                    <!-- Meta row: date, price, capacity -->
+                                    <Grid Grid.Row="1"
+                                          ColumnDefinitions="Auto,Auto,*,Auto"
+                                          ColumnSpacing="10">
+                                        <HorizontalStackLayout Spacing="5">
+                                            <Image Source="icon_calendar.svg"
+                                                   WidthRequest="13"
+                                                   HeightRequest="13"
+                                                   Opacity="0.6"
+                                                   VerticalOptions="Center" />
+                                            <Label Text="{Binding EventDate, StringFormat='{0:dd MMM yyyy}'}"
+                                                   FontSize="11"
+                                                   TextColor="#3F3A2D"
+                                                   VerticalOptions="Center" />
+                                        </HorizontalStackLayout>
+
+                                        <HorizontalStackLayout Grid.Column="1" Spacing="5">
+                                            <Image Source="icon_users.svg"
+                                                   WidthRequest="13"
+                                                   HeightRequest="13"
+                                                   Opacity="0.6"
+                                                   VerticalOptions="Center" />
+                                            <Label FontSize="11"
+                                                   TextColor="#3F3A2D"
+                                                   VerticalOptions="Center">
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="{Binding CurrentParticipants}" FontAttributes="Bold" />
+                                                        <Span Text="/" />
+                                                        <Span Text="{Binding MaxParticipants}" />
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+                                        </HorizontalStackLayout>
+
+                                        <Label Grid.Column="3"
+                                               Text="{Binding PriceText}"
+                                               FontSize="13"
                                                FontAttributes="Bold"
-                                               TextColor="#252525"
-                                               MaxLines="2"
-                                               LineBreakMode="TailTruncation" />
-                                        <Label Text="{Binding CityLocationText}"
-                                               FontSize="12"
-                                               TextColor="#767676"
-                                               MaxLines="1"
-                                               LineBreakMode="TailTruncation" />
-                                    </VerticalStackLayout>
+                                               TextColor="{StaticResource AdminGold}"
+                                               VerticalOptions="Center" />
+                                    </Grid>
 
-                                    <Border Grid.Column="1"
-                                            Padding="9,4"
-                                            StrokeThickness="0"
-                                            StrokeShape="RoundRectangle 10"
-                                            BackgroundColor="{Binding StatusBackgroundColor}"
-                                            VerticalOptions="Start">
-                                        <Label Text="{Binding StatusText}"
-                                               FontSize="10"
-                                               FontAttributes="Bold"
-                                               TextColor="{Binding StatusTextColor}" />
-                                    </Border>
-                                </Grid>
+                                    <!-- Action row -->
+                                    <Grid Grid.Row="2"
+                                          ColumnDefinitions="*,Auto"
+                                          ColumnSpacing="8">
 
-                                <Grid Grid.Row="1"
-                                      ColumnDefinitions="*,Auto"
-                                      ColumnSpacing="10">
-                                    <HorizontalStackLayout Spacing="6">
-                                        <Image Source="icon_calendar.svg"
-                                               WidthRequest="14"
-                                               HeightRequest="14" />
-                                        <Label Text="{Binding EventDate, StringFormat='{0:dd MMM yyyy}'}"
-                                               FontSize="12"
-                                               TextColor="#4F4F4F" />
-                                    </HorizontalStackLayout>
+                                        <Button Grid.Column="0"
+                                                Text="Editar"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.EditEventCommand}"
+                                                CommandParameter="{Binding}"
+                                                BackgroundColor="#FFF6DC"
+                                                TextColor="{StaticResource AdminGold}"
+                                                BorderColor="Transparent"
+                                                BorderWidth="0"
+                                                CornerRadius="10"
+                                                FontSize="12"
+                                                FontAttributes="Bold"
+                                                HeightRequest="38"
+                                                Padding="12,0"
+                                                ImageSource="icon_edit.svg"
+                                                ContentLayout="Left,6"
+                                                HorizontalOptions="Fill" />
 
-                                    <Label Grid.Column="1"
-                                           Text="{Binding PriceText}"
-                                           FontSize="13"
-                                           FontAttributes="Bold"
-                                           TextColor="#C9A227" />
-                                </Grid>
-
-                                <Grid Grid.Row="2"
-                                      ColumnDefinitions="*,Auto,Auto"
-                                      ColumnSpacing="8">
-                                    <Label Text="{Binding CurrentParticipants, StringFormat='{0} inscritos'}"
-                                           FontSize="12"
-                                           TextColor="#767676"
-                                           VerticalOptions="Center" />
-
-                                    <Button Grid.Column="1"
-                                            Text="Editar"
-                                            Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.EditEventCommand}"
-                                            CommandParameter="{Binding}"
-                                            BackgroundColor="White"
-                                            TextColor="#C9A227"
-                                            BorderColor="#C9A227"
-                                            BorderWidth="1"
-                                            CornerRadius="10"
-                                            FontSize="12"
-                                            FontAttributes="Bold"
-                                            HeightRequest="40"
-                                            Padding="12,0" />
-
-                                    <Button Grid.Column="2"
-                                            Text="Eliminar"
-                                            Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.DeleteEventCommand}"
-                                            CommandParameter="{Binding}"
-                                            BackgroundColor="#FDECEC"
-                                            TextColor="#B42318"
-                                            BorderColor="#F3B8B8"
-                                            BorderWidth="1"
-                                            CornerRadius="10"
-                                            FontSize="12"
-                                            FontAttributes="Bold"
-                                            HeightRequest="40"
-                                            Padding="12,0" />
+                                        <Button Grid.Column="1"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.DeleteEventCommand}"
+                                                CommandParameter="{Binding}"
+                                                BackgroundColor="{StaticResource AdminDangerSoft}"
+                                                TextColor="{StaticResource AdminDanger}"
+                                                BorderColor="Transparent"
+                                                BorderWidth="0"
+                                                CornerRadius="10"
+                                                FontSize="12"
+                                                FontAttributes="Bold"
+                                                HeightRequest="38"
+                                                WidthRequest="44"
+                                                Padding="0"
+                                                ImageSource="icon_delete.svg" />
+                                    </Grid>
                                 </Grid>
                             </Grid>
                         </Border>
